@@ -8,14 +8,14 @@
     html, body { margin: 0; padding: 0; height: 100%; font-size: 18px; overflow: hidden; }
     iframe { 
       width: 100%; 
-      height: 100%; 
+      height: 110vh; /* Увеличиваем высоту на 10% */
       border: none; 
       display: block; 
-      clip-path: inset(0 0 -100px 0); /* Обрезает 50px снизу */
+      transform: translateY(-10%); /* Сдвигаем содержимое вверх */
     }
     @media (max-width: 600px) {
       body { font-size: 20px; }
-      iframe { height: 100%; }
+      iframe { height: 110vh; transform: translateY(-10%); }
     }
   </style>
 </head>
