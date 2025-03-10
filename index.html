@@ -4,26 +4,11 @@
   <title>Payment Systems</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
-    table { width: 100%; border-collapse: collapse; }
-    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-    th { background-color: #f2f2f2; cursor: pointer; }
-    input { margin: 10px 0; padding: 5px; width: 100%; }
+    body { margin: 0; }
+    iframe { width: 100%; height: 100vh; border: none; }
   </style>
 </head>
 <body>
-  <input type="text" id="geoFilter" placeholder="Фильтр по Гео" onkeyup="filterTable()">
-  <table id="paymentTable">
-    <thead>
-      <tr>
-        <th onclick="sortTable(0)">ID</th>
-        <th onclick="sortTable(1)">Услуга</th>
-        <th onclick="sortTable(2)">Комиссия (%)</th>
-        <th onclick="sortTable(3)">Мин. транзакция ($)</th>
-        <th>Гео</th>
-      </tr>
-    </thead>
-    <tbody id="tableBody"></tbody>
-  </table>
-  <script src="script.js"></script>
+  <iframe src="https://airtable.com/appAyEpzQw75tRFbb/shrYJSFSHV0PE25UW" width="100%" height="600" frameborder="0"></iframe>
 </body>
 </html>
