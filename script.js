@@ -1,5 +1,5 @@
 const AIRTABLE_API_KEY = "patjChPlJ6HvP952h.6da6f908cf1081adb1518c55ba02bc1b902690dcdeca2153c5294d9fc9a52b2a"; // Ваш токен
-const BASE_ID = "PaysHubList"; // Замените на ID вашей базы
+const BASE_ID = "appAyEpzQw75tRFbb"; // Замените на ID вашей базы
 const TABLE_NAME = "PspList"; // Замените на имя вашей таблицы
 
 let data = [];
