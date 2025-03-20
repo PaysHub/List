@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Payment Systems</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-size: 18px;
+      overflow: hidden;
+      background-color: #ffffff; /* Белый фон для всей страницы */
+      color: #000000;
+    }
+    .iframe-container {
+      width: 100%;
+      height: calc(100% - 80px); /* Уменьшаем высоту iframe, чтобы кнопки поднялись */
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: none;
+      background: transparent; /* Прозрачный фон внутри iframe */
+      clip-path: inset(0 0 20px 0);
+    }
+    iframe.active {
+      display: block;
+    }
+    .tabs {
+      display: flex;
+      position: fixed;
+      bottom: 20px; /* Сдвигаем панель вверх на 20px от низа */
+      width: 100%;
+      background: #ffffff; /* Белый фон для полоски с кнопками */
+      padding: 10px; /* Оставляем изначальный padding */
+      box-sizing: border-box;
+      z-index: 10;
+    }
+    .tab {
+      flex: 1;
+      padding: 10px;
+      text-align: center;
+      cursor: pointer;
+      background: #d0d0d0;
+      color: #000000;
+      border-radius: 5px;
+      margin: 0 5px;
+      font-family: 'Arial', sans-serif;
+      font-size: 16px; /* Уменьшенный шрифт для кнопок */
+    }
+    .tab.active {
+      background: #1e90ff;
+      color: #ffffff;
+    }
+    /* Стили для прелоадера */
+    .preloader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #ffffff; /* Белый фон для прелоадера */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+      transition: opacity 0.5s ease; /* Добавляем плавный переход для opacity */
+      opacity: 1; /* Начальное состояние - полностью видимый */
+    }
+    .preloader.hidden {
+      opacity: 0; /* Скрытое состояние - прозрачный */
+      pointer-events: none; /* Отключаем взаимодействие, когда скрыт */
+    }
+    .wallet-container {
+      position: relative;
+      width: 150px; /* Увеличиваем ширину контейнера */
+      height: 100%;
+      display: flex;
+      flex-direction: column; /* Меняем на колонку, чтобы текст был под кошельком */
+      justify-content: center;
+      align-items: center;
+      z-index: 1;
+      padding-top: 50px; /* Опускаем кошелек ниже */
+    }
+    .wallet {
+      width: 150px; /* Увеличиваем ширину кошелька */
+      height: 105px; /* Увеличиваем высоту кошелька (в 1.5 раза) */
+      background: #d2b48c;
+      border-radius: 15px 15px 0 0; /* Пропорционально увеличиваем радиус */
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 3px 7px rgba(0, 0, 0, 0.2); /* Чуть больше тень */
+      z-index: 2;
+    }
+    .wallet::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 30px; /* Увеличиваем верхнюю часть пропорционально */
+      background: #b89778;
+      border-radius: 15px 15px 0 0;
+    }
+    .wallet::after {
+      content: '';
+      position: absolute;
+      top: 15px; /* Сдвигаем пропорционально */
+      left: 50%;
+      transform: translateX(-50%);
+      width: 15px; /* Увеличиваем кнопку */
+      height: 15px;
+      background: #000000;
+      border-radius: 50%;
+      box-shadow: 0 1.5px 3px rgba(0, 0, 0, 0.3);
+    }
+    .coin {
+      position: absolute;
+      animation: fall 2s infinite linear;
+      box-shadow: 0 3px 4px rgba(0, 0, 0, 0.1); /* Чуть больше тень */
+      width: 30px; /* Увеличиваем монетки */
+      height: 30px;
+      background: #FFD700;
+      border-radius: 50%;
+      z-index: 1;
+    }
+    @keyframes fall {
+      0% {
+        opacity: 1;
+        transform: rotate(0deg);
+        top: -30px; /* Смещаем старт выше из-за большего размера монет */
+      }
+      60% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+        top: calc(50% + 30px); /* Корректируем конечную точку для большего кошелька */
+        transform: rotate(360deg);
+      }
+    }
+    /* Стили для переливающегося текста */
+    .welcome-text {
+      margin-top: 20px; /* Отступ от кошелька */
+      font-family: 'Arial', sans-serif;
+      font-size: 24px;
+      font-weight: 300; /* Тонкий шрифт */
+      text-align: center; /* Центрируем текст */
+      background: linear-gradient(90deg, #1e90ff, #2ecc71, #1e90ff); /* Голубой и зеленый градиент */
+      background-size: 200% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent; /* Делаем текст прозрачным, чтобы виден был градиент */
+      animation: gradientShift 3s infinite linear; /* Анимация переливания */
+    }
+    @keyframes gradientShift {
+      0% { background-position: 0% 0%; }
+      100% { background-position: 200% 0%; }
+    }
+    @media (max-width: 600px) {
+      body { font-size: 20px; }
+      .iframe-container { height: calc(100vh - 80px); }
+      .tabs { bottom: 20px; padding: 10px; }
+      .tab { font-size: 14px; }
+      .welcome-text { font-size: 20px; } /* Уменьшаем текст на мобильных */
+    }
+  </style>
+</head>
+<body>
+  <div class="preloader" id="preloader">
+    <div class="wallet-container">
+      <div class="wallet"></div>
+      <div class="coin" style="left: 30px; animation-delay: 0s;"></div>
+      <div class="coin" style="left: 60px; animation-delay: 0.2s;"></div>
+      <div class="coin" style="left: 90px; animation-delay: 0.4s;"></div>
+      <div class="coin" style="left: 45px; animation-delay: 0.6s;"></div>
+      <div class="coin" style="left: 75px; animation-delay: 0.8s;"></div>
+      <div class="coin" style="left: 37.5px; animation-delay: 1s;"></div>
+      <div class="coin" style="left: 82.5px; animation-delay: 1.2s;"></div>
+      <div class="coin" style="left: 52.5px; animation-delay: 1.4s;"></div>
+      <div class="coin" style="left: 67.5px; animation-delay: 1.6s;"></div>
+      <div class="coin" style="left: 97.5px; animation-delay: 1.8s;"></div>
+      <div class="welcome-text">Welcome to PaysHub</div>
+    </div>
+  </div>
+  <div class="iframe-container">
+    <iframe id="rates" class="active" src="https://airtable.com/embed/appAyEpzQw75tRFbb/shrYJSFSHV0PE25UW" frameborder="0"></iframe>
+    <iframe id="tech" src="https://airtable.com/embed/appsYAo5ZtWnnBpmT/shreq36qQ6eQ30SeX" frameborder="0"></iframe>
+  </div>
+  <div class="tabs">
+    <div class="tab active" onclick="showTab('rates')">Ставки</div>
+    <div class="tab" onclick="showTab('tech')">Техрешения</div>
+    <div class="tab" onclick="openTelegram()">Оператор</div>
+  </div>
+  <script>
+    const tg = window.Telegram.WebApp;
+    tg.setHeaderColor('#ffffff'); /* Белый цвет заголовка для Telegram */
+    tg.setBackgroundColor('#ffffff'); /* Белый фон для Telegram */
+    tg.ready();
+
+    function showTab(tabId) {
+      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('iframe').forEach(iframe => iframe.classList.remove('active'));
+      document.querySelector(`[onclick="showTab('${tabId}')"]`).classList.add('active');
+      document.getElementById(tabId).classList.add('active');
+    }
+
+    function openTelegram() {
+      window.open('https://t.me/p_fintech?text=I%20need%20help%20with%20the%20PaysHub%20service', '_blank');
+    }
+
+    // Устанавливаем начальные позиции и задержки для монет
+    document.querySelectorAll('.coin').forEach(item => {
+      const randomLeft = Math.random() * 90 + 30; /* Увеличиваем диапазон для большего кошелька */
+      item.style.left = `${randomLeft}px`; // Исправляем шаблонную строку
+      item.style.top = '-30px';
+    });
+
+    // Скрываем прелоадер с плавным исчезновением после загрузки
+    window.addEventListener('load', () => {
+      const preloader = document.getElementById('preloader');
+      setTimeout(() => {
+        preloader.classList.add('hidden');
+        // Удаляем прелоадер из DOM после завершения анимации
+        preloader.addEventListener('transitionend', () => {
+          preloader.style.display = 'none';
+        }, { once: true });
+      }, 2000);
+    });
+  </script>
+</body>
+</html>
+
