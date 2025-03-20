@@ -11,26 +11,8 @@
       height: 100%;
       font-size: 18px;
       overflow: hidden;
-      background-color: #1c2526;
-      color: #ffffff;
-    }
-    .tabs {
-      display: flex;
-      background: #2a3435;
-      padding: 10px;
-    }
-    .tab {
-      flex: 1;
-      padding: 10px;
-      text-align: center;
-      cursor: pointer;
-      background: #3a4445;
-      color: #ffffff;
-      border-radius: 5px;
-      margin: 0 5px;
-    }
-    .tab.active {
-      background: #1e90ff;
+      background-color: #ffffff; /* Светлый фон */
+      color: #000000; /* Чёрный текст */
     }
     .iframe-container {
       width: 100%;
@@ -45,6 +27,30 @@
     iframe.active {
       display: block;
     }
+    .tabs {
+      display: flex;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: #f0f0f0; /* Светлый фон вкладок */
+      padding: 10px;
+      box-sizing: border-box;
+    }
+    .tab {
+      flex: 1;
+      padding: 10px;
+      text-align: center;
+      cursor: pointer;
+      background: #d0d0d0; /* Серый фон кнопок */
+      color: #000000;
+      border-radius: 5px;
+      margin: 0 5px;
+      font-family: 'Arial', sans-serif; /* Шрифт без засечек */
+    }
+    .tab.active {
+      background: #1e90ff; /* Голубой для активной вкладки */
+      color: #ffffff;
+    }
     @media (max-width: 600px) {
       body { font-size: 20px; }
       .iframe-container { height: calc(100vh - 60px); }
@@ -52,18 +58,18 @@
   </style>
 </head>
 <body>
-  <div class="tabs">
-    <div class="tab active" onclick="showTab('rates')">Ставки</div>
-    <div class="tab" onclick="showTab('tech')">Техрешения</div>
-  </div>
   <div class="iframe-container">
     <iframe id="rates" class="active" src="https://airtable.com/embed/appAyEpzQw75tRFbb/shrYJSFSHV0PE25UW" frameborder="0"></iframe>
     <iframe id="tech" src="https://airtable.com/embed/appsYAo5ZtWnnBpmT/shreq36qQ6eQ30SeX" frameborder="0"></iframe>
   </div>
+  <div class="tabs">
+    <div class="tab active" onclick="showTab('rates')">Ставки</div>
+    <div class="tab" onclick="showTab('tech')">Техрешения</div>
+  </div>
   <script>
     const tg = window.Telegram.WebApp;
-    tg.setHeaderColor('#1c2526');
-    tg.setBackgroundColor('#1c2526');
+    tg.setHeaderColor('#ffffff');
+    tg.setBackgroundColor('#ffffff');
     tg.ready();
 
     function showTab(tabId) {
