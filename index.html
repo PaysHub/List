@@ -18,12 +18,15 @@
       width: 100%;
       height: calc(100% - 60px);
       position: relative;
+      overflow: hidden;
     }
     iframe {
       width: 100%;
-      height: 100%;
+      height: 110%; /* Увеличиваем высоту, чтобы панель ушла вниз */
       border: none;
       display: none;
+      position: relative;
+      top: -30px; /* Сдвигаем iframe вверх, чтобы скрыть панель */
     }
     iframe.active {
       display: block;
@@ -53,10 +56,6 @@
       background: #1e90ff;
       color: #ffffff;
     }
-    /* Скрываем панель Airtable */
-    iframe .airtable-embed__footer {
-      display: none !important;
-    }
     @media (max-width: 600px) {
       body { font-size: 20px; }
       .iframe-container { height: calc(100vh - 60px); }
@@ -84,6 +83,20 @@
       document.querySelector(`[onclick="showTab('${tabId}')"]`).classList.add('active');
       document.getElementById(tabId).classList.add('active');
     }
+
+    // Пытаемся скрыть панель через JavaScript
+    window.addEventListener('load', () => {
+      document.querySelectorAll('iframe').forEach(iframe => {
+        iframe.onload = () => {
+          try {
+            const footer = iframe.contentDocument.querySelector('.airtable-embed__footer');
+            if (footer) footer.style.display = 'none';
+          } catch (e) {
+            console.log('Не удалось скрыть панель Airtable:', e);
+          }
+        };
+      });
+    });
   </script>
 </body>
 </html>
