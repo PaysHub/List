@@ -78,7 +78,7 @@
     .wallet {
       width: 100px;
       height: 70px;
-      background: #808080;
+      background: #d2b48c; /* Светло-коричневый кошелёк */
       border-radius: 10px 10px 0 0;
       position: absolute;
       bottom: 0;
@@ -92,7 +92,7 @@
       left: 0;
       width: 100%;
       height: 20px;
-      background: #666666;
+      background: #b89778; /* Чуть темнее для клапана */
       border-radius: 10px 10px 0 0;
     }
     .wallet::after {
@@ -103,33 +103,20 @@
       transform: translateX(-50%);
       width: 10px;
       height: 10px;
-      background: #1e90ff;
+      background: #000000; /* Чёрная пуговка */
       border-radius: 50%;
       box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
     }
-    .coin, .card, .usdt, .cash {
+    .coin {
       position: absolute;
       animation: fall 1.5s infinite ease-in;
       box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
     }
-    .coin, .usdt {
+    .coin {
       width: 20px;
       height: 20px;
       background: #FFD700;
       border-radius: 50%;
-    }
-    .card {
-      width: 30px;
-      height: 20px;
-      border-radius: 4px;
-    }
-    .card.blue { background: #1e90ff; }
-    .card.magenta { background: #ff00ff; }
-    .cash {
-      width: 30px;
-      height: 15px;
-      background: #00ff00;
-      border-radius: 2px;
     }
     @keyframes fall {
       0% {
@@ -158,13 +145,13 @@
       <div class="coin" style="left: 20px; top: -50px; animation-delay: 0.1s;"></div>
       <div class="coin" style="left: 40px; top: -150px; animation-delay: 0.3s;"></div>
       <div class="coin" style="left: 60px; top: -100px; animation-delay: 0.5s;"></div>
-      <div class="card blue" style="left: 30px; top: -80px; animation-delay: 0.2s;"></div>
-      <div class="card magenta" style="left: 50px; top: -120px; animation-delay: 0.4s;"></div>
-      <div class="usdt" style="left: 25px; top: -60px; animation-delay: 0.6s;"></div>
-      <div class="cash" style="left: 55px; top: -140px; animation-delay: 0.7s;"></div>
+      <div class="coin" style="left: 30px; top: -80px; animation-delay: 0.2s;"></div>
+      <div class="coin" style="left: 50px; top: -120px; animation-delay: 0.4s;"></div>
+      <div class="coin" style="left: 25px; top: -60px; animation-delay: 0.6s;"></div>
+      <div class="coin" style="left: 55px; top: -140px; animation-delay: 0.7s;"></div>
       <div class="coin" style="left: 35px; top: -90px; animation-delay: 0.8s;"></div>
-      <div class="card blue" style="left: 45px; top: -110px; animation-delay: 0.9s;"></div>
-      <div class="usdt" style="left: 65px; top: -70px; animation-delay: 1s;"></div>
+      <div class="coin" style="left: 45px; top: -110px; animation-delay: 0.9s;"></div>
+      <div class="coin" style="left: 65px; top: -70px; animation-delay: 1s;"></div>
     </div>
   </div>
   <div class="iframe-container">
@@ -188,8 +175,8 @@
       document.getElementById(tabId).classList.add('active');
     }
 
-    // Рандомная задержка и позиция для элементов
-    document.querySelectorAll('.coin, .card, .usdt, .cash').forEach(item => {
+    // Рандомная задержка и позиция для монет
+    document.querySelectorAll('.coin').forEach(item => {
       const randomLeft = Math.random() * 60 + 20; // Случайная позиция по горизонтали (внутри кошелька)
       const randomTop = -Math.random() * 150 - 50; // Случайная позиция по вертикали
       const randomDelay = Math.random() * 1; // Случайная задержка
