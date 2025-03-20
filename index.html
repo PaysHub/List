@@ -70,15 +70,15 @@
     }
     .wallet-container {
       position: relative;
-      width: 100px; /* Совпадает с шириной кошелька */
-      height: 100px;
+      width: 100px;
+      height: 200px;
       display: flex;
       justify-content: center;
     }
     .wallet {
       width: 100px;
       height: 70px;
-      background: #808080; /* Серый кошелёк */
+      background: #808080;
       border-radius: 10px 10px 0 0;
       position: absolute;
       bottom: 0;
@@ -92,31 +92,52 @@
       left: 0;
       width: 100%;
       height: 20px;
-      background: #666666; /* Более тёмный серый для клапана */
+      background: #666666;
       border-radius: 10px 10px 0 0;
     }
-    .coin {
-      width: 20px; /* Увеличиваем размер монет */
-      height: 20px;
-      background: #FFD700; /* Золотой цвет монет */
+    .wallet::after {
+      content: '';
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 10px;
+      height: 10px;
+      background: #1e90ff;
       border-radius: 50%;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    }
+    .coin, .card, .usdt, .cash {
       position: absolute;
       animation: fall 1.5s infinite ease-in;
       box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
     }
-    .coin:nth-child(2) { left: 10px; animation-delay: 0.1s; }
-    .coin:nth-child(3) { left: 25px; animation-delay: 0.3s; }
-    .coin:nth-child(4) { left: 40px; animation-delay: 0.5s; }
-    .coin:nth-child(5) { left: 55px; animation-delay: 0.7s; }
-    .coin:nth-child(6) { left: 70px; animation-delay: 0.9s; }
+    .coin, .usdt {
+      width: 20px;
+      height: 20px;
+      background: #FFD700;
+      border-radius: 50%;
+    }
+    .card {
+      width: 30px;
+      height: 20px;
+      border-radius: 4px;
+    }
+    .card.blue { background: #1e90ff; }
+    .card.magenta { background: #ff00ff; }
+    .cash {
+      width: 30px;
+      height: 15px;
+      background: #00ff00;
+      border-radius: 2px;
+    }
     @keyframes fall {
       0% {
-        top: -100px; /* Начинаем выше */
         opacity: 1;
         transform: rotate(0deg);
       }
       100% {
-        top: 70px; /* Падают в кошелёк */
+        top: 200px;
         opacity: 0;
         transform: rotate(360deg);
       }
@@ -134,11 +155,16 @@
   <div class="preloader" id="preloader">
     <div class="wallet-container">
       <div class="wallet"></div>
-      <div class="coin"></div>
-      <div class="coin"></div>
-      <div class="coin"></div>
-      <div class="coin"></div>
-      <div class="coin"></div>
+      <div class="coin" style="left: 20px; top: -50px; animation-delay: 0.1s;"></div>
+      <div class="coin" style="left: 40px; top: -150px; animation-delay: 0.3s;"></div>
+      <div class="coin" style="left: 60px; top: -100px; animation-delay: 0.5s;"></div>
+      <div class="card blue" style="left: 30px; top: -80px; animation-delay: 0.2s;"></div>
+      <div class="card magenta" style="left: 50px; top: -120px; animation-delay: 0.4s;"></div>
+      <div class="usdt" style="left: 25px; top: -60px; animation-delay: 0.6s;"></div>
+      <div class="cash" style="left: 55px; top: -140px; animation-delay: 0.7s;"></div>
+      <div class="coin" style="left: 35px; top: -90px; animation-delay: 0.8s;"></div>
+      <div class="card blue" style="left: 45px; top: -110px; animation-delay: 0.9s;"></div>
+      <div class="usdt" style="left: 65px; top: -70px; animation-delay: 1s;"></div>
     </div>
   </div>
   <div class="iframe-container">
@@ -161,6 +187,16 @@
       document.querySelector(`[onclick="showTab('${tabId}')"]`).classList.add('active');
       document.getElementById(tabId).classList.add('active');
     }
+
+    // Рандомная задержка и позиция для элементов
+    document.querySelectorAll('.coin, .card, .usdt, .cash').forEach(item => {
+      const randomLeft = Math.random() * 60 + 20; // Случайная позиция по горизонтали (внутри кошелька)
+      const randomTop = -Math.random() * 150 - 50; // Случайная позиция по вертикали
+      const randomDelay = Math.random() * 1; // Случайная задержка
+      item.style.left = `${randomLeft}px`;
+      item.style.top = `${randomTop}px`;
+      item.style.animationDelay = `${randomDelay}s`;
+    });
 
     // Скрываем прелоадер после загрузки iframe
     window.addEventListener('load', () => {
