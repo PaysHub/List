@@ -25,7 +25,7 @@
       height: 100%;
       border: none;
       display: none;
-      clip-path: inset(0 0 20px 0); /* Уменьшаем обрезку до 20px */
+      clip-path: inset(0 0 20px 0);
     }
     iframe.active {
       display: block;
@@ -55,6 +55,51 @@
       background: #1e90ff;
       color: #ffffff;
     }
+    /* Стили для прелоадера */
+    .preloader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+    }
+    .wallet {
+      width: 80px;
+      height: 60px;
+      background: #808080; /* Серый кошелёк */
+      border-radius: 10px;
+      position: relative;
+      overflow: hidden;
+    }
+    .coin {
+      width: 20px;
+      height: 20px;
+      background: #808080; /* Серые монеты */
+      border-radius: 50%;
+      position: absolute;
+      animation: fall 2s infinite;
+    }
+    .coin:nth-child(2) { left: 20px; animation-delay: 0.3s; }
+    .coin:nth-child(3) { left: 40px; animation-delay: 0.6s; }
+    .coin:nth-child(4) { left: 60px; animation-delay: 0.9s; }
+    @keyframes fall {
+      0% {
+        top: -30px;
+        opacity: 1;
+      }
+      100% {
+        top: 60px;
+        opacity: 0;
+      }
+    }
+    .preloader.hidden {
+      display: none;
+    }
     @media (max-width: 600px) {
       body { font-size: 20px; }
       .iframe-container { height: calc(100vh - 60px); }
@@ -62,6 +107,14 @@
   </style>
 </head>
 <body>
+  <div class="preloader" id="preloader">
+    <div class="wallet">
+      <div class="coin"></div>
+      <div class="coin"></div>
+      <div class="coin"></div>
+      <div class="coin"></div>
+    </div>
+  </div>
   <div class="iframe-container">
     <iframe id="rates" class="active" src="https://airtable.com/embed/appAyEpzQw75tRFbb/shrYJSFSHV0PE25UW" frameborder="0"></iframe>
     <iframe id="tech" src="https://airtable.com/embed/appsYAo5ZtWnnBpmT/shreq36qQ6eQ30SeX" frameborder="0"></iframe>
@@ -82,6 +135,14 @@
       document.querySelector(`[onclick="showTab('${tabId}')"]`).classList.add('active');
       document.getElementById(tabId).classList.add('active');
     }
+
+    // Скрываем прелоадер после загрузки iframe
+    window.addEventListener('load', () => {
+      const preloader = document.getElementById('preloader');
+      setTimeout(() => {
+        preloader.classList.add('hidden');
+      }, 2000); // Задержка 2 секунды для демонстрации
+    });
   </script>
 </body>
 </html>
