@@ -16,7 +16,7 @@
     }
     .iframe-container {
       width: 100%;
-      height: calc(100% - 60px);
+      height: calc(100% - 80px); /* Уменьшаем высоту iframe, чтобы кнопки поднялись */
       position: relative;
       overflow: hidden;
       z-index: 1;
@@ -35,10 +35,10 @@
     .tabs {
       display: flex;
       position: fixed;
-      bottom: 0;
+      bottom: 20px; /* Сдвигаем панель вверх на 20px от низа */
       width: 100%;
       background: #ffffff; /* Белый фон для полоски с кнопками */
-      padding: 10px;
+      padding: 10px; /* Оставляем изначальный padding */
       box-sizing: border-box;
       z-index: 10;
     }
@@ -73,7 +73,7 @@
     }
     .wallet-container {
       position: relative;
-      width: 100px;
+      width: 150px; /* Увеличиваем ширину контейнера */
       height: 100%;
       display: flex;
       justify-content: center;
@@ -81,13 +81,13 @@
       z-index: 1;
     }
     .wallet {
-      width: 100px;
-      height: 70px;
+      width: 150px; /* Увеличиваем ширину кошелька */
+      height: 105px; /* Увеличиваем высоту кошелька (в 1.5 раза) */
       background: #d2b48c;
-      border-radius: 10px 10px 0 0;
+      border-radius: 15px 15px 0 0; /* Пропорционально увеличиваем радиус */
       position: relative;
       overflow: hidden;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 3px 7px rgba(0, 0, 0, 0.2); /* Чуть больше тень */
       z-index: 2;
     }
     .wallet::before {
@@ -96,28 +96,28 @@
       top: 0;
       left: 0;
       width: 100%;
-      height: 20px;
+      height: 30px; /* Увеличиваем верхнюю часть пропорционально */
       background: #b89778;
-      border-radius: 10px 10px 0 0;
+      border-radius: 15px 15px 0 0;
     }
     .wallet::after {
       content: '';
       position: absolute;
-      top: 10px;
+      top: 15px; /* Сдвигаем пропорционально */
       left: 50%;
       transform: translateX(-50%);
-      width: 10px;
-      height: 10px;
+      width: 15px; /* Увеличиваем кнопку */
+      height: 15px;
       background: #000000;
       border-radius: 50%;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 1.5px 3px rgba(0, 0, 0, 0.3);
     }
     .coin {
       position: absolute;
       animation: fall 2s infinite linear;
-      box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
-      width: 20px;
-      height: 20px;
+      box-shadow: 0 3px 4px rgba(0, 0, 0, 0.1); /* Чуть больше тень */
+      width: 30px; /* Увеличиваем монетки */
+      height: 30px;
       background: #FFD700;
       border-radius: 50%;
       z-index: 1;
@@ -126,14 +126,14 @@
       0% {
         opacity: 1;
         transform: rotate(0deg);
-        top: -20px;
+        top: -30px; /* Смещаем старт выше из-за большего размера монет */
       }
       60% {
         opacity: 1;
       }
       100% {
         opacity: 0;
-        top: calc(50% + 20px);
+        top: calc(50% + 30px); /* Корректируем конечную точку для большего кошелька */
         transform: rotate(360deg);
       }
     }
@@ -142,7 +142,8 @@
     }
     @media (max-width: 600px) {
       body { font-size: 20px; }
-      .iframe-container { height: calc(100vh - 60px); }
+      .iframe-container { height: calc(100vh - 80px); }
+      .tabs { bottom: 20px; padding: 10px; }
       .tab { font-size: 14px; }
     }
   </style>
@@ -151,16 +152,16 @@
   <div class="preloader" id="preloader">
     <div class="wallet-container">
       <div class="wallet"></div>
-      <div class="coin" style="left: 20px; animation-delay: 0s;"></div>
-      <div class="coin" style="left: 40px; animation-delay: 0.2s;"></div>
-      <div class="coin" style="left: 60px; animation-delay: 0.4s;"></div>
-      <div class="coin" style="left: 30px; animation-delay: 0.6s;"></div>
-      <div class="coin" style="left: 50px; animation-delay: 0.8s;"></div>
-      <div class="coin" style="left: 25px; animation-delay: 1s;"></div>
-      <div class="coin" style="left: 55px; animation-delay: 1.2s;"></div>
-      <div class="coin" style="left: 35px; animation-delay: 1.4s;"></div>
-      <div class="coin" style="left: 45px; animation-delay: 1.6s;"></div>
-      <div class="coin" style="left: 65px; animation-delay: 1.8s;"></div>
+      <div class="coin" style="left: 30px; animation-delay: 0s;"></div>
+      <div class="coin" style="left: 60px; animation-delay: 0.2s;"></div>
+      <div class="coin" style="left: 90px; animation-delay: 0.4s;"></div>
+      <div class="coin" style="left: 45px; animation-delay: 0.6s;"></div>
+      <div class="coin" style="left: 75px; animation-delay: 0.8s;"></div>
+      <div class="coin" style="left: 37.5px; animation-delay: 1s;"></div>
+      <div class="coin" style="left: 82.5px; animation-delay: 1.2s;"></div>
+      <div class="coin" style="left: 52.5px; animation-delay: 1.4s;"></div>
+      <div class="coin" style="left: 67.5px; animation-delay: 1.6s;"></div>
+      <div class="coin" style="left: 97.5px; animation-delay: 1.8s;"></div>
     </div>
   </div>
   <div class="iframe-container">
@@ -186,9 +187,9 @@
 
     // Устанавливаем начальные позиции и задержки для монет
     document.querySelectorAll('.coin').forEach(item => {
-      const randomLeft = Math.random() * 60 + 20;
+      const randomLeft = Math.random() * 90 + 30; /* Увеличиваем диапазон для большего кошелька */
       item.style.left = `${randomLeft}px`;
-      item.style.top = `-20px`;
+      item.style.top = `-30px`;
     });
 
     // Скрываем прелоадер после загрузки
