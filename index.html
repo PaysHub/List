@@ -11,12 +11,13 @@
       height: 100%;
       font-size: 18px;
       overflow: hidden;
-      background-color: #ffffff; /* Светлый фон */
-      color: #000000; /* Чёрный текст */
+      background-color: #ffffff;
+      color: #000000;
     }
     .iframe-container {
       width: 100%;
       height: calc(100% - 60px);
+      position: relative;
     }
     iframe {
       width: 100%;
@@ -32,24 +33,29 @@
       position: fixed;
       bottom: 0;
       width: 100%;
-      background: #f0f0f0; /* Светлый фон вкладок */
+      background: #f0f0f0;
       padding: 10px;
       box-sizing: border-box;
+      z-index: 10;
     }
     .tab {
       flex: 1;
       padding: 10px;
       text-align: center;
       cursor: pointer;
-      background: #d0d0d0; /* Серый фон кнопок */
+      background: #d0d0d0;
       color: #000000;
       border-radius: 5px;
       margin: 0 5px;
-      font-family: 'Arial', sans-serif; /* Шрифт без засечек */
+      font-family: 'Arial', sans-serif;
     }
     .tab.active {
-      background: #1e90ff; /* Голубой для активной вкладки */
+      background: #1e90ff;
       color: #ffffff;
+    }
+    /* Скрываем панель Airtable */
+    iframe .airtable-embed__footer {
+      display: none !important;
     }
     @media (max-width: 600px) {
       body { font-size: 20px; }
