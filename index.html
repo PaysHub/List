@@ -171,6 +171,7 @@
   <div class="tabs">
     <div class="tab active" onclick="showTab('rates')">Ставки</div>
     <div class="tab" onclick="showTab('tech')">Техрешения</div>
+    <div class="tab" onclick="openTelegram()">Оператор</div>
   </div>
   <script>
     const tg = window.Telegram.WebApp;
@@ -183,6 +184,10 @@
       document.querySelectorAll('iframe').forEach(iframe => iframe.classList.remove('active'));
       document.querySelector(`[onclick="showTab('${tabId}')"]`).classList.add('active');
       document.getElementById(tabId).classList.add('active');
+    }
+
+    function openTelegram() {
+      window.open('https://t.me/p_fintech', '_blank'); /* Открываем ссылку на Telegram */
     }
 
     // Устанавливаем начальные позиции и задержки для монет
