@@ -70,15 +70,23 @@
       justify-content: center;
       align-items: center;
       z-index: 100;
+      transition: opacity 0.5s ease; /* Добавляем плавный переход для opacity */
+      opacity: 1; /* Начальное состояние - полностью видимый */
+    }
+    .preloader.hidden {
+      opacity: 0; /* Скрытое состояние - прозрачный */
+      pointer-events: none; /* Отключаем взаимодействие, когда скрыт */
     }
     .wallet-container {
       position: relative;
       width: 150px; /* Увеличиваем ширину контейнера */
       height: 100%;
       display: flex;
+      flex-direction: column; /* Меняем на колонку, чтобы текст был под кошельком */
       justify-content: center;
       align-items: center;
       z-index: 1;
+      padding-top: 50px; /* Опускаем кошелек ниже */
     }
     .wallet {
       width: 150px; /* Увеличиваем ширину кошелька */
@@ -137,14 +145,30 @@
         transform: rotate(360deg);
       }
     }
-    .preloader.hidden {
-      display: none;
+    /* Стили для переливающегося текста */
+    .welcome-text {
+      margin-top: 20px; /* Отступ от кошелька */
+      font-family: 'Arial', sans-serif;
+      font-size: 24px;
+      font-weight: 300; /* Тонкий шрифт */
+      text-align: center; /* Центрируем текст */
+      background: linear-gradient(90deg, #1e90ff, #2ecc71, #1e90ff); /* Голубой и зеленый градиент */
+      background-size: 200% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent; /* Делаем текст прозрачным, чтобы виден был градиент */
+      animation: gradientShift 3s infinite linear; /* Анимация переливания */
+    }
+    @keyframes gradientShift {
+      0% { background-position: 0% 0%; }
+      100% { background-position: 200% 0%; }
     }
     @media (max-width: 600px) {
       body { font-size: 20px; }
       .iframe-container { height: calc(100vh - 80px); }
       .tabs { bottom: 20px; padding: 10px; }
       .tab { font-size: 14px; }
+      .welcome-text { font-size: 20px; } /* Уменьшаем текст на мобильных */
     }
   </style>
 </head>
@@ -162,6 +186,7 @@
       <div class="coin" style="left: 52.5px; animation-delay: 1.4s;"></div>
       <div class="coin" style="left: 67.5px; animation-delay: 1.6s;"></div>
       <div class="coin" style="left: 97.5px; animation-delay: 1.8s;"></div>
+      <div class="welcome-text">Welcome to PaysHub</div>
     </div>
   </div>
   <div class="iframe-container">
@@ -187,23 +212,28 @@
     }
 
     function openTelegram() {
-      window.open('https://t.me/p_fintech', '_blank'); /* Открываем ссылку на Telegram */
+      window.open('https://t.me/p_fintech?text=I%20need%20help%20with%20the%20PaysHub%20service', '_blank');
     }
 
     // Устанавливаем начальные позиции и задержки для монет
     document.querySelectorAll('.coin').forEach(item => {
       const randomLeft = Math.random() * 90 + 30; /* Увеличиваем диапазон для большего кошелька */
-      item.style.left = `${randomLeft}px`;
-      item.style.top = `-30px`;
+      item.style.left = `${randomLeft}px`; // Исправляем шаблонную строку
+      item.style.top = '-30px';
     });
 
-    // Скрываем прелоадер после загрузки
+    // Скрываем прелоадер с плавным исчезновением после загрузки
     window.addEventListener('load', () => {
       const preloader = document.getElementById('preloader');
       setTimeout(() => {
         preloader.classList.add('hidden');
+        // Удаляем прелоадер из DOM после завершения анимации
+        preloader.addEventListener('transitionend', () => {
+          preloader.style.display = 'none';
+        }, { once: true });
       }, 2000);
     });
   </script>
 </body>
 </html>
+
