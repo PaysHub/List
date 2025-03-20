@@ -25,7 +25,7 @@
       height: 100%;
       border: none;
       display: none;
-      clip-path: inset(0 0 15px 0); /* Увеличиваем обрезку до 15px, чтобы скрыть панель */
+      clip-path: inset(0 0 10px 0);
     }
     iframe.active {
       display: block;
@@ -61,21 +61,6 @@
     .tab span {
       margin-left: 5px;
     }
-    /* Стили для текста-кнопок в Airtable */
-    iframe .text-element a[href*="airtable.com"] {
-      display: inline-block;
-      padding: 8px 16px;
-      background-color: #1e90ff;
-      color: #ffffff;
-      border-radius: 5px;
-      text-decoration: none;
-      font-family: 'Arial', sans-serif;
-      font-size: 14px;
-      margin: 5px 0;
-    }
-    iframe .text-element a[href*="airtable.com"]:hover {
-      background-color: #1565c0;
-    }
     @media (max-width: 600px) {
       body { font-size: 20px; }
       .iframe-container { height: calc(100vh - 60px); }
@@ -88,9 +73,9 @@
     <iframe id="tech" src="https://airtable.com/embed/appsYAo5ZtWnnBpmT/shreq36qQ6eQ30SeX" frameborder="0"></iframe>
   </div>
   <div class="tabs">
-    <div class="tab active" onclick="showTab('rates')">📊<span>Ставки</span></div>
-    <div class="tab" onclick="showTab('tech')">💻<span>Техрешения</span></div>
-    <div class="tab" onclick="window.location.href='https://t.me/p_fintech'">👤<span>Оператор</span></div>
+    <div class="tab active" onclick="showTab('rates')">&#128202;<span>Ставки</span></div>
+    <div class="tab" onclick="showTab('tech')">&#128187;<span>Техрешения</span></div>
+    <div class="tab" onclick="window.location.href='https://t.me/p_fintech'">&#128100;<span>Оператор</span></div>
   </div>
   <script>
     const tg = window.Telegram.WebApp;
