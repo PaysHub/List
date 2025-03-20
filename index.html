@@ -25,6 +25,7 @@
       height: 100%;
       border: none;
       display: none;
+      clip-path: inset(0 0 40px 0); /* Обрезаем 40px снизу */
     }
     iframe.active {
       display: block;
@@ -53,17 +54,6 @@
     .tab.active {
       background: #1e90ff;
       color: #ffffff;
-    }
-    /* Скрываем панель Airtable через обёртку */
-    .iframe-container::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 60px; /* Высота панели Airtable */
-      background: #ffffff; /* Цвет фона, чтобы закрыть панель */
-      z-index: 5;
     }
     @media (max-width: 600px) {
       body { font-size: 20px; }
