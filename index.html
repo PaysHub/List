@@ -11,34 +11,52 @@
       height: 100%;
       font-size: 18px;
       overflow: hidden;
-      background-color: #ffffff; /* Белый фон для всей страницы */
+      background-color: #ffffff;
       color: #000000;
     }
-    .iframe-container {
+    .content-container {
       width: 100%;
-      height: calc(100% - 80px); /* Уменьшаем высоту iframe, чтобы кнопки поднялись */
+      height: calc(100% - 80px);
       position: relative;
-      overflow: hidden;
+      overflow-y: auto;
       z-index: 1;
+      padding: 10px;
+      box-sizing: border-box;
     }
-    iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
+    .tab-content {
       display: none;
-      background: transparent; /* Прозрачный фон внутри iframe */
-      clip-path: inset(0 0 20px 0);
     }
-    iframe.active {
+    .tab-content.active {
       display: block;
+    }
+    .card {
+      background: #f5f5f5;
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .card-details {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    .card-details.active {
+      max-height: 200px; /* Настройте под ваши данные */
     }
     .tabs {
       display: flex;
       position: fixed;
-      bottom: 20px; /* Сдвигаем панель вверх на 20px от низа */
+      bottom: 20px;
       width: 100%;
-      background: #ffffff; /* Белый фон для полоски с кнопками */
-      padding: 10px; /* Оставляем изначальный padding */
+      background: #ffffff;
+      padding: 10px;
       box-sizing: border-box;
       z-index: 10;
     }
@@ -52,50 +70,49 @@
       border-radius: 5px;
       margin: 0 5px;
       font-family: 'Arial', sans-serif;
-      font-size: 16px; /* Уменьшенный шрифт для кнопок */
+      font-size: 16px;
     }
     .tab.active {
       background: #1e90ff;
       color: #ffffff;
     }
-    /* Стили для прелоадера */
     .preloader {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: #ffffff; /* Белый фон для прелоадера */
+      background: #ffffff;
       display: flex;
       justify-content: center;
       align-items: center;
       z-index: 100;
-      transition: opacity 0.5s ease; /* Плавный переход для opacity */
-      opacity: 1; /* Начальное состояние - полностью видимый */
+      transition: opacity 0.5s ease;
+      opacity: 1;
     }
     .preloader.hidden {
-      opacity: 0; /* Скрытое состояние - прозрачный */
-      pointer-events: none; /* Отключаем взаимодействие, когда скрыт */
+      opacity: 0;
+      pointer-events: none;
     }
     .wallet-container {
       position: relative;
-      width: 150px; /* Увеличиваем ширину контейнера */
+      width: 150px;
       height: 100%;
       display: flex;
-      flex-direction: column; /* Меняем на колонку, чтобы текст был под кошельком */
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       z-index: 1;
-      padding-top: 90px; /* Опускаем кошелек еще на 20px ниже (было 70px) */
+      padding-top: 90px;
     }
     .wallet {
-      width: 150px; /* Увеличиваем ширину кошелька */
-      height: 105px; /* Увеличиваем высоту кошелька (в 1.5 раза) */
+      width: 150px;
+      height: 105px;
       background: #d2b48c;
-      border-radius: 15px 15px 0 0; /* Пропорционально увеличиваем радиус */
+      border-radius: 15px 15px 0 0;
       position: relative;
       overflow: hidden;
-      box-shadow: 0 3px 7px rgba(0, 0, 0, 0.2); /* Чуть больше тень */
+      box-shadow: 0 3px 7px rgba(0, 0, 0, 0.2);
       z-index: 2;
     }
     .wallet::before {
@@ -104,17 +121,17 @@
       top: 0;
       left: 0;
       width: 100%;
-      height: 30px; /* Увеличиваем верхнюю часть пропорционально */
+      height: 30px;
       background: #b89778;
       border-radius: 15px 15px 0 0;
     }
     .wallet::after {
       content: '';
       position: absolute;
-      top: 15px; /* Сдвигаем пропорционально */
+      top: 15px;
       left: 50%;
       transform: translateX(-50%);
-      width: 15px; /* Увеличиваем кнопку */
+      width: 15px;
       height: 15px;
       background: #000000;
       border-radius: 50%;
@@ -123,8 +140,8 @@
     .coin {
       position: absolute;
       animation: fall 2s infinite linear;
-      box-shadow: 0 3px 4px rgba(0, 0, 0, 0.1); /* Чуть больше тень */
-      width: 30px; /* Увеличиваем монетки */
+      box-shadow: 0 3px 4px rgba(0, 0, 0, 0.1);
+      width: 30px;
       height: 30px;
       background: #FFD700;
       border-radius: 50%;
@@ -134,34 +151,33 @@
       0% {
         opacity: 1;
         transform: rotate(0deg);
-        top: -30px; /* Смещаем старт выше из-за большего размера монет */
+        top: -30px;
       }
       60% {
         opacity: 1;
       }
       100% {
         opacity: 0;
-        top: calc(50% + 30px); /* Исходное значение */
+        top: calc(50% + 30px);
         transform: rotate(360deg);
       }
     }
-    /* Стили для переливающегося текста */
     .welcome-text {
-      margin-top: 20px; /* Отступ от кошелька */
+      margin-top: 20px;
       font-family: 'Arial', sans-serif;
-      font-size: 20px; /* Уменьшенный размер для "Welcome to" */
-      font-weight: 300; /* Тонкий шрифт для "Welcome to" */
-      text-align: center; /* Центрируем текст */
-      background: linear-gradient(90deg, #1e90ff, #2ecc71, #1e90ff); /* Голубой и зеленый градиент */
+      font-size: 20px;
+      font-weight: 300;
+      text-align: center;
+      background: linear-gradient(90deg, #1e90ff, #2ecc71, #1e90ff);
       background-size: 200% 100%;
       -webkit-background-clip: text;
       background-clip: text;
-      color: transparent; /* Делаем текст прозрачным, чтобы виден был градиент */
-      animation: gradientShift 3s infinite linear; /* Анимация переливания */
+      color: transparent;
+      animation: gradientShift 3s infinite linear;
     }
     .welcome-text span {
-      font-size: 28px; /* Размер для "PaysHub" */
-      font-weight: 500; /* Жирность для "PaysHub" */
+      font-size: 28px;
+      font-weight: 500;
     }
     @keyframes gradientShift {
       0% { background-position: 0% 0%; }
@@ -169,11 +185,11 @@
     }
     @media (max-width: 600px) {
       body { font-size: 20px; }
-      .iframe-container { height: calc(100vh - 80px); }
+      .content-container { height: calc(100vh - 80px); }
       .tabs { bottom: 20px; padding: 10px; }
       .tab { font-size: 14px; }
-      .welcome-text { font-size: 18px; } /* Еще меньше для мобильных */
-      .welcome-text span { font-size: 24px; } /* Корректировка для мобильных */
+      .welcome-text { font-size: 18px; }
+      .welcome-text span { font-size: 24px; }
     }
   </style>
 </head>
@@ -194,9 +210,9 @@
       <div class="welcome-text">Welcome to <span>PaysHub</span></div>
     </div>
   </div>
-  <div class="iframe-container">
-    <iframe id="rates" class="active" src="https://airtable.com/embed/appAyEpzQw75tRFbb/shrYJSFSHV0PE25UW" frameborder="0"></iframe>
-    <iframe id="tech" src="https://airtable.com/embed/appsYAo5ZtWnnBpmT/shreq36qQ6eQ30SeX" frameborder="0"></iframe>
+  <div class="content-container">
+    <div id="rates" class="tab-content active"></div>
+    <div id="tech" class="tab-content"></div>
   </div>
   <div class="tabs">
     <div class="tab active" onclick="showTab('rates')">Ставки</div>
@@ -205,13 +221,68 @@
   </div>
   <script>
     const tg = window.Telegram.WebApp;
-    tg.setHeaderColor('#ffffff'); /* Белый цвет заголовка для Telegram */
-    tg.setBackgroundColor('#ffffff'); /* Белый фон для Telegram */
+    tg.setHeaderColor('#ffffff');
+    tg.setBackgroundColor('#ffffff');
     tg.ready();
+
+    const API_TOKEN = '26dcc8f4df0dbda1cf6dcbc31d2a0a82efb5fb37';
+    const BASE_URL = 'https://cloud.seatable.io/api/v2.1/dtable-rows/';
+    // Замените TABLE_ID на ID вашей таблицы в SeaTable
+    const RATES_TABLE_ID = 'ВАШ_TABLE_ID_ДЛЯ_СТАВОК'; // Найдите в URL таблицы
+    const TECH_TABLE_ID = 'ВАШ_TABLE_ID_ДЛЯ_ТЕХРЕШЕНИЙ'; // Найдите в URL таблицы
+
+    async function fetchData(tableId) {
+      try {
+        const response = await fetch(`${BASE_URL}?table_id=${tableId}`, {
+          headers: {
+            'Authorization': `Token ${API_TOKEN}`
+          }
+        });
+        const data = await response.json();
+        return data.rows;
+      } catch (error) {
+        console.error('Ошибка при получении данных:', error);
+        return [];
+      }
+    }
+
+    function renderData(containerId, rows) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
+      rows.forEach(row => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <div class="card-header">
+            <span>${row['PSPinterface'] || 'Без названия'}</span>
+            <span>${row['Pay in (%)'] || 'N/A'}</span>
+          </div>
+          <div class="card-details">
+            <p>Pay out: ${row['Pay out (%)'] || 'N/A'}</p>
+            <p>Method: ${row['Method']?.join(', ') || 'N/A'}</p>
+            <p>Roll reserve: ${row['Roll reserve'] || 'N/A'}</p>
+            <p>Refund fee: ${row['Refund fee'] || 'N/A'}</p>
+            <p>Min trans: ${row['Min trans'] || 'N/A'}</p>
+          </div>
+        `;
+        card.addEventListener('click', () => {
+          const details = card.querySelector('.card-details');
+          details.classList.toggle('active');
+        });
+        container.appendChild(card);
+      });
+    }
+
+    async function loadTabs() {
+      const ratesData = await fetchData(RATES_TABLE_ID);
+      const techData = await fetchData(TECH_TABLE_ID);
+      renderData('rates', ratesData);
+      renderData('tech', techData);
+    }
 
     function showTab(tabId) {
       document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-      document.querySelectorAll('iframe').forEach(iframe => iframe.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
       document.querySelector(`[onclick="showTab('${tabId}')"]`).classList.add('active');
       document.getElementById(tabId).classList.add('active');
     }
@@ -220,14 +291,12 @@
       window.open('https://t.me/p_fintech?text=I%20need%20help%20with%20the%20PaysHub%20service', '_blank');
     }
 
-    // Устанавливаем начальные позиции и задержки для монет
     document.querySelectorAll('.coin').forEach(item => {
-      const randomLeft = Math.random() * 90 + 30; /* Увеличиваем диапазон для большего кошелька */
+      const randomLeft = Math.random() * 90 + 30;
       item.style.left = `${randomLeft}px`;
       item.style.top = '-30px';
     });
 
-    // Скрываем прелоадер с плавным исчезновением после загрузки
     window.addEventListener('load', () => {
       const preloader = document.getElementById('preloader');
       setTimeout(() => {
@@ -236,29 +305,26 @@
           preloader.style.display = 'none';
         }, { once: true });
       }, 2000);
+      loadTabs();
     });
   </script>
 
-<!-- Yandex.Metrika counter -->
-<script type="text/javascript" >
-   (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-   m[i].l=1*new Date();
-   for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-   k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-   (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+  <!-- Yandex.Metrika counter -->
+  <script type="text/javascript">
+    (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+    m[i].l=1*new Date();
+    for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+    k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+    (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
 
-   ym(100499634, "init", {
-        clickmap:true,
-        trackLinks:true,
-        accurateTrackBounce:true,
-        webvisor:true
-   });
-</script>
-<noscript><div><img src="https://mc.yandex.ru/watch/100499634" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-<!-- /Yandex.Metrika counter -->
-
-
+    ym(100499634, "init", {
+      clickmap: true,
+      trackLinks: true,
+      accurateTrackBounce: true,
+      webvisor: true
+    });
+  </script>
+  <noscript><div><img src="https://mc.yandex.ru/watch/100499634" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+  <!-- /Yandex.Metrika counter -->
 </body>
 </html>
-
-
