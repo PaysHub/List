@@ -238,9 +238,10 @@
           }
         });
         const data = await response.json();
-        return data.rows;
+        console.log(`Данные для tableId ${tableId}:`, data); // Отладка
+        return data.rows || [];
       } catch (error) {
-        console.error('Ошибка при получении данных:', error);
+        console.error(`Ошибка при получении данных для tableId ${tableId}:`, error);
         return [];
       }
     }
@@ -248,7 +249,12 @@
     function renderData(containerId, rows) {
       const container = document.getElementById(containerId);
       container.innerHTML = '';
+      if (rows.length === 0) {
+        container.innerHTML = '<p>Нет данных для отображения</p>';
+        return;
+      }
       rows.forEach(row => {
+        console.log('Строка данных:', row); // Отладка
         const card = document.createElement('div');
         card.className = 'card';
         card.innerHTML = `
