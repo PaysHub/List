@@ -227,18 +227,19 @@
 
     const API_TOKEN = '26dcc8f4df0dbda1cf6dcbc31d2a0a82efb5fb37';
     const BASE_URL = 'https://cloud.seatable.io/api/v2.1/dtable-rows/';
+    const DTABLE_UUID = 'ВАШ_DTABLE_UUID'; // Замените на реальный UUID
     const RATES_TABLE_ID = 'F94E'; // Для "Ставки"
     const TECH_TABLE_ID = '8psA'; // Для "Техрешения"
 
     async function fetchData(tableId) {
       try {
-        const response = await fetch(`${BASE_URL}?table_id=${tableId}`, {
+        const response = await fetch(`${BASE_URL}?dtable_uuid=${DTABLE_UUID}&table_id=${tableId}`, {
           headers: {
             'Authorization': `Token ${API_TOKEN}`
           }
         });
         const data = await response.json();
-        console.log(`Данные для tableId ${tableId}:`, data); // Отладка
+        console.log(`Данные для tableId ${tableId}:`, data);
         return data.rows || [];
       } catch (error) {
         console.error(`Ошибка при получении данных для tableId ${tableId}:`, error);
@@ -254,7 +255,7 @@
         return;
       }
       rows.forEach(row => {
-        console.log('Строка данных:', row); // Отладка
+        console.log('Строка данных:', row);
         const card = document.createElement('div');
         card.className = 'card';
         card.innerHTML = `
