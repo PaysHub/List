@@ -17,7 +17,6 @@
     }
     .header {
       padding: 15px;
-      background: #2a2a2a;
       position: sticky;
       top: 0;
       z-index: 10;
@@ -44,6 +43,9 @@
     }
     .filter-section {
       margin-bottom: 15px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
     }
     .filter-section h3 {
       font-size: 14px;
@@ -53,12 +55,11 @@
     }
     .filter-dropdown {
       position: relative;
-      display: inline-block;
-      width: 100%;
+      width: 30%;
+      min-width: 150px;
     }
     .filter-button {
       padding: 6px 12px;
-      background: #333;
       border-radius: 8px;
       cursor: pointer;
       font-size: 14px;
@@ -69,9 +70,9 @@
       width: 100%;
       box-sizing: border-box;
     }
-    .filter-button.industry { background: #4a6fa5; }
-    .filter-button.geo { background: #5b9e5b; }
-    .filter-button.risk { background: #a55b5b; }
+    .filter-button.industry { background: #6a829b; } /* Приглушённый синий */
+    .filter-button.geo { background: #7ba57b; } /* Приглушённый зелёный */
+    .filter-button.risk { background: #c15b8a; } /* Ярко-малиновый */
     .filter-button.active {
       background: #007bff !important;
     }
@@ -131,9 +132,9 @@
       font-size: 12px;
       color: #fff;
     }
-    .tag.industry { background: #4a6fa5; }
-    .tag.geo { background: #5b9e5b; }
-    .tag.risk { background: #a55b5b; }
+    .tag.industry { background: #6a829b; } /* Приглушённый синий */
+    .tag.geo { background: #7ba57b; } /* Приглушённый зелёный */
+    .tag.risk { background: #c15b8a; } /* Ярко-малиновый */
     .card-details {
       max-height: 0;
       overflow: hidden;
@@ -357,6 +358,7 @@
       .card-details, .tech-info .description { font-size: 12px; }
       .tech-card img { height: 150px; }
       .details-grid { grid-template-columns: 1fr; }
+      .filter-dropdown { width: 100%; }
     }
   </style>
 </head>
@@ -383,22 +385,18 @@
   <div class="content-container">
     <div id="rates" class="tab-content active">
       <div class="filter-section">
-        <h3>Индустрия</h3>
         <div class="filter-dropdown">
+          <h3>Индустрия</h3>
           <div class="filter-button industry" id="industry-button">Выберите индустрию</div>
           <div class="filter-options" id="industry-options"></div>
         </div>
-      </div>
-      <div class="filter-section">
-        <h3>Гео</h3>
         <div class="filter-dropdown">
+          <h3>Гео</h3>
           <div class="filter-button geo" id="geo-button">Выберите гео</div>
           <div class="filter-options" id="geo-options"></div>
         </div>
-      </div>
-      <div class="filter-section">
-        <h3>Уровень риска</h3>
         <div class="filter-dropdown">
+          <h3>Уровень риска</h3>
           <div class="filter-button risk" id="risk-button">Выберите уровень риска</div>
           <div class="filter-options" id="risk-options"></div>
         </div>
@@ -459,7 +457,11 @@
         getTags(row, field).forEach(tag => tags.add(tag));
       });
 
-      button.addEventListener('click', () => {
+      button.addEventListener('click', (e) => {
+        e.stopPropagation();
+        document.querySelectorAll('.filter-options').forEach(opt => {
+          if (opt !== container) opt.classList.remove('active');
+        });
         container.classList.toggle('active');
       });
 
