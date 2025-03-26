@@ -225,8 +225,8 @@
       background: #333;
       transition: opacity 0.3s ease;
       opacity: 0;
-      line-height: 1.5; /* Улучшаем читаемость текста с переносами */
-      white-space: pre-wrap; /* Сохраняем переносы строк */
+      line-height: 1.5;
+      white-space: pre-wrap;
     }
     .card-details.active .info-tag {
       opacity: 1;
@@ -522,6 +522,7 @@
   <script>
     const tg = window.Telegram.WebApp;
     tg.ready();
+    tg.expand(); // Добавлен вызов для открытия на полный экран
 
     const API_TOKEN = 'ubicp2nFx8L47YOV3MOyn1FhUIPQ4EMESzFnrL3L';
     const BASE_URL = 'https://app.nocodb.com/api/v2/tables/';
