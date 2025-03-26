@@ -257,6 +257,7 @@
       height: 200px;
       object-fit: cover;
       border-radius: 12px 12px 0 0;
+      display: block;
     }
     .tabs {
       display: flex;
@@ -540,9 +541,25 @@
     }
 
     function extractImageUrl(imgField) {
-      if (!imgField) return 'https://via.placeholder.com/200';
-      const match = imgField.match(/\((https:\/\/[^\)]+)\)/);
-      return match ? match[1] : 'https://via.placeholder.com/200';
+      // Если поле пустое, возвращаем заглушку
+      if (!imgField) {
+        return 'https://via.placeholder.com/200';
+      }
+
+      // Проверяем, является ли imgField массивом (формат Attachment)
+      if (Array.isArray(imgField) && imgField.length > 0) {
+        // Берем URL первого изображения из массива
+        return imgField[0].url || 'https://via.placeholder.com/200';
+      }
+
+      // Если это строка (например, Markdown-формат), пытаемся извлечь URL
+      if (typeof imgField === 'string') {
+        const match = imgField.match(/\((https:\/\/[^\)]+)\)/);
+        return match ? match[1] : 'https://via.placeholder.com/200';
+      }
+
+      // Если формат неизвестный, возвращаем заглушку
+      return 'https://via.placeholder.com/200';
     }
 
     function renderFilters(containerId, buttonId, popupId, rows, field, filterType) {
@@ -719,6 +736,7 @@
       rows.forEach(row => {
         console.log('Rendering tech card:', row);
         const imgUrl = extractImageUrl(row['Img']);
+        console.log('Extracted image URL:', imgUrl);
         const card = document.createElement('div');
         card.className = 'tech-card';
         card.innerHTML = `
