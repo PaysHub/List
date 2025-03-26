@@ -148,7 +148,6 @@
     .card, .tech-card {
       background: #2a2a2a;
       border-radius: 12px;
-      padding: 15px;
       margin-bottom: 15px;
       cursor: pointer;
       transition: transform 0.3s ease;
@@ -171,12 +170,14 @@
       align-items: center;
       font-weight: 600;
       font-size: 16px;
+      padding: 15px;
     }
     .card-tags {
       margin-top: 8px;
       display: flex;
       gap: 6px;
       flex-wrap: wrap;
+      padding: 0 15px;
     }
     .tag {
       padding: 4px 8px;
@@ -195,11 +196,12 @@
       position: relative;
       display: flex;
       flex-direction: column;
+      padding: 0 15px;
     }
     .card-details.active {
       max-height: none;
       overflow: visible;
-      padding: 10px 0 0 0;
+      padding: 10px 15px 0 15px;
     }
     .details-block {
       margin-bottom: 15px;
@@ -255,27 +257,6 @@
       height: 200px;
       object-fit: cover;
       border-radius: 12px 12px 0 0;
-    }
-    .tech-info {
-      padding: 15px;
-    }
-    .tech-info .id {
-      font-size: 12px;
-      color: #888;
-    }
-    .tech-info .name {
-      font-size: 16px;
-      font-weight: 600;
-      margin: 5px 0;
-    }
-    .tech-info .description {
-      font-size: 14px;
-      color: #ccc;
-      margin-bottom: 5px;
-    }
-    .tech-info .type {
-      font-size: 12px;
-      color: #007bff;
     }
     .tabs {
       display: flex;
@@ -418,9 +399,9 @@
       .tab { font-size: 12px; }
       .welcome-text { font-size: 18px; }
       .welcome-text span { font-size: 24px; }
-      .card, .tech-card { padding: 10px; }
-      .card-header, .tech-info .name { font-size: 14px; }
-      .card-details, .tech-info .description { font-size: 12px; }
+      .card, .tech-card { padding: 0; }
+      .card-header { font-size: 14px; padding: 10px; }
+      .card-details { font-size: 12px; }
       .tech-card img { height: 150px; }
       .filter-section { flex-wrap: wrap; gap: 6px; padding: 8px 15px; }
       .filter-dropdown { min-width: 80px; }
@@ -556,6 +537,12 @@
 
     function getTags(row, field) {
       return row[field] ? row[field].split(',').map(tag => tag.trim()) : [];
+    }
+
+    function extractImageUrl(imgField) {
+      if (!imgField) return 'https://via.placeholder.com/200';
+      const match = imgField.match(/\((https:\/\/[^\)]+)\)/);
+      return match ? match[1] : 'https://via.placeholder.com/200';
     }
 
     function renderFilters(containerId, buttonId, popupId, rows, field, filterType) {
@@ -731,9 +718,11 @@
       }
       rows.forEach(row => {
         console.log('Rendering tech card:', row);
+        const imgUrl = extractImageUrl(row['Img']);
         const card = document.createElement('div');
-        card.className = 'card';
+        card.className = 'tech-card';
         card.innerHTML = `
+          <img src="${imgUrl}" alt="Tech Solution">
           <div class="card-header">
             <span>${row['ID name'] || 'Без названия'}</span>
             <span>${row['Price'] || 'N/A'}</span>
