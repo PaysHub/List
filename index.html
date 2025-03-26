@@ -180,7 +180,7 @@
       gap: 6px;
       flex-wrap: wrap;
       padding: 0 15px;
-      margin-bottom: 15px; /* Увеличиваем расстояние до краткого описания */
+      margin-bottom: 15px;
     }
     .tag {
       padding: 4px 8px;
@@ -225,6 +225,8 @@
       background: #333;
       transition: opacity 0.3s ease;
       opacity: 0;
+      line-height: 1.5; /* Улучшаем читаемость текста с переносами */
+      white-space: pre-wrap; /* Сохраняем переносы строк */
     }
     .card-details.active .info-tag {
       opacity: 1;
@@ -266,7 +268,7 @@
       font-size: 14px;
       color: #ccc;
       display: -webkit-box;
-      -webkit-line-clamp: 4; /* Увеличиваем количество строк до 4 */
+      -webkit-line-clamp: 4;
       -webkit-box-orient: vertical;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -621,6 +623,12 @@
       return !value || value === 'N/A' || value.trim() === '';
     }
 
+    // Функция для форматирования текста (замена переносов строк на <br>)
+    function formatText(text) {
+      if (!text) return '';
+      return text.replace(/\n/g, '<br>');
+    }
+
     function renderFilters(containerId, buttonId, popupId, rows, field, filterType) {
       const container = document.getElementById(containerId);
       const button = document.getElementById(buttonId);
@@ -766,7 +774,7 @@
           { label: 'Years on market', value: row['На рынке (лет)'] }
         ].filter(item => !isEmptyValue(item.value)).map(item => `<span class="info-tag">${item.label}: ${item.value}</span>`).join('');
 
-        const commentsBlock = !isEmptyValue(row['Комментарии']) ? `<span class="info-tag" style="display: block;">${row['Комментарии']}</span>` : '';
+        const commentsBlock = !isEmptyValue(row['Комментарии']) ? `<span class="info-tag" style="display: block;">${formatText(row['Комментарии'])}</span>` : '';
 
         card.innerHTML = `
           <div class="card-header">
@@ -855,7 +863,7 @@
           { label: 'Условия', value: row['Terms'] }
         ].filter(item => !isEmptyValue(item.value)).map(item => `<span class="info-tag">${item.label}: ${item.value}</span>`).join('');
 
-        const descriptionBlock = !isEmptyValue(row['Description']) ? `<span class="info-tag" style="display: block;">${row['Description']}</span>` : '';
+        const descriptionBlock = !isEmptyValue(row['Description']) ? `<span class="info-tag" style="display: block;">${formatText(row['Description'])}</span>` : '';
 
         card.innerHTML = `
           <img src="${imgUrl}" alt="Tech Solution" onerror="this.src='https://placehold.co/400x276'; console.log('Failed to load image: ${imgUrl}');">
