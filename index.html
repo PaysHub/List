@@ -30,22 +30,32 @@
     .tab-content.active {
       display: block;
     }
-    .filter-container {
+    .filter-section {
       margin-bottom: 15px;
+    }
+    .filter-section h3 {
+      font-size: 14px;
+      font-weight: 500;
+      color: #aaa;
+      margin-bottom: 8px;
+    }
+    .filter-container {
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
     }
     .filter-tag {
       padding: 6px 12px;
-      background: #333;
       border-radius: 20px;
       cursor: pointer;
       font-size: 14px;
       transition: background 0.3s;
     }
+    .filter-tag.industry { background: #4a6fa5; }
+    .filter-tag.geo { background: #5b9e5b; }
+    .filter-tag.risk { background: #a55b5b; }
     .filter-tag.active {
-      background: #007bff;
+      background: #007bff !important;
     }
     .card {
       background: #2a2a2a;
@@ -72,12 +82,14 @@
       flex-wrap: wrap;
     }
     .tag {
-      background: #444;
       padding: 4px 8px;
       border-radius: 12px;
       font-size: 12px;
-      color: #ccc;
+      color: #fff;
     }
+    .tag.industry { background: #4a6fa5; }
+    .tag.geo { background: #5b9e5b; }
+    .tag.risk { background: #a55b5b; }
     .card-details {
       max-height: 0;
       overflow: hidden;
@@ -87,7 +99,21 @@
       color: #ddd;
     }
     .card-details.active {
-      max-height: 600px;
+      max-height: 800px;
+    }
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+    }
+    .details-block {
+      margin-bottom: 15px;
+    }
+    .details-block h4 {
+      font-size: 14px;
+      font-weight: 600;
+      color: #aaa;
+      margin-bottom: 8px;
     }
     .apply-button {
       margin-top: 15px;
@@ -284,6 +310,7 @@
       .card-header, .tech-info .name { font-size: 14px; }
       .card-details, .tech-info .description { font-size: 12px; }
       .tech-card img { height: 150px; }
+      .details-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -306,9 +333,18 @@
   </div>
   <div class="content-container">
     <div id="rates" class="tab-content active">
-      <div class="filter-container" id="industry-filter"></div>
-      <div class="filter-container" id="geo-filter"></div>
-      <div class="filter-container" id="risk-filter"></div>
+      <div class="filter-section">
+        <h3>Индустрия</h3>
+        <div class="filter-container" id="industry-filter"></div>
+      </div>
+      <div class="filter-section">
+        <h3>Гео</h3>
+        <div class="filter-container" id="geo-filter"></div>
+      </div>
+      <div class="filter-section">
+        <h3>Уровень риска</h3>
+        <div class="filter-container" id="risk-filter"></div>
+      </div>
       <div id="rates-content"></div>
     </div>
     <div id="tech" class="tab-content">
@@ -366,7 +402,7 @@
       container.innerHTML = '';
       tags.forEach(tag => {
         const filterTag = document.createElement('div');
-        filterTag.className = 'filter-tag';
+        filterTag.className = `filter-tag ${filterType}`;
         filterTag.textContent = tag;
         filterTag.addEventListener('click', () => {
           document.querySelectorAll(`#${containerId} .filter-tag`).forEach(t => t.classList.remove('active'));
@@ -383,7 +419,7 @@
         container.appendChild(filterTag);
       });
       const resetFilter = document.createElement('div');
-      resetFilter.className = 'filter-tag';
+      resetFilter.className = `filter-tag ${filterType}`;
       resetFilter.textContent = 'Все';
       resetFilter.addEventListener('click', () => {
         document.querySelectorAll(`#${containerId} .filter-tag`).forEach(t => t.classList.remove('active'));
@@ -427,35 +463,52 @@
             <span>${row['Pay in (%)'] || 'N/A'}</span>
           </div>
           <div class="card-tags">
-            ${getTags(row, 'Industry').map(tag => `<span class="tag">${tag}</span>`).join('')}
-            ${getTags(row, 'Risk').map(tag => `<span class="tag">${tag}</span>`).join('')}
-            ${getTags(row, 'Geo').map(tag => `<span class="tag">${tag}</span>`).join('')}
+            ${getTags(row, 'Industry').slice(0, 1).map(tag => `<span class="tag industry">${tag}</span>`).join('')}
+            ${getTags(row, 'Geo').slice(0, 1).map(tag => `<span class="tag geo">${tag}</span>`).join('')}
+            ${getTags(row, 'Risk').slice(0, 1).map(tag => `<span class="tag risk">${tag}</span>`).join('')}
           </div>
           <div class="card-details">
-            <p><strong>Pay out:</strong> ${row['Pay out (%)'] || 'N/A'}</p>
-            <p><strong>Method:</strong> ${row['Method'] || 'N/A'}</p>
-            <p><strong>Roll reserve:</strong> ${row['Roll reserve'] || 'N/A'}</p>
-            <p><strong>Refund fee:</strong> ${row['Refound fee'] || 'N/A'}</p>
-            <p><strong>Min trans:</strong> ${row['($) Min transaction'] || 'N/A'}</p>
-            <p><strong>Max trans:</strong> ${row['($) Max transaction'] || 'N/A'}</p>
-            <p><strong>Min turnover:</strong> ${row['($) Мин. оборот'] || 'N/A'}</p>
-            <p><strong>Max turnover:</strong> ${row['($) Макс. оборот'] || 'N/A'}</p>
-            <p><strong>Additional fees:</strong> ${row['Доп. платежи'] || 'N/A'}</p>
-            <p><strong>Settlement:</strong> ${row['Settlement'] || 'N/A'}</p>
-            <p><strong>Settlement amount:</strong> ${row['Settlement amount'] || 'N/A'}</p>
-            <p><strong>Прием в:</strong> ${row['Прием в'] || 'N/A'}</p>
-            <p><strong>Расчет в:</strong> ${row['Расчет в'] || 'N/A'}</p>
-            <p><strong>License:</strong> ${row['Лицензия'] || 'N/A'}</p>
-            <p><strong>Integration:</strong> ${row['Интеграция'] || 'N/A'}</p>
-            <p><strong>Compliance:</strong> ${row['Compliance'] || 'N/A'}</p>
-            <p><strong>Support 24/7:</strong> ${row['Support 24/7'] || 'N/A'}</p>
-            <p><strong>Recurrent:</strong> ${row['Рекуррент'] || 'N/A'}</p>
-            <p><strong>Chargeback level:</strong> ${row['Уровень чарджбэков'] || 'N/A'}</p>
-            <p><strong>3DS:</strong> ${row['3DS-авторизация'] || 'N/A'}</p>
-            <p><strong>Liquidity:</strong> ${row['Ликвидность'] || 'N/A'}</p>
-            <p><strong>Conversion:</strong> ${row['Конверсия'] || 'N/A'}</p>
-            <p><strong>Years on market:</strong> ${row['На рынке (лет)'] || 'N/A'}</p>
-            <p><strong>Comments:</strong> ${row['Комментарии'] || 'Нет комментариев'}</p>
+            <div class="details-grid">
+              <div class="details-block">
+                <h4>Тарифы</h4>
+                <p><strong>Pay in:</strong> ${row['Pay in (%)'] || 'N/A'}</p>
+                <p><strong>Pay out:</strong> ${row['Pay out (%)'] || 'N/A'}</p>
+                <p><strong>Method:</strong> ${row['Method'] || 'N/A'}</p>
+                <p><strong>Roll reserve:</strong> ${row['Roll reserve'] || 'N/A'}</p>
+                <p><strong>Refund fee:</strong> ${row['Refound fee'] || 'N/A'}</p>
+              </div>
+              <div class="details-block">
+                <h4>Транзакции</h4>
+                <p><strong>Min trans:</strong> ${row['($) Min transaction'] || 'N/A'}</p>
+                <p><strong>Max trans:</strong> ${row['($) Max transaction'] || 'N/A'}</p>
+                <p><strong>Min turnover:</strong> ${row['($) Мин. оборот'] || 'N/A'}</p>
+                <p><strong>Max turnover:</strong> ${row['($) Макс. оборот'] || 'N/A'}</p>
+                <p><strong>Additional fees:</strong> ${row['Доп. платежи'] || 'N/A'}</p>
+              </div>
+              <div class="details-block">
+                <h4>Дополнительно</h4>
+                <p><strong>Geo:</strong> ${row['Geo'] || 'N/A'}</p>
+                <p><strong>Type traffic:</strong> ${row['Type traffic'] || 'N/A'}</p>
+                <p><strong>Settlement:</strong> ${row['Settlement'] || 'N/A'}</p>
+                <p><strong>Settlement amount:</strong> ${row['Settlement amount'] || 'N/A'}</p>
+                <p><strong>Прием в:</strong> ${row['Прием в'] || 'N/A'}</p>
+                <p><strong>Расчет в:</strong> ${row['Расчет в'] || 'N/A'}</p>
+                <p><strong>License:</strong> ${row['Лицензия'] || 'N/A'}</p>
+                <p><strong>Integration:</strong> ${row['Интеграция'] || 'N/A'}</p>
+                <p><strong>Compliance:</strong> ${row['Compliance'] || 'N/A'}</p>
+                <p><strong>Support 24/7:</strong> ${row['Support 24/7'] || 'N/A'}</p>
+                <p><strong>Recurrent:</strong> ${row['Рекуррент'] || 'N/A'}</p>
+                <p><strong>Chargeback level:</strong> ${row['Уровень чарджбэков'] || 'N/A'}</p>
+                <p><strong>3DS:</strong> ${row['3DS-авторизация'] || 'N/A'}</p>
+                <p><strong>Liquidity:</strong> ${row['Ликвидность'] || 'N/A'}</p>
+                <p><strong>Conversion:</strong> ${row['Конверсия'] || 'N/A'}</p>
+                <p><strong>Years on market:</strong> ${row['На рынке (лет)'] || 'N/A'}</p>
+              </div>
+            </div>
+            <div class="details-block">
+              <h4>Комментарии</h4>
+              <p>${row['Комментарии'] || 'Нет комментариев'}</p>
+            </div>
             <button class="apply-button" onclick="window.open('https://t.me/p_fintech?text=Im interested in ${row['ID Name']}', '_blank')">Подать заявку</button>
           </div>
         `;
