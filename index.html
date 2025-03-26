@@ -21,7 +21,7 @@
       position: relative;
       overflow-y: auto;
       z-index: 1;
-      padding: 70px 15px 15px 15px; /* Отступ сверху для фильтров */
+      padding: 100px 15px 15px 15px; /* Начальный отступ сверху */
       box-sizing: border-box;
       -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
       mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
@@ -63,7 +63,7 @@
       cursor: pointer;
       font-size: 14px;
       color: #fff;
-      background: #333; /* Нейтральный фон для всех кнопок */
+      background: #333;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -380,7 +380,7 @@
       background: linear-gradient(90deg, #007bff, #00c4b4, #007bff);
       background-size: 200% 100%;
       -webkit-background-clip: text;
- коронавируй-clip: text;
+      background-clip: text;
       color: transparent;
       animation: gradientShift 3s infinite linear;
     }
@@ -494,6 +494,14 @@
       geo: new Set(),
       risk: new Set()
     };
+
+    // Функция для динамического расчета высоты фильтров и установки padding
+    function adjustContentPadding() {
+      const filterSection = document.querySelector('.filter-section');
+      const contentContainer = document.querySelector('.content-container');
+      const filterHeight = filterSection.offsetHeight;
+      contentContainer.style.paddingTop = `${filterHeight + 15}px`; // +15px для дополнительного отступа
+    }
 
     async function fetchData(tableId) {
       try {
@@ -706,6 +714,7 @@
       renderFilters('risk-options', 'risk-button', 'risk-popup', ratesData, 'Risk', 'risk');
       renderRates('rates-content', ratesData);
       renderTech('tech-content', techData);
+      adjustContentPadding(); // Устанавливаем отступ после загрузки данных
     }
 
     function showTab(tabId) {
@@ -735,6 +744,8 @@
       }, 2000);
       loadTabs();
     });
+
+    window.addEventListener('resize', adjustContentPadding); // Пересчитываем при изменении размера окна
 
     document.addEventListener('click', (e) => {
       if (!e.target.closest('.filter-dropdown') && !e.target.closest('.filter-popup')) {
