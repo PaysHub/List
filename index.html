@@ -511,7 +511,7 @@
     const tg = window.Telegram.WebApp;
     tg.ready();
 
-    const API_TOKEN = 'ubicp2nFx8L47YOV3MOyn1FhUIPQ4EMESzFnrL3L'; // Новый токен
+    const API_TOKEN = 'ubicp2nFx8L47YOV3MOyn1FhUIPQ4EMESzFnrL3L';
     const BASE_URL = 'https://app.nocodb.com/api/v2/tables/';
     const RATES_TABLE_ID = 'mbz9kdbkba6i9t2';
     const TECH_TABLE_ID = 'mnliw8pc7zmrw35';
@@ -567,18 +567,23 @@
         return 'https://placehold.co/200x200';
       }
 
-      // Проверяем, является ли imgField строкой (прямой URL)
+      // Проверяем, является ли imgField строкой (прямой URL, например, с GitHub)
       if (typeof imgField === 'string') {
         // Проверяем, является ли строка прямым URL (начинается с http:// или https://)
         if (imgField.startsWith('http://') || imgField.startsWith('https://')) {
-          console.log('Direct image URL detected:', imgField);
+          // Проверяем, является ли это GitHub raw URL
+          if (imgField.includes('raw.githubusercontent.com')) {
+            console.log('GitHub raw image URL detected:', imgField);
+          } else {
+            console.log('Direct image URL detected:', imgField);
+          }
           return imgField;
         }
         // Проверяем, содержит ли строка URL в формате NocoDB (например, "(https://...)")
         const match = imgField.match(/\((https:\/\/[^\)]+)\)/);
         if (match) {
           const imageUrl = match[1];
-          console.log('Extracted image URL from string:', imageUrl);
+          console.log('Extracted image URL from string (NocoDB format):', imageUrl);
           const urlWithToken = `${imageUrl}?xc-token=${API_TOKEN}`;
           console.log('Image URL with token:', urlWithToken);
           return urlWithToken;
@@ -588,7 +593,7 @@
       // Проверяем, является ли imgField массивом (вложение NocoDB)
       if (Array.isArray(imgField) && imgField.length > 0) {
         const imageObj = imgField[0];
-        console.log('Image object:', imageObj);
+        console.log('Image object (NocoDB attachment):', imageObj);
         const imageUrl = imageObj.url;
         console.log('Extracted image URL from array:', imageUrl);
         if (imageUrl) {
