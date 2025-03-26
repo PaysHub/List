@@ -259,6 +259,16 @@
       border-radius: 12px 12px 0 0;
       display: block;
     }
+    .tech-card .short-description {
+      padding: 0 15px 15px 15px;
+      font-size: 14px;
+      color: #ccc;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
     .tabs {
       display: flex;
       position: fixed;
@@ -448,6 +458,12 @@
       <div id="rates-content"></div>
     </div>
     <div id="tech" class="tab-content">
+      <div class="filter-section">
+        <div class="filter-dropdown">
+          <h3>Тип</h3>
+          <div class="filter-button" id="type-button">Все</div>
+        </div>
+      </div>
       <div id="tech-content"></div>
     </div>
   </div>
@@ -482,6 +498,14 @@
       <div class="popup-button cancel" onclick="closePopup('risk-popup')">Закрыть</div>
     </div>
   </div>
+  <div class="filter-popup" id="type-popup">
+    <h4>Выберите тип</h4>
+    <div class="filter-tags" id="type-options"></div>
+    <div class="popup-actions">
+      <div class="popup-button apply" onclick="applyFilter('type')">Применить</div>
+      <div class="popup-button cancel" onclick="closePopup('type-popup')">Закрыть</div>
+    </div>
+  </div>
 
   <script>
     const tg = window.Telegram.WebApp;
@@ -499,7 +523,8 @@
     let activeFilters = {
       industry: new Set(),
       geo: new Set(),
-      risk: new Set()
+      risk: new Set(),
+      type: new Set()
     };
 
     function adjustContentPadding() {
@@ -536,30 +561,57 @@
       }
     }
 
-    function getTags(row, field) {
-      return row[field] ? row[field].split(',').map(tag => tag.trim()) : [];
+    async function fetchImageAsBase64(url) {
+      try {
+        console.log(`Fetching image from URL: ${url}`);
+        const response = await fetch(url, {
+          headers: {
+            'xc-token': API_TOKEN
+          }
+        });
+        if (!response.ok) {
+          throw new Error(`Failed to fetch image: ${response.status}`);
+        }
+        const blob = await response.blob();
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result);
+          reader.onerror = reject;
+          reader.readAsDataURL(blob);
+        });
+      } catch (error) {
+        console.error(`Error fetching image from ${url}:`, error);
+        return 'https://via.placeholder.com/200';
+      }
     }
 
-    function extractImageUrl(imgField) {
-      // Если поле пустое, возвращаем заглушку
+    async function extractImageUrl(imgField) {
       if (!imgField) {
         return 'https://via.placeholder.com/200';
       }
 
-      // Проверяем, является ли imgField массивом (формат Attachment)
       if (Array.isArray(imgField) && imgField.length > 0) {
-        // Берем URL первого изображения из массива
-        return imgField[0].url || 'https://via.placeholder.com/200';
+        const imageUrl = imgField[0].url;
+        if (imageUrl) {
+          const base64Image = await fetchImageAsBase64(imageUrl);
+          return base64Image;
+        }
       }
 
-      // Если это строка (например, Markdown-формат), пытаемся извлечь URL
       if (typeof imgField === 'string') {
         const match = imgField.match(/\((https:\/\/[^\)]+)\)/);
-        return match ? match[1] : 'https://via.placeholder.com/200';
+        if (match) {
+          const imageUrl = match[1];
+          const base64Image = await fetchImageAsBase64(imageUrl);
+          return base64Image;
+        }
       }
 
-      // Если формат неизвестный, возвращаем заглушку
       return 'https://via.placeholder.com/200';
+    }
+
+    function getTags(row, field) {
+      return row[field] ? row[field].split(',').map(tag => tag.trim()) : [];
     }
 
     function renderFilters(containerId, buttonId, popupId, rows, field, filterType) {
@@ -568,7 +620,13 @@
       const popup = document.getElementById(popupId);
       const tags = new Set(['Все']);
       rows.forEach(row => {
-        getTags(row, field).forEach(tag => tags.add(tag));
+        if (filterType === 'type') {
+          // Для фильтра по Type не разделяем на теги, берем значение как есть
+          const tag = row[field] || 'N/A';
+          tags.add(tag);
+        } else {
+          getTags(row, field).forEach(tag => tags.add(tag));
+        }
       });
 
       button.addEventListener('click', (e) => {
@@ -621,7 +679,11 @@
         button.classList.add('active');
       }
 
-      renderRates('rates-content', ratesData);
+      if (filterType === 'type') {
+        renderTech('tech-content', techData);
+      } else {
+        renderRates('rates-content', ratesData);
+      }
       closePopup(`${filterType}-popup`);
     }
 
@@ -725,7 +787,7 @@
       });
     }
 
-    function renderTech(containerId, rows) {
+    async function renderTech(containerId, rows) {
       const container = document.getElementById(containerId);
       container.innerHTML = '';
       console.log('Tech data received in renderTech:', rows);
@@ -733,21 +795,35 @@
         container.innerHTML = '<p>Данные для "Техрешения" не загружены. Возможные причины: 1) Таблица mnliw8pc7zmrw35 пуста. 2) TECH_TABLE_ID неверный. Откройте консоль (F12 → Console) и проверьте "Raw API response" и "Loaded techData".</p>';
         return;
       }
-      rows.forEach(row => {
+
+      let filteredRows = rows;
+      if (activeFilters.type.size > 0) {
+        filteredRows = filteredRows.filter(row => 
+          activeFilters.type.has(row['Type'] || 'N/A')
+        );
+      }
+
+      if (filteredRows.length === 0) {
+        container.innerHTML = '<p>Нет данных для отображения</p>';
+        return;
+      }
+
+      for (const row of filteredRows) {
         console.log('Rendering tech card:', row);
-        const imgUrl = extractImageUrl(row['Img']);
+        const imgUrl = await extractImageUrl(row['Img']);
         console.log('Extracted image URL:', imgUrl);
         const card = document.createElement('div');
         card.className = 'tech-card';
         card.innerHTML = `
           <img src="${imgUrl}" alt="Tech Solution">
           <div class="card-header">
-            <span>${row['ID name'] || 'Без названия'}</span>
+            <span>${row['Name'] || 'Без названия'}</span>
             <span>${row['Price'] || 'N/A'}</span>
           </div>
           <div class="card-tags">
             <span class="tag">${row['Type'] || 'White Label'}</span>
           </div>
+          <div class="short-description">${row['Description'] || 'Нет описания'}</div>
           <div class="card-details">
             <div class="details-block">
               <h4>Основная информация</h4>
@@ -762,7 +838,7 @@
               <span class="info-tag" style="display: block;">${row['Description'] || 'Нет описания'}</span>
             </div>
             <div class="apply-button-container">
-              <button class="apply-button" onclick="window.open('${row['Link'] || '#'}', '_blank')">${row['Buttons'] || 'Перейти'}</button>
+              <button class="apply-button" onclick="window.open('https://t.me/p_fintech?text=Im interested in ${row['ID name']}', '_blank')">Подать заявку</button>
             </div>
           </div>
         `;
@@ -773,7 +849,7 @@
           card.classList.toggle('active');
         });
         container.appendChild(card);
-      });
+      }
     }
 
     async function loadTabs() {
@@ -788,9 +864,10 @@
       renderFilters('industry-options', 'industry-button', 'industry-popup', ratesData, 'Industry', 'industry');
       renderFilters('geo-options', 'geo-button', 'geo-popup', ratesData, 'Geo', 'geo');
       renderFilters('risk-options', 'risk-button', 'risk-popup', ratesData, 'Risk', 'risk');
+      renderFilters('type-options', 'type-button', 'type-popup', techData, 'Type', 'type');
       renderRates('rates-content', ratesData);
       console.log('Calling renderTech with techData...');
-      renderTech('tech-content', techData);
+      await renderTech('tech-content', techData);
       adjustContentPadding();
       console.log('Finished loading tabs.');
     }
