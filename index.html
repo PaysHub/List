@@ -762,7 +762,6 @@
         ].filter(item => !isEmptyValue(item.value)).map(item => `<span class="info-tag">${item.label}: ${item.value}</span>`).join('');
 
         const mainInfoBlock = [
-          { label: 'Сервис', value: row['ID Name'] },
           { label: 'Индустрия', value: row['Industry'] },
           { label: 'Гео', value: row['Geo'] },
           { label: 'Риск', value: row['Risk'] }
@@ -792,7 +791,7 @@
             <span>${row['Pay in (%)'] || ''}</span>
           </div>
           <div class="card-tags">
-            <span class="tag service">${row['ID Name'] || 'Без названия'}</span>
+            <span class="tag service">${row['Service'] || 'N/A'}</span>
             ${getTags(row, 'Industry').slice(0, 1).map(tag => `<span class="tag">${tag}</span>`).join('')}
             ${getTags(row, 'Geo').slice(0, 1).map(tag => `<span class="tag">${tag}</span>`).join('')}
             ${getTags(row, 'Risk').slice(0, 1).map(tag => `<span class="tag">${tag}</span>`).join('')}
