@@ -189,6 +189,9 @@
       color: #fff;
       background: #333;
     }
+    .tag.service {
+      background: #007bff; /* Выделяем сервис другим цветом */
+    }
     .card-details {
       max-height: 0;
       overflow: hidden;
@@ -476,7 +479,7 @@
           <div class="filter-button" id="type-button">Все</div>
         </div>
       </div>
-      <div id="tech-content"></div>
+      <div id="tech-content"><p>Загрузка...</p></div>
     </div>
   </div>
   <div class="tabs">
@@ -522,7 +525,7 @@
   <script>
     const tg = window.Telegram.WebApp;
     tg.ready();
-    tg.expand(); // Добавлен вызов для открытия на полный экран
+    tg.expand();
 
     const API_TOKEN = 'ubicp2nFx8L47YOV3MOyn1FhUIPQ4EMESzFnrL3L';
     const BASE_URL = 'https://app.nocodb.com/api/v2/tables/';
@@ -783,9 +786,10 @@
             <span>${row['Pay in (%)'] || ''}</span>
           </div>
           <div class="card-tags">
-            ${getTags(row, 'Industry').slice(0, 1).map(tag => `<span class="tag">${tag}</span>`).join('')}
-            ${getTags(row, 'Geo').slice(0, 1).map(tag => `<span class="tag">${tag}</span>`).join('')}
-            ${getTags(row, 'Risk').slice(0, 1).map(tag => `<span class="tag">${tag}</span>`).join('')}
+            <span class="tag service">${row['ID Name'] || 'Без названия'}</span>
+            ${getTags(row, 'Industry').map(tag => `<span class="tag">${tag}</span>`).join('')}
+            ${getTags(row, 'Geo').map(tag => `<span class="tag">${tag}</span>`).join('')}
+            ${getTags(row, 'Risk').map(tag => `<span class="tag">${tag}</span>`).join('')}
           </div>
           <div class="card-details">
             ${tariffsBlock ? `
@@ -906,20 +910,33 @@
 
     async function loadTabs() {
       console.log('Starting to load tabs...');
-      ratesData = await fetchData(RATES_TABLE_ID);
+      // Загружаем данные для обеих вкладок одновременно
+      const [rates, tech] = await Promise.all([
+        fetchData(RATES_TABLE_ID),
+        fetchData(TECH_TABLE_ID)
+      ]);
+      
+      ratesData = rates;
+      techData = tech;
+      
       console.log('Loaded ratesData:', ratesData);
-      techData = await fetchData(TECH_TABLE_ID);
       console.log('Loaded techData:', techData);
+      
       if (!techData || techData.length === 0) {
         console.log('No tech data loaded. Check TECH_TABLE_ID or table contents.');
       }
+      
+      // Рендерим фильтры
       renderFilters('industry-options', 'industry-button', 'industry-popup', ratesData, 'Industry', 'industry');
       renderFilters('geo-options', 'geo-button', 'geo-popup', ratesData, 'Geo', 'geo');
       renderFilters('risk-options', 'risk-button', 'risk-popup', ratesData, 'Risk', 'risk');
       renderFilters('type-options', 'type-button', 'type-popup', techData, 'Type', 'type');
+      
+      // Рендерим обе вкладки
       renderRates('rates-content', ratesData);
       console.log('Calling renderTech with techData...');
       await renderTech('tech-content', techData);
+      
       adjustContentPadding();
       console.log('Finished loading tabs.');
     }
