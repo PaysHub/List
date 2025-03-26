@@ -509,8 +509,6 @@
 
   <script>
     const tg = window.Telegram.WebApp;
-    tg.setHeaderColor('#1a1a1a');
-    tg.setBackgroundColor('#1a1a1a');
     tg.ready();
 
     const API_TOKEN = '473ECiCPMZ1Iz42hrMGKMJ1QSshcKRKEpX6fsl8H';
@@ -570,7 +568,9 @@
       }
 
       if (Array.isArray(imgField) && imgField.length > 0) {
-        const imageUrl = imgField[0].url;
+        const imageObj = imgField[0];
+        console.log('Image object:', imageObj);
+        const imageUrl = imageObj.url;
         console.log('Extracted image URL from array:', imageUrl);
         if (imageUrl) {
           const urlWithToken = `${imageUrl}?xc-token=${API_TOKEN}`;
