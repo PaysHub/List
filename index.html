@@ -194,6 +194,12 @@
       background-size: 200% 100%;
       animation: gradientShift 3s infinite linear;
     }
+    .tag.pay-in {
+      background: #28a745; /* Зелёный для Pay in */
+    }
+    .tag.pay-out {
+      background: #dc3545; /* Красный для Pay out */
+    }
     .card-details {
       max-height: 0;
       overflow: hidden;
@@ -449,7 +455,7 @@
       <div class="coin" style="left: 45px; animation-delay: 0.6s;"></div>
       <div class="coin" style="left: 75px; animation-delay: 0.8s;"></div>
       <div class="coin" style="left: 37.5px; animation-delay: 1s;"></div>
-      <div class="coin" style="left: 82.5px; animation-delay: 1.2s;"></div>
+      <div class="coin" style="left: 82.5px; animation-delay: 1.2s;"></dives>
       <div class="coin" style="left: 52.5px; animation-delay: 1.4s;"></div>
       <div class="coin" style="left: 67.5px; animation-delay: 1.6s;"></div>
       <div class="coin" style="left: 97.5px; animation-delay: 1.8s;"></div>
@@ -797,6 +803,8 @@
             ${getTags(row, 'Industry').slice(0, 1).map(tag => `<span class="tag">${tag}</span>`).join('')}
             ${getTags(row, 'Geo').slice(0, 1).map(tag => `<span class="tag">${tag}</span>`).join('')}
             ${getTags(row, 'Risk').slice(0, 1).map(tag => `<span class="tag">${tag}</span>`).join('')}
+            ${row['Pay in (%)'] ? `<span class="tag pay-in">Pay in: ${row['Pay in (%)']}</span>` : ''}
+            ${row['Pay out (%)'] ? `<span class="tag pay-out">Pay out: ${row['Pay out (%)']}</span>` : ''}
           </div>
           <div class="card-details">
             ${mainInfoBlock ? `
