@@ -67,7 +67,7 @@
       cursor: pointer;
       font-size: 12px;
       color: #fff;
-      background: #333; /* Серый фон по умолчанию */
+      background: #333;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -75,7 +75,7 @@
       box-sizing: border-box;
     }
     .filter-button.active {
-      background: linear-gradient(90deg, #007bff, #00c4b4, #007bff); /* Градиент синий-бирюзовый-синий */
+      background: linear-gradient(90deg, #007bff, #00c4b4, #007bff);
       background-size: 200% 100%;
       animation: gradientShift 3s infinite linear;
     }
@@ -116,14 +116,14 @@
     .filter-tag {
       padding: 6px 12px;
       border-radius: 12px;
-      background: #333; /* Серый */
+      background: #333;
       color: #fff;
       font-size: 13px;
       cursor: pointer;
       transition: background 0.3s;
     }
     .filter-tag.selected {
-      background: #007bff; /* Синий */
+      background: #007bff;
     }
     .popup-actions {
       display: flex;
@@ -140,10 +140,10 @@
       color: #fff;
     }
     .popup-button.apply {
-      background: #007bff; /* Синий */
+      background: #007bff;
     }
     .popup-button.cancel {
-      background: #555; /* Тёмно-серый */
+      background: #555;
     }
     .card {
       background: #2a2a2a;
@@ -161,7 +161,7 @@
     .card.active {
       border: 3px solid transparent;
       background: linear-gradient(#2a2a2a, #2a2a2a) padding-box,
-                  linear-gradient(90deg, #007bff, #00c4b4, #007bff) border-box; /* Градиент синий-бирюзовый-синий */
+                  linear-gradient(90deg, #007bff, #00c4b4, #007bff) border-box;
       background-size: 200% 100%;
       animation: gradientShift 3s infinite linear;
     }
@@ -232,7 +232,7 @@
     .apply-button {
       margin-top: 15px;
       padding: 10px;
-      background: #007bff; /* Синий */
+      background: #007bff;
       border: none;
       border-radius: 8px;
       color: #fff;
@@ -244,7 +244,7 @@
       transition: background 0.3s;
     }
     .apply-button:hover {
-      background: #0056b3; /* Тёмный синий */
+      background: #0056b3;
     }
     .apply-button-container {
       padding: 10px 0;
@@ -292,7 +292,7 @@
       padding: 10px;
       text-align: center;
       cursor: pointer;
-      background: #333; /* Серый */
+      background: #333;
       color: #fff;
       border-radius: 8px;
       margin: 0 5px;
@@ -300,7 +300,7 @@
       transition: background 0.3s;
     }
     .tab.active {
-      background: #007bff; /* Синий */
+      background: #007bff;
     }
     .preloader {
       position: fixed;
@@ -393,7 +393,7 @@
       font-size: 20px;
       font-weight: 300;
       text-align: center;
-      background: linear-gradient(90deg, #007bff, #00c4b4, #007bff); /* Градиент синий-бирюзовый-синий */
+      background: linear-gradient(90deg, #007bff, #00c4b4, #007bff);
       background-size: 200% 100%;
       -webkit-background-clip: text;
       background-clip: text;
@@ -537,17 +537,22 @@
         if (viewId) {
           url = `${BASE_URL}${tableId}/views/${viewId}/records?offset=0&limit=100`;
         }
+        console.log(`Fetching data from URL: ${url}`); // Отладка: вывод URL
         const response = await fetch(url, {
           headers: {
             'xc-token': API_TOKEN
           }
         });
         if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
+          throw new Error(`HTTP error! Status: ${response.status}, Status Text: ${response.statusText}`);
         }
         const data = await response.json();
         console.log(`Данные для tableId ${tableId}${viewId ? `, viewId ${viewId}` : ''}:`, data);
-        return data.list || [];
+        if (!data.list) {
+          console.warn(`No 'list' property in response for tableId ${tableId}`);
+          return [];
+        }
+        return data.list;
       } catch (error) {
         console.error(`Ошибка при получении данных для tableId ${tableId}:`, error);
         return [];
@@ -724,6 +729,7 @@
     function extractImageUrl(imgField) {
       if (!imgField) return 'https://via.placeholder.com/200';
       if (Array.isArray(imgField) && imgField.length > 0) {
+        console.log('Extracting image URL from array:', imgField); // Отладка
         return imgField[0].url || 'https://via.placeholder.com/200';
       }
       const match = imgField.match(/\((https:\/\/[^\)]+)\)/);
@@ -751,6 +757,7 @@
       container.appendChild(header);
 
       rows.forEach(row => {
+        console.log('Rendering tech row:', row); // Отладка: вывод каждой строки
         const rowElement = document.createElement('div');
         rowElement.className = 'tech-grid-row';
         rowElement.innerHTML = `
