@@ -190,7 +190,7 @@
       background: #333;
     }
     .tag.service {
-      background: #007bff; /* Выделяем сервис другим цветом */
+      background: #007bff; /* Выделяем сервис синим цветом */
     }
     .card-details {
       max-height: 0;
@@ -756,16 +756,22 @@
           { label: 'Max trans', value: row['($) Max transaction'] },
           { label: 'Min turnover', value: row['($) Мин. оборот'] },
           { label: 'Max turnover', value: row['($) Макс. оборот'] },
-          { label: 'Additional fees', value: row['Доп. платежи'] }
+          { label: 'Additional fees', value: row['Доп. платежи'] },
+          { label: 'Прием в', value: row['Прием в'] },
+          { label: 'Расчет в', value: row['Расчет в'] }
+        ].filter(item => !isEmptyValue(item.value)).map(item => `<span class="info-tag">${item.label}: ${item.value}</span>`).join('');
+
+        const mainInfoBlock = [
+          { label: 'Сервис', value: row['ID Name'] },
+          { label: 'Индустрия', value: row['Industry'] },
+          { label: 'Гео', value: row['Geo'] },
+          { label: 'Риск', value: row['Risk'] }
         ].filter(item => !isEmptyValue(item.value)).map(item => `<span class="info-tag">${item.label}: ${item.value}</span>`).join('');
 
         const additionalBlock = [
-          { label: 'Geo', value: row['Geo'] },
           { label: 'Type traffic', value: row['Type traffic'] },
           { label: 'Settlement', value: row['Settlement'] },
           { label: 'Settlement amount', value: row['Settlement amount'] },
-          { label: 'Прием в', value: row['Прием в'] },
-          { label: 'Расчет в', value: row['Расчет в'] },
           { label: 'License', value: row['Лицензия'] },
           { label: 'Integration', value: row['Интеграция'] },
           { label: 'Compliance', value: row['Compliance'] },
@@ -787,11 +793,17 @@
           </div>
           <div class="card-tags">
             <span class="tag service">${row['ID Name'] || 'Без названия'}</span>
-            ${getTags(row, 'Industry').map(tag => `<span class="tag">${tag}</span>`).join('')}
-            ${getTags(row, 'Geo').map(tag => `<span class="tag">${tag}</span>`).join('')}
-            ${getTags(row, 'Risk').map(tag => `<span class="tag">${tag}</span>`).join('')}
+            ${getTags(row, 'Industry').slice(0, 1).map(tag => `<span class="tag">${tag}</span>`).join('')}
+            ${getTags(row, 'Geo').slice(0, 1).map(tag => `<span class="tag">${tag}</span>`).join('')}
+            ${getTags(row, 'Risk').slice(0, 1).map(tag => `<span class="tag">${tag}</span>`).join('')}
           </div>
           <div class="card-details">
+            ${mainInfoBlock ? `
+              <div class="details-block">
+                <h4>Основная информация</h4>
+                ${mainInfoBlock}
+              </div>
+            ` : ''}
             ${tariffsBlock ? `
               <div class="details-block">
                 <h4>Тарифы</h4>
