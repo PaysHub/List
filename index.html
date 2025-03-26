@@ -21,50 +21,15 @@
       position: sticky;
       top: 0;
       z-index: 10;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
     }
     .header h2 {
       font-size: 18px;
       font-weight: 600;
       margin: 0;
     }
-    .menu-button {
-      background: #007bff;
-      border: none;
-      border-radius: 8px;
-      padding: 8px 12px;
-      color: #fff;
-      font-size: 14px;
-      cursor: pointer;
-    }
-    .dropdown-menu {
-      position: absolute;
-      top: 60px;
-      right: 15px;
-      background: #2a2a2a;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-      display: none;
-      z-index: 20;
-    }
-    .dropdown-menu.active {
-      display: block;
-    }
-    .dropdown-item {
-      padding: 10px 20px;
-      color: #fff;
-      font-size: 14px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    .dropdown-item:hover {
-      background: #007bff;
-    }
     .content-container {
       width: 100%;
-      height: calc(100% - 60px);
+      height: calc(100% - 140px);
       position: relative;
       overflow-y: auto;
       z-index: 1;
@@ -86,23 +51,55 @@
       color: #aaa;
       margin-bottom: 8px;
     }
-    .filter-container {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
+    .filter-dropdown {
+      position: relative;
+      display: inline-block;
+      width: 100%;
     }
-    .filter-tag {
+    .filter-button {
       padding: 6px 12px;
-      border-radius: 20px;
+      background: #333;
+      border-radius: 8px;
       cursor: pointer;
       font-size: 14px;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .filter-button.industry { background: #4a6fa5; }
+    .filter-button.geo { background: #5b9e5b; }
+    .filter-button.risk { background: #a55b5b; }
+    .filter-button.active {
+      background: #007bff !important;
+    }
+    .filter-options {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      background: #2a2a2a;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      display: none;
+      z-index: 20;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    .filter-options.active {
+      display: block;
+    }
+    .filter-option {
+      padding: 8px 12px;
+      color: #fff;
+      font-size: 14px;
+      cursor: pointer;
       transition: background 0.3s;
     }
-    .filter-tag.industry { background: #4a6fa5; }
-    .filter-tag.geo { background: #5b9e5b; }
-    .filter-tag.risk { background: #a55b5b; }
-    .filter-tag.active {
-      background: #007bff !important;
+    .filter-option:hover {
+      background: #007bff;
     }
     .card {
       background: #2a2a2a;
@@ -217,6 +214,31 @@
       font-size: 12px;
       color: #007bff;
     }
+    .tabs {
+      display: flex;
+      position: fixed;
+      bottom: 20px;
+      width: 100%;
+      background: #1a1a1a;
+      padding: 10px;
+      box-sizing: border-box;
+      z-index: 10;
+    }
+    .tab {
+      flex: 1;
+      padding: 10px;
+      text-align: center;
+      cursor: pointer;
+      background: #333;
+      color: #fff;
+      border-radius: 8px;
+      margin: 0 5px;
+      font-size: 14px;
+      transition: background 0.3s;
+    }
+    .tab.active {
+      background: #007bff;
+    }
     .preloader {
       position: fixed;
       top: 0;
@@ -324,11 +346,12 @@
       100% { background-position: 200% 0%; }
     }
     @media (max-width: 600px) {
-      .content-container { height: calc(100vh - 60px); }
+      .content-container { height: calc(100vh - 140px); }
       .header h2 { font-size: 16px; }
-      .menu-button { font-size: 12px; padding: 6px 10px; }
-      .dropdown-menu { top: 50px; }
-      .dropdown-item { font-size: 12px; }
+      .tabs { bottom: 20px; padding: 10px; }
+      .tab { font-size: 12px; }
+      .welcome-text { font-size: 18px; }
+      .welcome-text span { font-size: 24px; }
       .card, .tech-card { padding: 10px; }
       .card-header, .tech-info .name { font-size: 14px; }
       .card-details, .tech-info .description { font-size: 12px; }
@@ -356,32 +379,40 @@
   </div>
   <div class="header">
     <h2 id="page-title">Лист ставок</h2>
-    <button class="menu-button" onclick="toggleMenu()">Меню</button>
-    <div class="dropdown-menu" id="dropdown-menu">
-      <div class="dropdown-item" onclick="showTab('rates')">Лист ставок</div>
-      <div class="dropdown-item" onclick="showTab('tech')">Готовые решения</div>
-      <div class="dropdown-item" onclick="openTelegram()">Оператор</div>
-    </div>
   </div>
   <div class="content-container">
     <div id="rates" class="tab-content active">
       <div class="filter-section">
         <h3>Индустрия</h3>
-        <div class="filter-container" id="industry-filter"></div>
+        <div class="filter-dropdown">
+          <div class="filter-button industry" id="industry-button">Выберите индустрию</div>
+          <div class="filter-options" id="industry-options"></div>
+        </div>
       </div>
       <div class="filter-section">
         <h3>Гео</h3>
-        <div class="filter-container" id="geo-filter"></div>
+        <div class="filter-dropdown">
+          <div class="filter-button geo" id="geo-button">Выберите гео</div>
+          <div class="filter-options" id="geo-options"></div>
+        </div>
       </div>
       <div class="filter-section">
         <h3>Уровень риска</h3>
-        <div class="filter-container" id="risk-filter"></div>
+        <div class="filter-dropdown">
+          <div class="filter-button risk" id="risk-button">Выберите уровень риска</div>
+          <div class="filter-options" id="risk-options"></div>
+        </div>
       </div>
       <div id="rates-content"></div>
     </div>
     <div id="tech" class="tab-content">
       <div id="tech-content"></div>
     </div>
+  </div>
+  <div class="tabs">
+    <div class="tab active" onclick="showTab('rates')">Ставки</div>
+    <div class="tab" onclick="showTab('tech')">Техрешения</div>
+    <div class="tab" onclick="openTelegram()">Оператор</div>
   </div>
   <script>
     const tg = window.Telegram.WebApp;
@@ -420,47 +451,38 @@
       return row[field] ? row[field].split(',').map(tag => tag.trim()) : [];
     }
 
-    function renderFilters(containerId, rows, field, filterType) {
+    function renderFilters(containerId, buttonId, rows, field, filterType) {
       const container = document.getElementById(containerId);
-      const tags = new Set();
+      const button = document.getElementById(buttonId);
+      const tags = new Set(['Все']);
       rows.forEach(row => {
         getTags(row, field).forEach(tag => tags.add(tag));
       });
-      container.innerHTML = '';
+
+      button.addEventListener('click', () => {
+        container.classList.toggle('active');
+      });
+
       tags.forEach(tag => {
-        const filterTag = document.createElement('div');
-        filterTag.className = `filter-tag ${filterType}`;
-        filterTag.textContent = tag;
-        filterTag.addEventListener('click', () => {
-          document.querySelectorAll(`#${containerId} .filter-tag`).forEach(t => t.classList.remove('active'));
-          filterTag.classList.add('active');
-          if (filterType === 'industry') {
-            activeIndustryFilter = tag;
-          } else if (filterType === 'geo') {
-            activeGeoFilter = tag;
-          } else if (filterType === 'risk') {
-            activeRiskFilter = tag;
+        const option = document.createElement('div');
+        option.className = 'filter-option';
+        option.textContent = tag;
+        option.addEventListener('click', () => {
+          button.textContent = tag;
+          container.classList.remove('active');
+          if (tag === 'Все') {
+            if (filterType === 'industry') activeIndustryFilter = null;
+            else if (filterType === 'geo') activeGeoFilter = null;
+            else if (filterType === 'risk') activeRiskFilter = null;
+          } else {
+            if (filterType === 'industry') activeIndustryFilter = tag;
+            else if (filterType === 'geo') activeGeoFilter = tag;
+            else if (filterType === 'risk') activeRiskFilter = tag;
           }
           renderRates('rates-content', ratesData);
         });
-        container.appendChild(filterTag);
+        container.appendChild(option);
       });
-      const resetFilter = document.createElement('div');
-      resetFilter.className = `filter-tag ${filterType}`;
-      resetFilter.textContent = 'Все';
-      resetFilter.addEventListener('click', () => {
-        document.querySelectorAll(`#${containerId} .filter-tag`).forEach(t => t.classList.remove('active'));
-        resetFilter.classList.add('active');
-        if (filterType === 'industry') {
-          activeIndustryFilter = null;
-        } else if (filterType === 'geo') {
-          activeGeoFilter = null;
-        } else if (filterType === 'risk') {
-          activeRiskFilter = null;
-        }
-        renderRates('rates-content', ratesData);
-      });
-      container.appendChild(resetFilter);
     }
 
     function renderRates(containerId, rows) {
@@ -594,29 +616,24 @@
       ratesData = await fetchData(RATES_TABLE_ID);
       techData = await fetchData(TECH_TABLE_ID);
       console.log('Tech Data:', techData); // Для отладки
-      renderFilters('industry-filter', ratesData, 'Industry', 'industry');
-      renderFilters('geo-filter', ratesData, 'Geo', 'geo');
-      renderFilters('risk-filter', ratesData, 'Risk', 'risk');
+      renderFilters('industry-options', 'industry-button', ratesData, 'Industry', 'industry');
+      renderFilters('geo-options', 'geo-button', ratesData, 'Geo', 'geo');
+      renderFilters('risk-options', 'risk-button', ratesData, 'Risk', 'risk');
       renderRates('rates-content', ratesData);
       renderTech('tech-content', techData);
     }
 
     function showTab(tabId) {
+      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
       document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+      document.querySelector(`[onclick="showTab('${tabId}')"]`).classList.add('active');
       document.getElementById(tabId).classList.add('active');
-      document.getElementById('dropdown-menu').classList.remove('active');
       const title = tabId === 'rates' ? 'Лист ставок' : 'Готовые решения';
       document.getElementById('page-title').textContent = title;
     }
 
     function openTelegram() {
       window.open('https://t.me/p_fintech?text=I%20need%20help%20with%20the%20PaysHub%20service', '_blank');
-      document.getElementById('dropdown-menu').classList.remove('active');
-    }
-
-    function toggleMenu() {
-      const menu = document.getElementById('dropdown-menu');
-      menu.classList.toggle('active');
     }
 
     document.querySelectorAll('.coin').forEach(item => {
@@ -634,6 +651,15 @@
         }, { once: true });
       }, 2000);
       loadTabs();
+    });
+
+    // Закрытие dropdown при клике вне
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.filter-dropdown')) {
+        document.querySelectorAll('.filter-options').forEach(options => {
+          options.classList.remove('active');
+        });
+      }
     });
   </script>
 
