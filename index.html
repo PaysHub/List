@@ -225,29 +225,28 @@
     tg.setBackgroundColor('#ffffff');
     tg.ready();
 
-    const API_TOKEN = '26dcc8f4df0dbda1cf6dcbc31d2a0a82efb5fb37';
-    const BASE_URL = 'https://cloud.seatable.io/api/v2.1/dtable-rows/';
-    const DTABLE_UUID = 'ВАШ_DTABLE_UUID'; // Замените на реальный UUID
-    const RATES_TABLE_ID = 'F94E'; // Для "Ставки"
-    const TECH_TABLE_ID = '8psA'; // Для "Техрешения"
+    const API_TOKEN = '473ECiCPMZ1Iz42hrMGKMJ1QSshcKRKEpX6fsl8H';
+    const BASE_URL = 'https://app.nocodb.com/api/v2/tables/';
+    const RATES_TABLE_ID = 'mbz9kdbkba6i9t2'; // PaysHub PSP List
+    const TECH_TABLE_ID = 'mnliw8pc7zmrw35'; // PaysHub Ready Solutions
 
     async function fetchData(tableId) {
       try {
-        const response = await fetch(`${BASE_URL}?dtable_uuid=${DTABLE_UUID}&table_id=${tableId}`, {
+        const response = await fetch(`${BASE_URL}${tableId}/records?offset=0&limit=100`, {
           headers: {
-            'Authorization': `Token ${API_TOKEN}`
+            'xc-token': API_TOKEN
           }
         });
         const data = await response.json();
         console.log(`Данные для tableId ${tableId}:`, data);
-        return data.rows || [];
+        return data.list || [];
       } catch (error) {
         console.error(`Ошибка при получении данных для tableId ${tableId}:`, error);
         return [];
       }
     }
 
-    function renderData(containerId, rows) {
+    function renderRates(containerId, rows) {
       const container = document.getElementById(containerId);
       container.innerHTML = '';
       if (rows.length === 0) {
@@ -255,20 +254,48 @@
         return;
       }
       rows.forEach(row => {
-        console.log('Строка данных:', row);
+        console.log('Строка данных (Rates):', row);
         const card = document.createElement('div');
         card.className = 'card';
         card.innerHTML = `
           <div class="card-header">
-            <span>${row['PSPinterface'] || 'Без названия'}</span>
+            <span>${row['ID Name'] || 'Без названия'}</span>
             <span>${row['Pay in (%)'] || 'N/A'}</span>
           </div>
           <div class="card-details">
             <p>Pay out: ${row['Pay out (%)'] || 'N/A'}</p>
-            <p>Method: ${row['Method']?.join(', ') || 'N/A'}</p>
+            <p>Method: ${row['Method'] || 'N/A'}</p>
             <p>Roll reserve: ${row['Roll reserve'] || 'N/A'}</p>
-            <p>Refund fee: ${row['Refund fee'] || 'N/A'}</p>
-            <p>Min trans: ${row['Min trans'] || 'N/A'}</p>
+            <p>Refund fee: ${row['Refound fee'] || 'N/A'}</p>
+            <p>Min trans: ${row['($) Min transaction'] || 'N/A'}</p>
+          </div>
+        `;
+        card.addEventListener('click', () => {
+          const details = card.querySelector('.card-details');
+          details.classList.toggle('active');
+        });
+        container.appendChild(card);
+      });
+    }
+
+    function renderTech(containerId, rows) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
+      if (rows.length === 0) {
+        container.innerHTML = '<p>Нет данных для отображения</p>';
+        return;
+      }
+      rows.forEach(row => {
+        console.log('Строка данных (Tech):', row);
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <div class="card-header">
+            <span>${row['Name'] || 'Без названия'}</span>
+          </div>
+          <div class="card-details">
+            <p>ID: ${row['ID name'] || 'N/A'}</p>
+            <!-- Дополнительные поля добавим позже -->
           </div>
         `;
         card.addEventListener('click', () => {
@@ -282,8 +309,8 @@
     async function loadTabs() {
       const ratesData = await fetchData(RATES_TABLE_ID);
       const techData = await fetchData(TECH_TABLE_ID);
-      renderData('rates', ratesData);
-      renderData('tech', techData);
+      renderRates('rates', ratesData);
+      renderTech('tech', techData);
     }
 
     function showTab(tabId) {
