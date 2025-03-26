@@ -17,14 +17,14 @@
     }
     .content-container {
       width: 100%;
-      height: calc(100% - 70px);
+      height: calc(100% - 50px); /* Уменьшили вычитаемую высоту, чтобы контент был виден */
       position: relative;
       overflow-y: auto;
       z-index: 1;
       padding: 60px 15px 15px 15px;
       box-sizing: border-box;
-      -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
-      mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to bottom, black 90%, transparent 100%); /* Уменьшили высоту градиента */
+      mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
       transition: filter 0.3s ease;
     }
     .content-container.blurred {
@@ -192,10 +192,14 @@
       margin-top: 10px;
       font-size: 14px;
       color: #ddd;
+      position: relative;
+      display: flex;
+      flex-direction: column;
     }
     .card-details.active {
-      max-height: 1000px;
-      padding: 10px 0 0 0;
+      max-height: 400px; /* Ограничиваем высоту для прокрутки */
+      overflow-y: auto; /* Добавляем прокрутку */
+      padding: 10px 0 60px 0; /* Увеличиваем нижний padding, чтобы учесть кнопку */
     }
     .details-block {
       margin-bottom: 15px;
@@ -238,6 +242,11 @@
       display: block;
       width: 100%;
       transition: background 0.3s;
+      position: sticky;
+      bottom: 0;
+      z-index: 1;
+      background: #2a2a2a; /* Фон кнопки совпадает с фоном карточки */
+      border-top: 1px solid #333; /* Разделительная линия сверху */
     }
     .apply-button:hover {
       background: #0056b3;
@@ -415,7 +424,7 @@
       100% { background-position: 200% 0%; }
     }
     @media (max-width: 600px) {
-      .content-container { height: calc(100vh - 70px); }
+      .content-container { height: calc(100vh - 50px); }
       .tabs { bottom: 20px; padding: 10px; }
       .tab { font-size: 12px; }
       .welcome-text { font-size: 18px; }
