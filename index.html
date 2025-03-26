@@ -17,13 +17,13 @@
     }
     .content-container {
       width: 100%;
-      height: calc(100% - 50px); /* Уменьшили вычитаемую высоту, чтобы контент был виден */
+      height: calc(100% - 50px);
       position: relative;
       overflow-y: auto;
       z-index: 1;
-      padding: 60px 15px 15px 15px;
+      padding: 60px 15px 70px 15px; /* Увеличили padding-bottom, чтобы учесть высоту .tabs */
       box-sizing: border-box;
-      -webkit-mask-image: linear-gradient(to bottom, black 90%, transparent 100%); /* Уменьшили высоту градиента */
+      -webkit-mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
       mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
       transition: filter 0.3s ease;
     }
@@ -199,7 +199,7 @@
     .card-details.active {
       max-height: 400px; /* Ограничиваем высоту для прокрутки */
       overflow-y: auto; /* Добавляем прокрутку */
-      padding: 10px 0 60px 0; /* Увеличиваем нижний padding, чтобы учесть кнопку */
+      padding: 10px 0 0 0;
     }
     .details-block {
       margin-bottom: 15px;
@@ -242,14 +242,17 @@
       display: block;
       width: 100%;
       transition: background 0.3s;
-      position: sticky;
-      bottom: 0;
-      z-index: 1;
-      background: #2a2a2a; /* Фон кнопки совпадает с фоном карточки */
-      border-top: 1px solid #333; /* Разделительная линия сверху */
     }
     .apply-button:hover {
       background: #0056b3;
+    }
+    .apply-button-container {
+      position: sticky;
+      bottom: 0;
+      background: #2a2a2a; /* Фон совпадает с карточкой */
+      padding: 10px 0;
+      z-index: 1;
+      border-top: 1px solid #333; /* Разделительная линия сверху */
     }
     .tech-card {
       background: #2a2a2a;
@@ -705,7 +708,9 @@
               <h4>Комментарии</h4>
               <span class="info-tag" style="display: block;">${row['Комментарии'] || 'Нет комментариев'}</span>
             </div>
-            <button class="apply-button" onclick="window.open('https://t.me/p_fintech?text=Im interested in ${row['ID Name']}', '_blank')">Подать заявку</button>
+            <div class="apply-button-container">
+              <button class="apply-button" onclick="window.open('https://t.me/p_fintech?text=Im interested in ${row['ID Name']}', '_blank')">Подать заявку</button>
+            </div>
           </div>
         `;
         card.addEventListener('click', (e) => {
@@ -747,7 +752,9 @@
             <span class="info-tag">ID: ${row['ID name'] || 'N/A'}</span>
             <span class="info-tag">Название: ${row['Name'] || 'N/A'}</span>
             <span class="info-tag" style="display: block;">Описание: ${row['Description'] || 'Готовое решение для Telegram (добавьте больше информации позже)'}</span>
-            <button class="apply-button" onclick="window.open('https://t.me/p_fintech?text=Im interested in ${row['ID name']}', '_blank')">Подать заявку</button>
+            <div class="apply-button-container">
+              <button class="apply-button" onclick="window.open('https://t.me/p_fintech?text=Im interested in ${row['ID name']}', '_blank')">Подать заявку</button>
+            </div>
           </div>
         `;
         card.addEventListener('click', (e) => {
