@@ -67,15 +67,17 @@
       cursor: pointer;
       font-size: 12px;
       color: #fff;
-      background: #333;
       display: flex;
       justify-content: space-between;
       align-items: center;
       width: 100%;
       box-sizing: border-box;
     }
+    .filter-button.industry { background: #5a829b; }
+    .filter-button.geo { background: #6a9b8a; }
+    .filter-button.risk { background: #7ab59a; }
     .filter-button.active {
-      background: linear-gradient(90deg, #007bff, #00c4b4, #007bff);
+      background: linear-gradient(90deg, #5a829b, #7ab59a, #5a829b);
       background-size: 200% 100%;
       animation: gradientShift 3s infinite linear;
     }
@@ -123,7 +125,7 @@
       transition: background 0.3s;
     }
     .filter-tag.selected {
-      background: #007bff;
+      background: #5a829b;
     }
     .popup-actions {
       display: flex;
@@ -140,12 +142,12 @@
       color: #fff;
     }
     .popup-button.apply {
-      background: #007bff;
+      background: #5a829b;
     }
     .popup-button.cancel {
       background: #555;
     }
-    .card, .tech-card {
+    .card {
       background: #2a2a2a;
       border-radius: 12px;
       padding: 15px;
@@ -155,13 +157,13 @@
       position: relative;
       border: 3px solid transparent;
     }
-    .card:hover, .tech-card:hover {
+    .card:hover {
       transform: translateY(-3px);
     }
-    .card.active, .tech-card.active {
+    .card.active {
       border: 3px solid transparent;
       background: linear-gradient(#2a2a2a, #2a2a2a) padding-box,
-                  linear-gradient(90deg, #007bff, #00c4b4, #007bff) border-box;
+                  linear-gradient(90deg, #5a829b, #7ab59a, #5a829b) border-box;
       background-size: 200% 100%;
       animation: gradientShift 3s infinite linear;
     }
@@ -232,7 +234,7 @@
     .apply-button {
       margin-top: 15px;
       padding: 10px;
-      background: #007bff;
+      background: #5a829b;
       border: none;
       border-radius: 8px;
       color: #fff;
@@ -244,38 +246,34 @@
       transition: background 0.3s;
     }
     .apply-button:hover {
-      background: #0056b3;
+      background: #4a729b;
     }
     .apply-button-container {
       padding: 10px 0;
       border-top: 1px solid #333;
     }
-    .tech-card img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-      border-radius: 12px 12px 0 0;
+    .tech-grid {
+      display: grid;
+      gap: 10px;
+      margin-top: 10px;
     }
-    .tech-info {
-      padding: 15px;
+    .tech-grid-header, .tech-grid-row {
+      display: grid;
+      grid-template-columns: 1fr 2fr 1fr 1fr 1fr;
+      gap: 10px;
+      padding: 10px;
+      background: #2a2a2a;
+      border-radius: 8px;
     }
-    .tech-info .id {
-      font-size: 12px;
-      color: #888;
-    }
-    .tech-info .name {
-      font-size: 16px;
+    .tech-grid-header {
       font-weight: 600;
-      margin: 5px 0;
+      background: #333;
     }
-    .tech-info .description {
-      font-size: 14px;
-      color: #ccc;
-      margin-bottom: 5px;
+    .tech-grid-row {
+      cursor: pointer;
     }
-    .tech-info .type {
-      font-size: 12px;
-      color: #007bff;
+    .tech-grid-row:hover {
+      background: #3a3a3a;
     }
     .tabs {
       display: flex;
@@ -304,7 +302,7 @@
       transition: background 0.3s;
     }
     .tab.active {
-      background: #007bff;
+      background: #5a829b;
     }
     .preloader {
       position: fixed;
@@ -397,7 +395,7 @@
       font-size: 20px;
       font-weight: 300;
       text-align: center;
-      background: linear-gradient(90deg, #007bff, #00c4b4, #007bff);
+      background: linear-gradient(90deg, #5a829b, #7ab59a, #5a829b);
       background-size: 200% 100%;
       -webkit-background-clip: text;
       background-clip: text;
@@ -418,10 +416,17 @@
       .tab { font-size: 12px; }
       .welcome-text { font-size: 18px; }
       .welcome-text span { font-size: 24px; }
-      .card, .tech-card { padding: 10px; }
-      .card-header, .tech-info .name { font-size: 14px; }
-      .card-details, .tech-info .description { font-size: 12px; }
-      .tech-card img { height: 150px; }
+      .card { padding: 10px; }
+      .card-header { font-size: 14px; }
+      .card-details { font-size: 12px; }
+      .tech-grid-header, .tech-grid-row {
+        grid-template-columns: 1fr 1fr;
+        font-size: 12px;
+      }
+      .tech-grid-header div:nth-child(4), .tech-grid-row div:nth-child(4),
+      .tech-grid-header div:nth-child(5), .tech-grid-row div:nth-child(5) {
+        display: none;
+      }
       .filter-section { flex-wrap: wrap; gap: 6px; padding: 8px 15px; }
       .filter-dropdown { min-width: 80px; }
       .filter-button { padding: 3px 8px; font-size: 11px; }
@@ -452,21 +457,21 @@
       <div class="filter-section">
         <div class="filter-dropdown">
           <h3>Индустрия</h3>
-          <div class="filter-button" id="industry-button">Все</div>
+          <div class="filter-button industry" id="industry-button">Все</div>
         </div>
         <div class="filter-dropdown">
           <h3>Гео</h3>
-          <div class="filter-button" id="geo-button">Все</div>
+          <div class="filter-button geo" id="geo-button">Все</div>
         </div>
         <div class="filter-dropdown">
           <h3>Риск</h3>
-          <div class="filter-button" id="risk-button">Все</div>
+          <div class="filter-button risk" id="risk-button">Все</div>
         </div>
       </div>
       <div id="rates-content"></div>
     </div>
     <div id="tech" class="tab-content">
-      <div id="tech-content"></div>
+      <div id="tech-content" class="tech-grid"></div>
     </div>
   </div>
   <div class="tabs">
@@ -511,6 +516,7 @@
     const BASE_URL = 'https://app.nocodb.com/api/v2/tables/';
     const RATES_TABLE_ID = 'mbz9kdbkba6i9t2';
     const TECH_TABLE_ID = 'mnliw8pc7zmrw35';
+    const TECH_VIEW_ID = 'vwmf51jogqgqlls7';
 
     let ratesData = [];
     let techData = [];
@@ -527,9 +533,13 @@
       contentContainer.style.paddingTop = `${filterHeight + 10}px`;
     }
 
-    async function fetchData(tableId) {
+    async function fetchData(tableId, viewId = null) {
       try {
-        const response = await fetch(`${BASE_URL}${tableId}/records?offset=0&limit=100`, {
+        let url = `${BASE_URL}${tableId}/records?offset=0&limit=100`;
+        if (viewId) {
+          url = `${BASE_URL}${tableId}/views/${viewId}/records?offset=0&limit=100`;
+        }
+        const response = await fetch(url, {
           headers: {
             'xc-token': API_TOKEN
           }
@@ -538,6 +548,7 @@
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
+        console.log(`Данные для tableId ${tableId}${viewId ? `, viewId ${viewId}` : ''}:`, data);
         return data.list || [];
       } catch (error) {
         console.error(`Ошибка при получении данных для tableId ${tableId}:`, error);
@@ -714,6 +725,9 @@
 
     function extractImageUrl(imgField) {
       if (!imgField) return 'https://via.placeholder.com/200';
+      if (Array.isArray(imgField) && imgField.length > 0) {
+        return imgField[0].url || 'https://via.placeholder.com/200';
+      }
       const match = imgField.match(/\((https:\/\/[^\)]+)\)/);
       return match ? match[1] : 'https://via.placeholder.com/200';
     }
@@ -721,62 +735,62 @@
     function renderTech(containerId, rows) {
       const container = document.getElementById(containerId);
       container.innerHTML = '';
-      console.log('Tech data:', rows); // Отладочный вывод данных
+      console.log('Tech data in renderTech:', rows);
       if (!rows || rows.length === 0) {
         container.innerHTML = '<p>Нет данных для отображения. Проверьте подключение к API или наличие данных в таблице.</p>';
         return;
       }
+
+      const header = document.createElement('div');
+      header.className = 'tech-grid-header';
+      header.innerHTML = `
+        <div>ID</div>
+        <div>Название</div>
+        <div>Тип</div>
+        <div>Цена</div>
+        <div>Условия</div>
+      `;
+      container.appendChild(header);
+
       rows.forEach(row => {
-        console.log('Rendering tech card:', row); // Отладочный вывод каждой записи
-        const imageUrl = row['Img'] ? extractImageUrl(row['Img']) : 'https://via.placeholder.com/200';
-        const card = document.createElement('div');
-        card.className = 'tech-card';
-        card.innerHTML = `
-          <img src="${imageUrl}" alt="Tech Solution">
-          <div class="tech-info">
-            <div class="id">${row['ID name'] || 'N/A'}</div>
-            <div class="name">${row['Name'] || 'Без названия'}</div>
-            <div class="description">${row['Description'] || 'Готовое решение для Telegram'}</div>
-            <div class="type">${row['Type'] || 'White Label'}</div>
-          </div>
-          <div class="card-details">
-            <div class="details-block">
-              <h4>Основная информация</h4>
-              <span class="info-tag">ID: ${row['ID name'] || 'N/A'}</span>
-              <span class="info-tag">Название: ${row['Name'] || 'N/A'}</span>
-              <span class="info-tag">Тип: ${row['Type'] || 'N/A'}</span>
-            </div>
+        const rowElement = document.createElement('div');
+        rowElement.className = 'tech-grid-row';
+        rowElement.innerHTML = `
+          <div>${row['ID name'] || row['ID_name'] || 'N/A'}</div>
+          <div>${row['Name'] || 'Без названия'}</div>
+          <div>${row['Type'] || 'N/A'}</div>
+          <div>${row['Price'] || 'N/A'}</div>
+          <div>${row['Terms'] || 'N/A'}</div>
+        `;
+        rowElement.addEventListener('click', () => {
+          const existingDetails = rowElement.nextSibling;
+          if (existingDetails && existingDetails.classList.contains('card-details')) {
+            existingDetails.remove();
+            return;
+          }
+          const details = document.createElement('div');
+          details.className = 'card-details';
+          details.style.padding = '10px';
+          details.innerHTML = `
             <div class="details-block">
               <h4>Описание</h4>
-              <span class="info-tag" style="display: block;">${row['Description'] || 'Готовое решение для Telegram (добавьте больше информации позже)'}</span>
-            </div>
-            <div class="details-block">
-              <h4>Дополнительно</h4>
-              <span class="info-tag">Интеграция: ${row['Интеграция'] || 'N/A'}</span>
-              <span class="info-tag">Лицензия: ${row['Лицензия'] || 'N/A'}</span>
-              <span class="info-tag">Поддержка 24/7: ${row['Support 24/7'] || 'N/A'}</span>
-              <span class="info-tag">На рынке (лет): ${row['На рынке (лет)'] || 'N/A'}</span>
+              <span class="info-tag" style="display: block;">${row['Description'] || 'Нет описания'}</span>
             </div>
             <div class="apply-button-container">
-              <button class="apply-button" onclick="window.open('https://t.me/p_fintech?text=Im interested in ${row['ID name']}', '_blank')">Подать заявку</button>
+              <button class="apply-button" onclick="window.open('${row['Buttons'] || 'https://t.me/p_fintech?text=Im interested in this solution'}', '_blank')">Подать заявку</button>
             </div>
-          </div>
-        `;
-        card.addEventListener('click', (e) => {
-          if (e.target.classList.contains('apply-button')) return;
-          const details = card.querySelector('.card-details');
-          details.classList.toggle('active');
-          card.classList.toggle('active');
+          `;
+          rowElement.insertAdjacentElement('afterend', details);
         });
-        container.appendChild(card);
+        container.appendChild(rowElement);
       });
     }
 
     async function loadTabs() {
       ratesData = await fetchData(RATES_TABLE_ID);
-      techData = await fetchData(TECH_TABLE_ID);
-      console.log('Loaded ratesData:', ratesData); // Отладочный вывод
-      console.log('Loaded techData:', techData); // Отладочный вывод
+      techData = await fetchData(TECH_TABLE_ID, TECH_VIEW_ID);
+      console.log('Loaded ratesData:', ratesData);
+      console.log('Loaded techData:', techData);
       renderFilters('industry-options', 'industry-button', 'industry-popup', ratesData, 'Industry', 'industry');
       renderFilters('geo-options', 'geo-button', 'geo-popup', ratesData, 'Geo', 'geo');
       renderFilters('risk-options', 'risk-button', 'risk-popup', ratesData, 'Risk', 'risk');
@@ -790,7 +804,10 @@
       document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
       document.querySelector(`[onclick="showTab('${tabId}')"]`).classList.add('active');
       document.getElementById(tabId).classList.add('active');
-      console.log(`Switched to tab: ${tabId}`); // Отладочный вывод
+      console.log(`Switched to tab: ${tabId}`);
+      if (tabId === 'tech') {
+        renderTech('tech-content', techData);
+      }
     }
 
     function openTelegram() {
