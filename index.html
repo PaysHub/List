@@ -724,7 +724,7 @@
       container.innerHTML = '';
       console.log('Tech data:', rows);
       if (!rows || rows.length === 0) {
-        container.innerHTML = '<p>Нет данных для отображения. Проверьте подключение к API или наличие данных в таблице.</p>';
+        container.innerHTML = '<p>Данные не загружены. Проверьте: 1) Подключение к API (API_TOKEN и TECH_TABLE_ID). 2) Наличие данных в таблице mnliw8pc7zmrw35. 3) Соответствие названий полей в NocoDB ожидаемой структуре (ID name, Name, Type, Short description, Description, Price, Terms, Icon, Link, Buttons, Img). Смотрите консоль для деталей.</p>';
         return;
       }
       rows.forEach(row => {
