@@ -67,17 +67,15 @@
       cursor: pointer;
       font-size: 12px;
       color: #fff;
+      background: #333; /* Серый фон по умолчанию */
       display: flex;
       justify-content: space-between;
       align-items: center;
       width: 100%;
       box-sizing: border-box;
     }
-    .filter-button.industry { background: #5a829b; }
-    .filter-button.geo { background: #6a9b8a; }
-    .filter-button.risk { background: #7ab59a; }
     .filter-button.active {
-      background: linear-gradient(90deg, #5a829b, #7ab59a, #5a829b);
+      background: linear-gradient(90deg, #007bff, #00c4b4, #007bff); /* Градиент синий-бирюзовый-синий */
       background-size: 200% 100%;
       animation: gradientShift 3s infinite linear;
     }
@@ -118,14 +116,14 @@
     .filter-tag {
       padding: 6px 12px;
       border-radius: 12px;
-      background: #333;
+      background: #333; /* Серый */
       color: #fff;
       font-size: 13px;
       cursor: pointer;
       transition: background 0.3s;
     }
     .filter-tag.selected {
-      background: #5a829b;
+      background: #007bff; /* Синий */
     }
     .popup-actions {
       display: flex;
@@ -142,10 +140,10 @@
       color: #fff;
     }
     .popup-button.apply {
-      background: #5a829b;
+      background: #007bff; /* Синий */
     }
     .popup-button.cancel {
-      background: #555;
+      background: #555; /* Тёмно-серый */
     }
     .card {
       background: #2a2a2a;
@@ -163,7 +161,7 @@
     .card.active {
       border: 3px solid transparent;
       background: linear-gradient(#2a2a2a, #2a2a2a) padding-box,
-                  linear-gradient(90deg, #5a829b, #7ab59a, #5a829b) border-box;
+                  linear-gradient(90deg, #007bff, #00c4b4, #007bff) border-box; /* Градиент синий-бирюзовый-синий */
       background-size: 200% 100%;
       animation: gradientShift 3s infinite linear;
     }
@@ -234,7 +232,7 @@
     .apply-button {
       margin-top: 15px;
       padding: 10px;
-      background: #5a829b;
+      background: #007bff; /* Синий */
       border: none;
       border-radius: 8px;
       color: #fff;
@@ -246,7 +244,7 @@
       transition: background 0.3s;
     }
     .apply-button:hover {
-      background: #4a729b;
+      background: #0056b3; /* Тёмный синий */
     }
     .apply-button-container {
       padding: 10px 0;
@@ -294,7 +292,7 @@
       padding: 10px;
       text-align: center;
       cursor: pointer;
-      background: #333;
+      background: #333; /* Серый */
       color: #fff;
       border-radius: 8px;
       margin: 0 5px;
@@ -302,7 +300,7 @@
       transition: background 0.3s;
     }
     .tab.active {
-      background: #5a829b;
+      background: #007bff; /* Синий */
     }
     .preloader {
       position: fixed;
@@ -395,7 +393,7 @@
       font-size: 20px;
       font-weight: 300;
       text-align: center;
-      background: linear-gradient(90deg, #5a829b, #7ab59a, #5a829b);
+      background: linear-gradient(90deg, #007bff, #00c4b4, #007bff); /* Градиент синий-бирюзовый-синий */
       background-size: 200% 100%;
       -webkit-background-clip: text;
       background-clip: text;
@@ -457,15 +455,15 @@
       <div class="filter-section">
         <div class="filter-dropdown">
           <h3>Индустрия</h3>
-          <div class="filter-button industry" id="industry-button">Все</div>
+          <div class="filter-button" id="industry-button">Все</div>
         </div>
         <div class="filter-dropdown">
           <h3>Гео</h3>
-          <div class="filter-button geo" id="geo-button">Все</div>
+          <div class="filter-button" id="geo-button">Все</div>
         </div>
         <div class="filter-dropdown">
           <h3>Риск</h3>
-          <div class="filter-button risk" id="risk-button">Все</div>
+          <div class="filter-button" id="risk-button">Все</div>
         </div>
       </div>
       <div id="rates-content"></div>
