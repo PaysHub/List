@@ -573,7 +573,6 @@
         const imageUrl = imgField[0].url;
         console.log('Extracted image URL from array:', imageUrl);
         if (imageUrl) {
-          // Добавляем токен в URL, чтобы обойти CORS
           const urlWithToken = `${imageUrl}?xc-token=${API_TOKEN}`;
           console.log('Image URL with token:', urlWithToken);
           return urlWithToken;
@@ -807,7 +806,7 @@
           <div class="card-tags">
             <span class="tag">${row['Type'] || 'White Label'}</span>
           </div>
-          <div class="short-description">${row['Description'] || 'Нет описания'}</div>
+          <div class="short-description">${row['Short description'] || 'Нет краткого описания'}</div>
           <div class="card-details">
             <div class="details-block">
               <h4>Основная информация</h4>
