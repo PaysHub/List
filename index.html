@@ -4,15 +4,16 @@
   <title>Payment Systems</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     html, body {
       margin: 0;
       padding: 0;
       height: 100%;
-      font-size: 18px;
+      font-family: 'Inter', sans-serif;
+      background-color: #1a1a1a;
+      color: #ffffff;
       overflow: hidden;
-      background-color: #ffffff;
-      color: #000000;
     }
     .content-container {
       width: 100%;
@@ -20,7 +21,7 @@
       position: relative;
       overflow-y: auto;
       z-index: 1;
-      padding: 10px;
+      padding: 15px;
       box-sizing: border-box;
     }
     .tab-content {
@@ -29,33 +30,128 @@
     .tab-content.active {
       display: block;
     }
-    .card {
-      background: #f5f5f5;
-      border-radius: 8px;
-      padding: 10px;
-      margin-bottom: 10px;
+    .filter-container {
+      margin-bottom: 15px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .filter-tag {
+      padding: 6px 12px;
+      background: #333;
+      border-radius: 20px;
       cursor: pointer;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      font-size: 14px;
+      transition: background 0.3s;
+    }
+    .filter-tag.active {
+      background: #007bff;
+    }
+    .card {
+      background: #2a2a2a;
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 15px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-3px);
     }
     .card-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      font-weight: 600;
+      font-size: 16px;
+    }
+    .card-tags {
+      margin-top: 8px;
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .tag {
+      background: #444;
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      color: #ccc;
     }
     .card-details {
       max-height: 0;
       overflow: hidden;
       transition: max-height 0.3s ease;
+      margin-top: 10px;
+      font-size: 14px;
+      color: #ddd;
     }
     .card-details.active {
-      max-height: 200px;
+      max-height: 400px;
+    }
+    .apply-button {
+      margin-top: 15px;
+      padding: 10px;
+      background: #007bff;
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      font-weight: 500;
+      cursor: pointer;
+      text-align: center;
+      display: block;
+      width: 100%;
+      transition: background 0.3s;
+    }
+    .apply-button:hover {
+      background: #0056b3;
+    }
+    .tech-card {
+      display: flex;
+      gap: 15px;
+      background: #2a2a2a;
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 15px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    .tech-card:hover {
+      transform: translateY(-3px);
+    }
+    .tech-card img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    .tech-info {
+      flex: 1;
+    }
+    .tech-info .id {
+      font-size: 12px;
+      color: #888;
+    }
+    .tech-info .name {
+      font-size: 16px;
+      font-weight: 600;
+      margin: 5px 0;
+    }
+    .tech-info .description {
+      font-size: 14px;
+      color: #ccc;
+      margin-bottom: 5px;
+    }
+    .tech-info .type {
+      font-size: 12px;
+      color: #007bff;
     }
     .tabs {
       display: flex;
       position: fixed;
       bottom: 20px;
       width: 100%;
-      background: #ffffff;
+      background: #1a1a1a;
       padding: 10px;
       box-sizing: border-box;
       z-index: 10;
@@ -65,16 +161,15 @@
       padding: 10px;
       text-align: center;
       cursor: pointer;
-      background: #d0d0d0;
-      color: #000000;
-      border-radius: 5px;
+      background: #333;
+      color: #fff;
+      border-radius: 8px;
       margin: 0 5px;
-      font-family: 'Arial', sans-serif;
-      font-size: 16px;
+      font-size: 14px;
+      transition: background 0.3s;
     }
     .tab.active {
-      background: #1e90ff;
-      color: #ffffff;
+      background: #007bff;
     }
     .preloader {
       position: fixed;
@@ -82,7 +177,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: #ffffff;
+      background: #1a1a1a;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -164,11 +259,10 @@
     }
     .welcome-text {
       margin-top: 20px;
-      font-family: 'Arial', sans-serif;
       font-size: 20px;
       font-weight: 300;
       text-align: center;
-      background: linear-gradient(90deg, #1e90ff, #2ecc71, #1e90ff);
+      background: linear-gradient(90deg, #007bff, #00c4b4, #007bff);
       background-size: 200% 100%;
       -webkit-background-clip: text;
       background-clip: text;
@@ -184,12 +278,14 @@
       100% { background-position: 200% 0%; }
     }
     @media (max-width: 600px) {
-      body { font-size: 20px; }
       .content-container { height: calc(100vh - 80px); }
       .tabs { bottom: 20px; padding: 10px; }
       .tab { font-size: 14px; }
       .welcome-text { font-size: 18px; }
       .welcome-text span { font-size: 24px; }
+      .card, .tech-card { padding: 10px; }
+      .card-header, .tech-info .name { font-size: 14px; }
+      .card-details, .tech-info .description { font-size: 12px; }
     }
   </style>
 </head>
@@ -211,8 +307,13 @@
     </div>
   </div>
   <div class="content-container">
-    <div id="rates" class="tab-content active"></div>
-    <div id="tech" class="tab-content"></div>
+    <div id="rates" class="tab-content active">
+      <div class="filter-container" id="rates-filter"></div>
+      <div id="rates-content"></div>
+    </div>
+    <div id="tech" class="tab-content">
+      <div id="tech-content"></div>
+    </div>
   </div>
   <div class="tabs">
     <div class="tab active" onclick="showTab('rates')">Ставки</div>
@@ -221,14 +322,18 @@
   </div>
   <script>
     const tg = window.Telegram.WebApp;
-    tg.setHeaderColor('#ffffff');
-    tg.setBackgroundColor('#ffffff');
+    tg.setHeaderColor('#1a1a1a');
+    tg.setBackgroundColor('#1a1a1a');
     tg.ready();
 
     const API_TOKEN = '473ECiCPMZ1Iz42hrMGKMJ1QSshcKRKEpX6fsl8H';
     const BASE_URL = 'https://app.nocodb.com/api/v2/tables/';
     const RATES_TABLE_ID = 'mbz9kdbkba6i9t2'; // PaysHub PSP List
     const TECH_TABLE_ID = 'mnliw8pc7zmrw35'; // PaysHub Ready Solutions
+
+    let ratesData = [];
+    let techData = [];
+    let activeFilter = null;
 
     async function fetchData(tableId) {
       try {
@@ -246,14 +351,50 @@
       }
     }
 
+    function getTags(row, field) {
+      return row[field] ? row[field].split(',').map(tag => tag.trim()) : [];
+    }
+
+    function renderFilters(containerId, rows, field) {
+      const container = document.getElementById(containerId);
+      const tags = new Set();
+      rows.forEach(row => {
+        getTags(row, field).forEach(tag => tags.add(tag));
+      });
+      container.innerHTML = '';
+      tags.forEach(tag => {
+        const filterTag = document.createElement('div');
+        filterTag.className = 'filter-tag';
+        filterTag.textContent = tag;
+        filterTag.addEventListener('click', () => {
+          document.querySelectorAll(`#${containerId} .filter-tag`).forEach(t => t.classList.remove('active'));
+          filterTag.classList.add('active');
+          activeFilter = tag;
+          renderRates('rates-content', ratesData);
+        });
+        container.appendChild(filterTag);
+      });
+      const resetFilter = document.createElement('div');
+      resetFilter.className = 'filter-tag';
+      resetFilter.textContent = 'Все';
+      resetFilter.addEventListener('click', () => {
+        document.querySelectorAll(`#${containerId} .filter-tag`).forEach(t => t.classList.remove('active'));
+        resetFilter.classList.add('active');
+        activeFilter = null;
+        renderRates('rates-content', ratesData);
+      });
+      container.appendChild(resetFilter);
+    }
+
     function renderRates(containerId, rows) {
       const container = document.getElementById(containerId);
       container.innerHTML = '';
-      if (rows.length === 0) {
+      const filteredRows = activeFilter ? rows.filter(row => getTags(row, 'Industry').includes(activeFilter)) : rows;
+      if (filteredRows.length === 0) {
         container.innerHTML = '<p>Нет данных для отображения</p>';
         return;
       }
-      rows.forEach(row => {
+      filteredRows.forEach(row => {
         console.log('Строка данных (Rates):', row);
         const card = document.createElement('div');
         card.className = 'card';
@@ -262,15 +403,26 @@
             <span>${row['ID Name'] || 'Без названия'}</span>
             <span>${row['Pay in (%)'] || 'N/A'}</span>
           </div>
+          <div class="card-tags">
+            ${getTags(row, 'Industry').map(tag => `<span class="tag">${tag}</span>`).join('')}
+            ${getTags(row, 'Risk').map(tag => `<span class="tag">${tag}</span>`).join('')}
+          </div>
           <div class="card-details">
-            <p>Pay out: ${row['Pay out (%)'] || 'N/A'}</p>
-            <p>Method: ${row['Method'] || 'N/A'}</p>
-            <p>Roll reserve: ${row['Roll reserve'] || 'N/A'}</p>
-            <p>Refund fee: ${row['Refound fee'] || 'N/A'}</p>
-            <p>Min trans: ${row['($) Min transaction'] || 'N/A'}</p>
+            <p><strong>Pay out:</strong> ${row['Pay out (%)'] || 'N/A'}</p>
+            <p><strong>Method:</strong> ${row['Method'] || 'N/A'}</p>
+            <p><strong>Roll reserve:</strong> ${row['Roll reserve'] || 'N/A'}</p>
+            <p><strong>Refund fee:</strong> ${row['Refound fee'] || 'N/A'}</p>
+            <p><strong>Min trans:</strong> ${row['($) Min transaction'] || 'N/A'}</p>
+            <p><strong>Geo:</strong> ${row['Geo'] || 'N/A'}</p>
+            <p><strong>Type traffic:</strong> ${row['Type traffic'] || 'N/A'}</p>
+            <p><strong>Settlement:</strong> ${row['Settlement'] || 'N/A'}</p>
+            <p><strong>Прием в:</strong> ${row['Прием в'] || 'N/A'}</p>
+            <p><strong>Расчет в:</strong> ${row['Расчет в'] || 'N/A'}</p>
+            <button class="apply-button" onclick="window.open('https://t.me/p_fintech?text=Im interested in ${row['ID Name']}', '_blank')">Подать заявку</button>
           </div>
         `;
-        card.addEventListener('click', () => {
+        card.addEventListener('click', (e) => {
+          if (e.target.classList.contains('apply-button')) return;
           const details = card.querySelector('.card-details');
           details.classList.toggle('active');
         });
@@ -288,17 +440,24 @@
       rows.forEach(row => {
         console.log('Строка данных (Tech):', row);
         const card = document.createElement('div');
-        card.className = 'card';
+        card.className = 'tech-card';
         card.innerHTML = `
-          <div class="card-header">
-            <span>${row['Name'] || 'Без названия'}</span>
+          <img src="https://via.placeholder.com/80" alt="Tech Solution">
+          <div class="tech-info">
+            <div class="id">${row['ID name'] || 'N/A'}</div>
+            <div class="name">${row['Name'] || 'Без названия'}</div>
+            <div class="description">Готовое решение для Telegram</div>
+            <div class="type">White Label</div>
           </div>
           <div class="card-details">
-            <p>ID: ${row['ID name'] || 'N/A'}</p>
-            <!-- Дополнительные поля добавим позже -->
+            <p><strong>ID:</strong> ${row['ID name'] || 'N/A'}</p>
+            <p><strong>Название:</strong> ${row['Name'] || 'N/A'}</p>
+            <p><strong>Описание:</strong> Готовое решение для Telegram (добавьте больше информации позже)</p>
+            <button class="apply-button" onclick="window.open('https://t.me/p_fintech?text=Im interested in ${row['ID name']}', '_blank')">Подать заявку</button>
           </div>
         `;
-        card.addEventListener('click', () => {
+        card.addEventListener('click', (e) => {
+          if (e.target.classList.contains('apply-button')) return;
           const details = card.querySelector('.card-details');
           details.classList.toggle('active');
         });
@@ -307,10 +466,11 @@
     }
 
     async function loadTabs() {
-      const ratesData = await fetchData(RATES_TABLE_ID);
-      const techData = await fetchData(TECH_TABLE_ID);
-      renderRates('rates', ratesData);
-      renderTech('tech', techData);
+      ratesData = await fetchData(RATES_TABLE_ID);
+      techData = await fetchData(TECH_TABLE_ID);
+      renderFilters('rates-filter', ratesData, 'Industry');
+      renderRates('rates-content', ratesData);
+      renderTech('tech-content', techData);
     }
 
     function showTab(tabId) {
