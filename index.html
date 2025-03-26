@@ -146,7 +146,15 @@
       background: #555;
     }
     .card, .tech-card {
-      background}
+      background: #2a2a2a;
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 15px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      position: relative;
+      border: 3px solid transparent;
+    }
     .card:hover, .tech-card:hover {
       transform: translateY(-3px);
     }
@@ -522,17 +530,24 @@
     async function fetchData(tableId) {
       try {
         console.log(`Fetching data for table ${tableId}...`);
+        console.log(`Using API_TOKEN: ${API_TOKEN}`);
+        console.log(`Request URL: ${BASE_URL}${tableId}/records?offset=0&limit=100`);
         const response = await fetch(`${BASE_URL}${tableId}/records?offset=0&limit=100`, {
           headers: {
             'xc-token': API_TOKEN
           }
         });
+        console.log(`Response status: ${response.status}`);
         if (!response.ok) {
+          const errorText = await response.text();
+          console.error(`HTTP error! Status: ${response.status}, Response: ${errorText}`);
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
         console.log(`Raw API response for table ${tableId}:`, data);
-        return data.list || [];
+        const records = data.list || [];
+        console.log(`Extracted records for table ${tableId}:`, records);
+        return records;
       } catch (error) {
         console.error(`Ошибка при получении данных для tableId ${tableId}:`, error);
         return [];
