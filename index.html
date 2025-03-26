@@ -21,10 +21,14 @@
       position: relative;
       overflow-y: auto;
       z-index: 1;
-      padding: 100px 15px 15px 15px; /* Начальный отступ сверху */
+      padding: 60px 15px 15px 15px; /* Уменьшенный начальный отступ */
       box-sizing: border-box;
       -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
       mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+      transition: filter 0.3s ease;
+    }
+    .content-container.blurred {
+      filter: blur(5px) brightness(0.5);
     }
     .tab-content {
       display: none;
@@ -38,30 +42,30 @@
       left: 0;
       width: 100%;
       background: #1a1a1a;
-      padding: 15px;
+      padding: 10px 15px; /* Уменьшенный padding */
       display: flex;
-      gap: 10px;
+      gap: 8px; /* Уменьшенный gap */
       flex-wrap: nowrap;
       align-items: center;
       z-index: 10;
       box-sizing: border-box;
     }
     .filter-section h3 {
-      font-size: 14px;
+      font-size: 12px; /* Уменьшенный шрифт */
       font-weight: 500;
       color: #aaa;
-      margin-bottom: 8px;
+      margin-bottom: 6px; /* Уменьшенный отступ */
     }
     .filter-dropdown {
       position: relative;
       flex: 1;
-      min-width: 100px;
+      min-width: 90px; /* Уменьшенная минимальная ширина */
     }
     .filter-button {
-      padding: 6px 12px;
-      border-radius: 8px;
+      padding: 4px 10px; /* Уменьшенный padding */
+      border-radius: 6px; /* Уменьшенный радиус */
       cursor: pointer;
-      font-size: 14px;
+      font-size: 12px; /* Уменьшенный шрифт */
       color: #fff;
       background: #333;
       display: flex;
@@ -99,15 +103,23 @@
       margin-bottom: 10px;
       color: #fff;
     }
-    .filter-option {
+    .filter-tags {
       display: flex;
-      align-items: center;
-      padding: 8px 0;
-      color: #fff;
-      font-size: 14px;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 15px;
     }
-    .filter-option input {
-      margin-right: 10px;
+    .filter-tag {
+      padding: 6px 12px;
+      border-radius: 12px;
+      background: #333;
+      color: #fff;
+      font-size: 13px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .filter-tag.selected {
+      background: #007bff;
     }
     .popup-actions {
       display: flex;
@@ -270,6 +282,10 @@
       padding: 10px;
       box-sizing: border-box;
       z-index: 10;
+      transition: filter 0.3s ease;
+    }
+    .tabs.blurred {
+      filter: blur(5px) brightness(0.5);
     }
     .tab {
       flex: 1;
@@ -297,7 +313,7 @@
       justify-content: center;
       align-items: center;
       z-index: 100;
-      transition: opacity 0.5s ease;
+      transition: opacity 0.3s ease;
       opacity: 1;
     }
     .preloader.hidden {
@@ -402,8 +418,10 @@
       .card-header, .tech-info .name { font-size: 14px; }
       .card-details, .tech-info .description { font-size: 12px; }
       .tech-card img { height: 150px; }
-      .filter-section { flex-wrap: wrap; }
-      .filter-dropdown { min-width: 100px; flex: 1; }
+      .filter-section { flex-wrap: wrap; gap: 6px; padding: 8px 15px; }
+      .filter-dropdown { min-width: 80px; }
+      .filter-button { padding: 3px 8px; font-size: 11px; }
+      .filter-section h3 { font-size: 11px; margin-bottom: 4px; }
       .filter-popup { width: 90%; }
     }
   </style>
@@ -433,10 +451,10 @@
           <div class="filter-button" id="industry-button">Все</div>
           <div class="filter-popup" id="industry-popup">
             <h4>Выберите индустрии</h4>
-            <div id="industry-options"></div>
+            <div class="filter-tags" id="industry-options"></div>
             <div class="popup-actions">
               <div class="popup-button apply" onclick="applyFilter('industry')">Применить</div>
-              <div class="popup-button cancel" onclick="closePopup('industry-popup')">Отмена</div>
+              <div class="popup-button cancel" onclick="closePopup('industry-popup')">Закрыть</div>
             </div>
           </div>
         </div>
@@ -445,10 +463,10 @@
           <div class="filter-button" id="geo-button">Все</div>
           <div class="filter-popup" id="geo-popup">
             <h4>Выберите регионы</h4>
-            <div id="geo-options"></div>
+            <div class="filter-tags" id="geo-options"></div>
             <div class="popup-actions">
               <div class="popup-button apply" onclick="applyFilter('geo')">Применить</div>
-              <div class="popup-button cancel" onclick="closePopup('geo-popup')">Отмена</div>
+              <div class="popup-button cancel" onclick="closePopup('geo-popup')">Закрыть</div>
             </div>
           </div>
         </div>
@@ -457,10 +475,10 @@
           <div class="filter-button" id="risk-button">Все</div>
           <div class="filter-popup" id="risk-popup">
             <h4>Выберите уровни риска</h4>
-            <div id="risk-options"></div>
+            <div class="filter-tags" id="risk-options"></div>
             <div class="popup-actions">
               <div class="popup-button apply" onclick="applyFilter('risk')">Применить</div>
-              <div class="popup-button cancel" onclick="closePopup('risk-popup')">Отмена</div>
+              <div class="popup-button cancel" onclick="closePopup('risk-popup')">Закрыть</div>
             </div>
           </div>
         </div>
@@ -495,12 +513,11 @@
       risk: new Set()
     };
 
-    // Функция для динамического расчета высоты фильтров и установки padding
     function adjustContentPadding() {
       const filterSection = document.querySelector('.filter-section');
       const contentContainer = document.querySelector('.content-container');
       const filterHeight = filterSection.offsetHeight;
-      contentContainer.style.paddingTop = `${filterHeight + 15}px`; // +15px для дополнительного отступа
+      contentContainer.style.paddingTop = `${filterHeight + 10}px`;
     }
 
     async function fetchData(tableId) {
@@ -537,42 +554,59 @@
           if (p !== popup) p.classList.remove('active');
         });
         popup.classList.toggle('active');
+        document.querySelector('.content-container').classList.toggle('blurred');
+        document.querySelector('.tabs').classList.toggle('blurred');
       });
 
       Array.from(tags).sort().forEach(tag => {
-        const option = document.createElement('div');
-        option.className = 'filter-option';
-        option.innerHTML = `
-          <input type="checkbox" id="${filterType}-${tag}" value="${tag}" ${tag === 'Все' && activeFilters[filterType].size === 0 ? 'checked' : ''}>
-          <label for="${filterType}-${tag}">${tag}</label>
-        `;
-        container.appendChild(option);
+        const tagElement = document.createElement('div');
+        tagElement.className = 'filter-tag';
+        tagElement.textContent = tag;
+        tagElement.dataset.value = tag;
+        if (activeFilters[filterType].has(tag)) {
+          tagElement.classList.add('selected');
+        }
+        tagElement.addEventListener('click', () => {
+          if (tag === 'Все') {
+            const allTags = container.querySelectorAll('.filter-tag');
+            allTags.forEach(t => t.classList.remove('selected'));
+            tagElement.classList.add('selected');
+          } else {
+            const allTag = container.querySelector('.filter-tag[data-value="Все"]');
+            allTag.classList.remove('selected');
+            tagElement.classList.toggle('selected');
+          }
+        });
+        container.appendChild(tagElement);
       });
     }
 
     function applyFilter(filterType) {
       const popup = document.getElementById(`${filterType}-popup`);
       const button = document.getElementById(`${filterType}-button`);
-      const checkboxes = popup.querySelectorAll('input[type="checkbox"]:checked');
+      const selectedTags = popup.querySelectorAll('.filter-tag.selected');
       activeFilters[filterType].clear();
-      const selectedTags = Array.from(checkboxes).map(cb => cb.value);
-      
-      if (selectedTags.length === 0 || selectedTags.includes('Все')) {
+      const selectedValues = Array.from(selectedTags).map(tag => tag.dataset.value);
+
+      if (selectedValues.length === 0 || selectedValues.includes('Все')) {
         activeFilters[filterType].clear();
         button.textContent = 'Все';
         button.classList.remove('active');
       } else {
-        selectedTags.forEach(tag => activeFilters[filterType].add(tag));
-        button.textContent = selectedTags.join(', ');
+        selectedValues.forEach(tag => activeFilters[filterType].add(tag));
+        button.textContent = selectedValues.join(', ');
         button.classList.add('active');
       }
-      
+
       renderRates('rates-content', ratesData);
-      popup.classList.remove('active');
+      closePopup(`${filterType}-popup`);
     }
 
     function closePopup(popupId) {
-      document.getElementById(popupId).classList.remove('active');
+      const popup = document.getElementById(popupId);
+      popup.classList.remove('active');
+      document.querySelector('.content-container').classList.remove('blurred');
+      document.querySelector('.tabs').classList.remove('blurred');
     }
 
     function renderRates(containerId, rows) {
@@ -714,7 +748,7 @@
       renderFilters('risk-options', 'risk-button', 'risk-popup', ratesData, 'Risk', 'risk');
       renderRates('rates-content', ratesData);
       renderTech('tech-content', techData);
-      adjustContentPadding(); // Устанавливаем отступ после загрузки данных
+      adjustContentPadding();
     }
 
     function showTab(tabId) {
@@ -745,12 +779,14 @@
       loadTabs();
     });
 
-    window.addEventListener('resize', adjustContentPadding); // Пересчитываем при изменении размера окна
+    window.addEventListener('resize', adjustContentPadding);
 
     document.addEventListener('click', (e) => {
       if (!e.target.closest('.filter-dropdown') && !e.target.closest('.filter-popup')) {
         document.querySelectorAll('.filter-popup').forEach(popup => {
           popup.classList.remove('active');
+          document.querySelector('.content-container').classList.remove('blurred');
+          document.querySelector('.tabs').classList.remove('blurred');
         });
       }
     });
