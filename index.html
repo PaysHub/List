@@ -189,8 +189,10 @@
       color: #fff;
       background: #333;
     }
-    .tag.service {
-      background: #007bff; /* Выделяем сервис синим цветом */
+    .tag.service, .tag.tech-type {
+      background: linear-gradient(90deg, #007bff, #00c4b4, #007bff);
+      background-size: 200% 100%;
+      animation: gradientShift 3s infinite linear;
     }
     .card-details {
       max-height: 0;
@@ -888,7 +890,7 @@
             <span>${row['Price'] || ''}</span>
           </div>
           <div class="card-tags">
-            <span class="tag">${row['Type'] || 'White Label'}</span>
+            <span class="tag tech-type">${row['Type'] || 'White Label'}</span>
           </div>
           <div class="short-description">${row['Short description'] || 'Нет краткого описания'}</div>
           <div class="card-details">
