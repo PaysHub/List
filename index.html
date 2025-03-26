@@ -534,6 +534,9 @@
             'xc-token': API_TOKEN
           }
         });
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
         const data = await response.json();
         return data.list || [];
       } catch (error) {
@@ -718,11 +721,13 @@
     function renderTech(containerId, rows) {
       const container = document.getElementById(containerId);
       container.innerHTML = '';
-      if (rows.length === 0) {
-        container.innerHTML = '<p>Нет данных для отображения</p>';
+      console.log('Tech data:', rows); // Отладочный вывод данных
+      if (!rows || rows.length === 0) {
+        container.innerHTML = '<p>Нет данных для отображения. Проверьте подключение к API или наличие данных в таблице.</p>';
         return;
       }
       rows.forEach(row => {
+        console.log('Rendering tech card:', row); // Отладочный вывод каждой записи
         const imageUrl = row['Img'] ? extractImageUrl(row['Img']) : 'https://via.placeholder.com/200';
         const card = document.createElement('div');
         card.className = 'tech-card';
@@ -770,6 +775,8 @@
     async function loadTabs() {
       ratesData = await fetchData(RATES_TABLE_ID);
       techData = await fetchData(TECH_TABLE_ID);
+      console.log('Loaded ratesData:', ratesData); // Отладочный вывод
+      console.log('Loaded techData:', techData); // Отладочный вывод
       renderFilters('industry-options', 'industry-button', 'industry-popup', ratesData, 'Industry', 'industry');
       renderFilters('geo-options', 'geo-button', 'geo-popup', ratesData, 'Geo', 'geo');
       renderFilters('risk-options', 'risk-button', 'risk-popup', ratesData, 'Risk', 'risk');
@@ -783,6 +790,7 @@
       document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
       document.querySelector(`[onclick="showTab('${tabId}')"]`).classList.add('active');
       document.getElementById(tabId).classList.add('active');
+      console.log(`Switched to tab: ${tabId}`); // Отладочный вывод
     }
 
     function openTelegram() {
