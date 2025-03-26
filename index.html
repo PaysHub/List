@@ -107,11 +107,8 @@
       background: #0056b3;
     }
     .tech-card {
-      display: flex;
-      gap: 15px;
       background: #2a2a2a;
       border-radius: 12px;
-      padding: 15px;
       margin-bottom: 15px;
       cursor: pointer;
       transition: transform 0.3s ease;
@@ -120,13 +117,13 @@
       transform: translateY(-3px);
     }
     .tech-card img {
-      width: 80px;
-      height: 80px;
+      width: 100%;
+      height: 200px;
       object-fit: cover;
-      border-radius: 8px;
+      border-radius: 12px 12px 0 0;
     }
     .tech-info {
-      flex: 1;
+      padding: 15px;
     }
     .tech-info .id {
       font-size: 12px;
@@ -286,6 +283,7 @@
       .card, .tech-card { padding: 10px; }
       .card-header, .tech-info .name { font-size: 14px; }
       .card-details, .tech-info .description { font-size: 12px; }
+      .tech-card img { height: 150px; }
     }
   </style>
 </head>
@@ -308,7 +306,8 @@
   </div>
   <div class="content-container">
     <div id="rates" class="tab-content active">
-      <div class="filter-container" id="rates-filter"></div>
+      <div class="filter-container" id="industry-filter"></div>
+      <div class="filter-container" id="geo-filter"></div>
       <div id="rates-content"></div>
     </div>
     <div id="tech" class="tab-content">
@@ -333,7 +332,8 @@
 
     let ratesData = [];
     let techData = [];
-    let activeFilter = null;
+    let activeIndustryFilter = null;
+    let activeGeoFilter = null;
 
     async function fetchData(tableId) {
       try {
@@ -355,7 +355,7 @@
       return row[field] ? row[field].split(',').map(tag => tag.trim()) : [];
     }
 
-    function renderFilters(containerId, rows, field) {
+    function renderFilters(containerId, rows, field, filterType) {
       const container = document.getElementById(containerId);
       const tags = new Set();
       rows.forEach(row => {
@@ -369,7 +369,11 @@
         filterTag.addEventListener('click', () => {
           document.querySelectorAll(`#${containerId} .filter-tag`).forEach(t => t.classList.remove('active'));
           filterTag.classList.add('active');
-          activeFilter = tag;
+          if (filterType === 'industry') {
+            activeIndustryFilter = tag;
+          } else {
+            activeGeoFilter = tag;
+          }
           renderRates('rates-content', ratesData);
         });
         container.appendChild(filterTag);
@@ -380,7 +384,11 @@
       resetFilter.addEventListener('click', () => {
         document.querySelectorAll(`#${containerId} .filter-tag`).forEach(t => t.classList.remove('active'));
         resetFilter.classList.add('active');
-        activeFilter = null;
+        if (filterType === 'industry') {
+          activeIndustryFilter = null;
+        } else {
+          activeGeoFilter = null;
+        }
         renderRates('rates-content', ratesData);
       });
       container.appendChild(resetFilter);
@@ -389,7 +397,13 @@
     function renderRates(containerId, rows) {
       const container = document.getElementById(containerId);
       container.innerHTML = '';
-      const filteredRows = activeFilter ? rows.filter(row => getTags(row, 'Industry').includes(activeFilter)) : rows;
+      let filteredRows = rows;
+      if (activeIndustryFilter) {
+        filteredRows = filteredRows.filter(row => getTags(row, 'Industry').includes(activeIndustryFilter));
+      }
+      if (activeGeoFilter) {
+        filteredRows = filteredRows.filter(row => getTags(row, 'Geo').includes(activeGeoFilter));
+      }
       if (filteredRows.length === 0) {
         container.innerHTML = '<p>Нет данных для отображения</p>';
         return;
@@ -406,6 +420,7 @@
           <div class="card-tags">
             ${getTags(row, 'Industry').map(tag => `<span class="tag">${tag}</span>`).join('')}
             ${getTags(row, 'Risk').map(tag => `<span class="tag">${tag}</span>`).join('')}
+            ${getTags(row, 'Geo').map(tag => `<span class="tag">${tag}</span>`).join('')}
           </div>
           <div class="card-details">
             <p><strong>Pay out:</strong> ${row['Pay out (%)'] || 'N/A'}</p>
@@ -430,6 +445,12 @@
       });
     }
 
+    function extractImageUrl(imgField) {
+      if (!imgField) return 'https://via.placeholder.com/200';
+      const match = imgField.match(/\((https:\/\/[^\)]+)\)/);
+      return match ? match[1] : 'https://via.placeholder.com/200';
+    }
+
     function renderTech(containerId, rows) {
       const container = document.getElementById(containerId);
       container.innerHTML = '';
@@ -439,10 +460,11 @@
       }
       rows.forEach(row => {
         console.log('Строка данных (Tech):', row);
+        const imageUrl = extractImageUrl(row['Img']);
         const card = document.createElement('div');
         card.className = 'tech-card';
         card.innerHTML = `
-          <img src="https://via.placeholder.com/80" alt="Tech Solution">
+          <img src="${imageUrl}" alt="Tech Solution">
           <div class="tech-info">
             <div class="id">${row['ID name'] || 'N/A'}</div>
             <div class="name">${row['Name'] || 'Без названия'}</div>
@@ -468,7 +490,8 @@
     async function loadTabs() {
       ratesData = await fetchData(RATES_TABLE_ID);
       techData = await fetchData(TECH_TABLE_ID);
-      renderFilters('rates-filter', ratesData, 'Industry');
+      renderFilters('industry-filter', ratesData, 'Industry', 'industry');
+      renderFilters('geo-filter', ratesData, 'Geo', 'geo');
       renderRates('rates-content', ratesData);
       renderTech('tech-content', techData);
     }
