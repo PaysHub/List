@@ -15,20 +15,9 @@
       color: #ffffff;
       overflow: hidden;
     }
-    .header {
-      padding: 15px;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-    .header h2 {
-      font-size: 18px;
-      font-weight: 600;
-      margin: 0;
-    }
     .content-container {
       width: 100%;
-      height: calc(100% - 140px);
+      height: calc(100% - 70px);
       position: relative;
       overflow-y: auto;
       z-index: 1;
@@ -45,7 +34,7 @@
       margin-bottom: 15px;
       display: flex;
       gap: 10px;
-      flex-wrap: nowrap; /* Убираем перенос на новую строку */
+      flex-wrap: nowrap;
       align-items: center;
     }
     .filter-section h3 {
@@ -56,7 +45,7 @@
     }
     .filter-dropdown {
       position: relative;
-      flex: 1; /* Равномерное распределение ширины */
+      flex: 1;
       min-width: 100px;
     }
     .filter-button {
@@ -71,9 +60,9 @@
       width: 100%;
       box-sizing: border-box;
     }
-    .filter-button.industry { background: #6a829b; } /* Приглушённый синий */
-    .filter-button.geo { background: #7ba57b; } /* Приглушённый зелёный */
-    .filter-button.risk { background: #c15b8a; } /* Ярко-малиновый */
+    .filter-button.industry { background: #5A8299; } /* Нейтральный голубой */
+    .filter-button.geo { background: #6A9288; } /* Нейтральный зеленоватый */
+    .filter-button.risk { background: #7BA57B; } /* Нейтральный зеленый */
     .filter-button.active {
       background: #007bff !important;
     }
@@ -133,9 +122,9 @@
       font-size: 12px;
       color: #fff;
     }
-    .tag.industry { background: #6a829b; } /* Приглушённый синий */
-    .tag.geo { background: #7ba57b; } /* Приглушённый зелёный */
-    .tag.risk { background: #c15b8a; } /* Ярко-малиновый */
+    .tag.industry { background: #5A8299; }
+    .tag.geo { background: #6A9288; }
+    .tag.risk { background: #7BA57B; }
     .card-details {
       max-height: 0;
       overflow: hidden;
@@ -348,8 +337,7 @@
       100% { background-position: 200% 0%; }
     }
     @media (max-width: 600px) {
-      .content-container { height: calc(100vh - 140px); }
-      .header h2 { font-size: 16px; }
+      .content-container { height: calc(100vh - 70px); }
       .tabs { bottom: 20px; padding: 10px; }
       .tab { font-size: 12px; }
       .welcome-text { font-size: 18px; }
@@ -359,7 +347,7 @@
       .card-details, .tech-info .description { font-size: 12px; }
       .tech-card img { height: 150px; }
       .details-grid { grid-template-columns: 1fr; }
-      .filter-section { flex-wrap: wrap; } /* На мобильных фильтры могут переноситься */
+      .filter-section { flex-wrap: wrap; }
       .filter-dropdown { min-width: 100px; flex: 1; }
     }
   </style>
@@ -381,25 +369,22 @@
       <div class="welcome-text">Welcome to <span>PaysHub</span></div>
     </div>
   </div>
-  <div class="header">
-    <h2 id="page-title">Лист ставок</h2>
-  </div>
   <div class="content-container">
     <div id="rates" class="tab-content active">
       <div class="filter-section">
         <div class="filter-dropdown">
-          <h3>Индустр.</h3>
-          <div class="filter-button industry" id="industry-button">Выберите индустрию</div>
+          <h3>Индустрия</h3>
+          <div class="filter-button industry" id="industry-button">Все</div>
           <div class="filter-options" id="industry-options"></div>
         </div>
         <div class="filter-dropdown">
           <h3>Гео</h3>
-          <div class="filter-button geo" id="geo-button">Выберите гео</div>
+          <div class="filter-button geo" id="geo-button">Все</div>
           <div class="filter-options" id="geo-options"></div>
         </div>
         <div class="filter-dropdown">
           <h3>Риск</h3>
-          <div class="filter-button risk" id="risk-button">Выберите риск</div>
+          <div class="filter-button risk" id="risk-button">Все</div>
           <div class="filter-options" id="risk-options"></div>
         </div>
       </div>
@@ -422,8 +407,8 @@
 
     const API_TOKEN = '473ECiCPMZ1Iz42hrMGKMJ1QSshcKRKEpX6fsl8H';
     const BASE_URL = 'https://app.nocodb.com/api/v2/tables/';
-    const RATES_TABLE_ID = 'mbz9kdbkba6i9t2'; // PaysHub PSP List
-    const TECH_TABLE_ID = 'mnliw8pc7zmrw35'; // PaysHub Ready Solutions
+    const RATES_TABLE_ID = 'mbz9kdbkba6i9t2';
+    const TECH_TABLE_ID = 'mnliw8pc7zmrw35';
 
     let ratesData = [];
     let techData = [];
@@ -439,7 +424,6 @@
           }
         });
         const data = await response.json();
-        console.log(`Данные для tableId ${tableId}:`, data);
         return data.list || [];
       } catch (error) {
         console.error(`Ошибка при получении данных для tableId ${tableId}:`, error);
@@ -467,7 +451,7 @@
         container.classList.toggle('active');
       });
 
-      tags.forEach(tag => {
+      Array.from(tags).sort().forEach(tag => {
         const option = document.createElement('div');
         option.className = 'filter-option';
         option.textContent = tag;
@@ -507,7 +491,6 @@
         return;
       }
       filteredRows.forEach(row => {
-        console.log('Строка данных (Rates):', row);
         const card = document.createElement('div');
         card.className = 'card';
         card.innerHTML = `
@@ -588,7 +571,6 @@
         return;
       }
       rows.forEach(row => {
-        console.log('Строка данных (Tech):', row);
         const imageUrl = row['Img'] ? extractImageUrl(row['Img']) : 'https://via.placeholder.com/200';
         const card = document.createElement('div');
         card.className = 'tech-card';
@@ -619,7 +601,6 @@
     async function loadTabs() {
       ratesData = await fetchData(RATES_TABLE_ID);
       techData = await fetchData(TECH_TABLE_ID);
-      console.log('Tech Data:', techData); // Для отладки
       renderFilters('industry-options', 'industry-button', ratesData, 'Industry', 'industry');
       renderFilters('geo-options', 'geo-button', ratesData, 'Geo', 'geo');
       renderFilters('risk-options', 'risk-button', ratesData, 'Risk', 'risk');
@@ -632,8 +613,6 @@
       document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
       document.querySelector(`[onclick="showTab('${tabId}')"]`).classList.add('active');
       document.getElementById(tabId).classList.add('active');
-      const title = tabId === 'rates' ? 'Лист ставок' : 'Готовые решения';
-      document.getElementById('page-title').textContent = title;
     }
 
     function openTelegram() {
@@ -657,7 +636,6 @@
       loadTabs();
     });
 
-    // Закрытие dropdown при клике вне
     document.addEventListener('click', (e) => {
       if (!e.target.closest('.filter-dropdown')) {
         document.querySelectorAll('.filter-options').forEach(options => {
@@ -667,7 +645,6 @@
     });
   </script>
 
-  <!-- Yandex.Metrika counter -->
   <script type="text/javascript">
     (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
     m[i].l=1*new Date();
@@ -683,6 +660,5 @@
     });
   </script>
   <noscript><div><img src="https://mc.yandex.ru/watch/100499634" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-  <!-- /Yandex.Metrika counter -->
 </body>
 </html>
