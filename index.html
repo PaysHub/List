@@ -145,7 +145,7 @@
     .popup-button.cancel {
       background: #555;
     }
-    .card {
+    .card, .tech-card {
       background: #2a2a2a;
       border-radius: 12px;
       padding: 15px;
@@ -155,10 +155,10 @@
       position: relative;
       border: 3px solid transparent;
     }
-    .card:hover {
+    .card:hover, .tech-card:hover {
       transform: translateY(-3px);
     }
-    .card.active {
+    .card.active, .tech-card.active {
       border: 3px solid transparent;
       background: linear-gradient(#2a2a2a, #2a2a2a) padding-box,
                   linear-gradient(90deg, #007bff, #00c4b4, #007bff) border-box;
@@ -250,28 +250,32 @@
       padding: 10px 0;
       border-top: 1px solid #333;
     }
-    .tech-grid {
-      display: grid;
-      gap: 10px;
-      margin-top: 10px;
+    .tech-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 12px 12px 0 0;
     }
-    .tech-grid-header, .tech-grid-row {
-      display: grid;
-      grid-template-columns: 1fr 2fr 1fr 1fr 1fr;
-      gap: 10px;
-      padding: 10px;
-      background: #2a2a2a;
-      border-radius: 8px;
+    .tech-info {
+      padding: 15px;
     }
-    .tech-grid-header {
+    .tech-info .id {
+      font-size: 12px;
+      color: #888;
+    }
+    .tech-info .name {
+      font-size: 16px;
       font-weight: 600;
-      background: #333;
+      margin: 5px 0;
     }
-    .tech-grid-row {
-      cursor: pointer;
+    .tech-info .description {
+      font-size: 14px;
+      color: #ccc;
+      margin-bottom: 5px;
     }
-    .tech-grid-row:hover {
-      background: #3a3a3a;
+    .tech-info .type {
+      font-size: 12px;
+      color: #007bff;
     }
     .tabs {
       display: flex;
@@ -414,17 +418,10 @@
       .tab { font-size: 12px; }
       .welcome-text { font-size: 18px; }
       .welcome-text span { font-size: 24px; }
-      .card { padding: 10px; }
-      .card-header { font-size: 14px; }
-      .card-details { font-size: 12px; }
-      .tech-grid-header, .tech-grid-row {
-        grid-template-columns: 1fr 1fr;
-        font-size: 12px;
-      }
-      .tech-grid-header div:nth-child(4), .tech-grid-row div:nth-child(4),
-      .tech-grid-header div:nth-child(5), .tech-grid-row div:nth-child(5) {
-        display: none;
-      }
+      .card, .tech-card { padding: 10px; }
+      .card-header, .tech-info .name { font-size: 14px; }
+      .card-details, .tech-info .description { font-size: 12px; }
+      .tech-card img { height: 150px; }
       .filter-section { flex-wrap: wrap; gap: 6px; padding: 8px 15px; }
       .filter-dropdown { min-width: 80px; }
       .filter-button { padding: 3px 8px; font-size: 11px; }
@@ -469,7 +466,7 @@
       <div id="rates-content"></div>
     </div>
     <div id="tech" class="tab-content">
-      <div id="tech-content" class="tech-grid"></div>
+      <div id="tech-content"></div>
     </div>
   </div>
   <div class="tabs">
@@ -514,7 +511,6 @@
     const BASE_URL = 'https://app.nocodb.com/api/v2/tables/';
     const RATES_TABLE_ID = 'mbz9kdbkba6i9t2';
     const TECH_TABLE_ID = 'mnliw8pc7zmrw35';
-    const TECH_VIEW_ID = 'vwmf51jogqgqlls7';
 
     let ratesData = [];
     let techData = [];
@@ -531,28 +527,19 @@
       contentContainer.style.paddingTop = `${filterHeight + 10}px`;
     }
 
-    async function fetchData(tableId, viewId = null) {
+    async function fetchData(tableId) {
       try {
-        let url = `${BASE_URL}${tableId}/records?offset=0&limit=100`;
-        if (viewId) {
-          url = `${BASE_URL}${tableId}/views/${viewId}/records?offset=0&limit=100`;
-        }
-        console.log(`Fetching data from URL: ${url}`); // Отладка: вывод URL
-        const response = await fetch(url, {
+        const response = await fetch(`${BASE_URL}${tableId}/records?offset=0&limit=100`, {
           headers: {
             'xc-token': API_TOKEN
           }
         });
         if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}, Status Text: ${response.statusText}`);
+          throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
-        console.log(`Данные для tableId ${tableId}${viewId ? `, viewId ${viewId}` : ''}:`, data);
-        if (!data.list) {
-          console.warn(`No 'list' property in response for tableId ${tableId}`);
-          return [];
-        }
-        return data.list;
+        console.log(`Raw API response for table ${tableId}:`, data);
+        return data.list || [];
       } catch (error) {
         console.error(`Ошибка при получении данных для tableId ${tableId}:`, error);
         return [];
@@ -728,10 +715,6 @@
 
     function extractImageUrl(imgField) {
       if (!imgField) return 'https://via.placeholder.com/200';
-      if (Array.isArray(imgField) && imgField.length > 0) {
-        console.log('Extracting image URL from array:', imgField); // Отладка
-        return imgField[0].url || 'https://via.placeholder.com/200';
-      }
       const match = imgField.match(/\((https:\/\/[^\)]+)\)/);
       return match ? match[1] : 'https://via.placeholder.com/200';
     }
@@ -739,61 +722,66 @@
     function renderTech(containerId, rows) {
       const container = document.getElementById(containerId);
       container.innerHTML = '';
-      console.log('Tech data in renderTech:', rows);
+      console.log('Tech data:', rows);
       if (!rows || rows.length === 0) {
         container.innerHTML = '<p>Нет данных для отображения. Проверьте подключение к API или наличие данных в таблице.</p>';
         return;
       }
-
-      const header = document.createElement('div');
-      header.className = 'tech-grid-header';
-      header.innerHTML = `
-        <div>ID</div>
-        <div>Название</div>
-        <div>Тип</div>
-        <div>Цена</div>
-        <div>Условия</div>
-      `;
-      container.appendChild(header);
-
       rows.forEach(row => {
-        console.log('Rendering tech row:', row); // Отладка: вывод каждой строки
-        const rowElement = document.createElement('div');
-        rowElement.className = 'tech-grid-row';
-        rowElement.innerHTML = `
-          <div>${row['ID name'] || row['ID_name'] || 'N/A'}</div>
-          <div>${row['Name'] || 'Без названия'}</div>
-          <div>${row['Type'] || 'N/A'}</div>
-          <div>${row['Price'] || 'N/A'}</div>
-          <div>${row['Terms'] || 'N/A'}</div>
-        `;
-        rowElement.addEventListener('click', () => {
-          const existingDetails = rowElement.nextSibling;
-          if (existingDetails && existingDetails.classList.contains('card-details')) {
-            existingDetails.remove();
-            return;
-          }
-          const details = document.createElement('div');
-          details.className = 'card-details';
-          details.style.padding = '10px';
-          details.innerHTML = `
+        console.log('Rendering tech card:', row);
+        const idName = row['ID name'] || 'N/A';
+        const name = row['Name'] || 'Без названия';
+        const type = row['Type'] || 'White Label';
+        const shortDescription = row['Short description'] || 'Описание отсутствует';
+        const description = row['Description'] || 'Подробное описание отсутствует';
+        const price = row['Price'] || 'N/A';
+        const terms = row['Terms'] || 'N/A';
+        const icon = row['Icon'] ? extractImageUrl(row['Icon']) : 'https://via.placeholder.com/200';
+        const img = row['Img'] ? extractImageUrl(row['Img']) : 'https://via.placeholder.com/200';
+        const link = row['Link'] || '#';
+        const buttons = row['Buttons'] || 'Перейти';
+
+        const card = document.createElement('div');
+        card.className = 'tech-card';
+        card.innerHTML = `
+          <img src="${img}" alt="Tech Solution">
+          <div class="tech-info">
+            <div class="id">${idName}</div>
+            <div class="name">${name}</div>
+            <div class="description">${shortDescription}</div>
+            <div class="type">${type}</div>
+          </div>
+          <div class="card-details">
+            <div class="details-block">
+              <h4>Основная информация</h4>
+              <span class="info-tag">ID: ${idName}</span>
+              <span class="info-tag">Название: ${name}</span>
+              <span class="info-tag">Тип: ${type}</span>
+              <span class="info-tag">Цена: ${price}</span>
+              <span class="info-tag">Условия: ${terms}</span>
+            </div>
             <div class="details-block">
               <h4>Описание</h4>
-              <span class="info-tag" style="display: block;">${row['Description'] || 'Нет описания'}</span>
+              <span class="info-tag" style="display: block;">${description}</span>
             </div>
             <div class="apply-button-container">
-              <button class="apply-button" onclick="window.open('${row['Buttons'] || 'https://t.me/p_fintech?text=Im interested in this solution'}', '_blank')">Подать заявку</button>
+              <button class="apply-button" onclick="window.open('${link}', '_blank')">${buttons}</button>
             </div>
-          `;
-          rowElement.insertAdjacentElement('afterend', details);
+          </div>
+        `;
+        card.addEventListener('click', (e) => {
+          if (e.target.classList.contains('apply-button')) return;
+          const details = card.querySelector('.card-details');
+          details.classList.toggle('active');
+          card.classList.toggle('active');
         });
-        container.appendChild(rowElement);
+        container.appendChild(card);
       });
     }
 
     async function loadTabs() {
       ratesData = await fetchData(RATES_TABLE_ID);
-      techData = await fetchData(TECH_TABLE_ID, TECH_VIEW_ID);
+      techData = await fetchData(TECH_TABLE_ID);
       console.log('Loaded ratesData:', ratesData);
       console.log('Loaded techData:', techData);
       renderFilters('industry-options', 'industry-button', 'industry-popup', ratesData, 'Industry', 'industry');
@@ -810,9 +798,6 @@
       document.querySelector(`[onclick="showTab('${tabId}')"]`).classList.add('active');
       document.getElementById(tabId).classList.add('active');
       console.log(`Switched to tab: ${tabId}`);
-      if (tabId === 'tech') {
-        renderTech('tech-content', techData);
-      }
     }
 
     function openTelegram() {
