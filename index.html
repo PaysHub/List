@@ -158,11 +158,16 @@
       transform: translateY(-3px);
     }
     .card.active {
-      border: 3px solid;
-      border-image: linear-gradient(to bottom, #007bff, #00c4b4, #007bff) 1;
-      border-image-slice: 1;
+      outline: 3px solid transparent;
+      outline-offset: 0px;
+      background: linear-gradient(90deg, #007bff, #00c4b4, #007bff) border-box;
       background-size: 200% 100%;
       animation: gradientShift 3s infinite linear;
+      -webkit-mask: 
+        linear-gradient(#fff 0 0) padding-box, 
+        linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
     }
     .card-header {
       display: flex;
@@ -194,7 +199,7 @@
     }
     .card-details.active {
       max-height: 1000px;
-      padding: 10px 0 0 0; /* Убрали внутренние отступы, так как обводка теперь на .card */
+      padding: 10px 0 0 0;
     }
     .details-block {
       margin-bottom: 15px;
@@ -553,7 +558,7 @@
       const popup = document.getElementById(popupId);
       const tags = new Set(['Все']);
       rows.forEach(row => {
-        getTags(row, 'Industry').forEach(tag => tags.add(tag));
+        getTags(row, field).forEach(tag => tags.add(tag));
       });
 
       button.addEventListener('click', (e) => {
@@ -702,7 +707,7 @@
           if (e.target.classList.contains('apply-button')) return;
           const details = card.querySelector('.card-details');
           details.classList.toggle('active');
-          card.classList.toggle('active'); // Добавляем/убираем класс active для .card
+          card.classList.toggle('active');
         });
         container.appendChild(card);
       });
