@@ -152,9 +152,17 @@
       margin-bottom: 15px;
       cursor: pointer;
       transition: transform 0.3s ease;
+      position: relative;
     }
     .card:hover {
       transform: translateY(-3px);
+    }
+    .card.active {
+      border: 3px solid;
+      border-image: linear-gradient(to bottom, #007bff, #00c4b4, #007bff) 1;
+      border-image-slice: 1;
+      background-size: 200% 100%;
+      animation: gradientShift 3s infinite linear;
     }
     .card-header {
       display: flex;
@@ -183,17 +191,10 @@
       margin-top: 10px;
       font-size: 14px;
       color: #ddd;
-      border: none;
     }
     .card-details.active {
       max-height: 1000px;
-      border: 3px solid;
-      border-image: linear-gradient(to bottom, #007bff, #00c4b4, #007bff) 1;
-      border-image-slice: 1;
-      background-size: 200% 100%;
-      animation: gradientShift 3s infinite linear;
-      border-radius: 8px;
-      padding: 10px;
+      padding: 10px 0 0 0; /* Убрали внутренние отступы, так как обводка теперь на .card */
     }
     .details-block {
       margin-bottom: 15px;
@@ -475,7 +476,7 @@
     <div class="tab" onclick="openTelegram()">Оператор</div>
   </div>
 
-  <!-- Попапы вынесены в body -->
+  <!-- Попапы -->
   <div class="filter-popup" id="industry-popup">
     <h4>Выберите индустрии</h4>
     <div class="filter-tags" id="industry-options"></div>
@@ -552,7 +553,7 @@
       const popup = document.getElementById(popupId);
       const tags = new Set(['Все']);
       rows.forEach(row => {
-        getTags(row, field).forEach(tag => tags.add(tag));
+        getTags(row, 'Industry').forEach(tag => tags.add(tag));
       });
 
       button.addEventListener('click', (e) => {
@@ -701,6 +702,7 @@
           if (e.target.classList.contains('apply-button')) return;
           const details = card.querySelector('.card-details');
           details.classList.toggle('active');
+          card.classList.toggle('active'); // Добавляем/убираем класс active для .card
         });
         container.appendChild(card);
       });
