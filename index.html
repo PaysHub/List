@@ -123,10 +123,8 @@
       border-radius: 12px;
       font-size: 12px;
       color: #fff;
+      background: #333; /* Нейтральный фон для всех тегов */
     }
-    .tag.industry { background: #007bff; }
-    .tag.geo { background: #00c4b4; }
-    .tag.risk { background: #007bff; }
     .card-details {
       max-height: 0;
       overflow: hidden;
@@ -137,12 +135,6 @@
     }
     .card-details.active {
       max-height: 1000px;
-    }
-    .details-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 15px;
-      margin-bottom: 15px;
     }
     .details-block {
       margin-bottom: 15px;
@@ -367,7 +359,6 @@
       .card-header, .tech-info .name { font-size: 14px; }
       .card-details, .tech-info .description { font-size: 12px; }
       .tech-card img { height: 150px; }
-      .details-grid { grid-template-columns: 1fr; }
       .filter-section { flex-wrap: wrap; }
       .filter-dropdown { min-width: 100px; flex: 1; }
     }
@@ -520,9 +511,9 @@
             <span>${row['Pay in (%)'] || 'N/A'}</span>
           </div>
           <div class="card-tags">
-            ${getTags(row, 'Industry').slice(0, 1).map(tag => `<span class="tag industry">${tag}</span>`).join('')}
-            ${getTags(row, 'Geo').slice(0, 1).map(tag => `<span class="tag geo">${tag}</span>`).join('')}
-            ${getTags(row, 'Risk').slice(0, 1).map(tag => `<span class="tag risk">${tag}</span>`).join('')}
+            ${getTags(row, 'Industry').slice(0, 1).map(tag => `<span class="tag">${tag}</span>`).join('')}
+            ${getTags(row, 'Geo').slice(0, 1).map(tag => `<span class="tag">${tag}</span>`).join('')}
+            ${getTags(row, 'Risk').slice(0, 1).map(tag => `<span class="tag">${tag}</span>`).join('')}
           </div>
           <div class="card-details">
             <div class="details-block">
