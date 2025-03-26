@@ -559,8 +559,34 @@
       }
     }
 
-    function extractImageUrl(imgField) {
-      console.log('Processing Img field:', imgField); // Отладка: выводим поле Img
+    async function fetchAttachment(attachment) {
+      try {
+        console.log('Fetching attachment:', attachment);
+        const signedUrl = attachment.signedUrl;
+        console.log('Signed URL:', signedUrl);
+        const response = await fetch(signedUrl, {
+          headers: {
+            'xc-token': API_TOKEN
+          }
+        });
+        console.log(`Attachment fetch status: ${response.status}`);
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error(`Failed to fetch attachment: ${errorText}`);
+          return null;
+        }
+        const blob = await response.blob();
+        const imageUrl = URL.createObjectURL(blob);
+        console.log('Generated blob URL:', imageUrl);
+        return imageUrl;
+      } catch (error) {
+        console.error('Error fetching attachment:', error);
+        return null;
+      }
+    }
+
+    async function extractImageUrl(imgField) {
+      console.log('Processing Img field:', imgField);
 
       if (!imgField) {
         console.log('Img field is empty or undefined');
@@ -570,12 +596,10 @@
       if (Array.isArray(imgField) && imgField.length > 0) {
         const imageObj = imgField[0];
         console.log('Image object:', imageObj);
-        const imageUrl = imageObj.url;
-        console.log('Extracted image URL from array:', imageUrl);
+        const imageUrl = await fetchAttachment(imageObj);
         if (imageUrl) {
-          const urlWithToken = `${imageUrl}?xc-token=${API_TOKEN}`;
-          console.log('Image URL with token:', urlWithToken);
-          return urlWithToken;
+          console.log('Successfully fetched image URL:', imageUrl);
+          return imageUrl;
         }
       }
 
@@ -793,7 +817,7 @@
 
       for (const row of filteredRows) {
         console.log('Rendering tech card:', row);
-        const imgUrl = extractImageUrl(row['Img']);
+        const imgUrl = await extractImageUrl(row['Img']);
         console.log('Extracted image URL for card:', imgUrl);
         const card = document.createElement('div');
         card.className = 'tech-card';
@@ -823,7 +847,7 @@
             <div class="apply-button-container">
               <button class="apply-button" onclick="window.open('https://t.me/p_fintech?text=Im interested in ${row['ID name']}', '_blank')">Подать заявку</button>
             </div>
-          </div>
+          </ натdiv>
         `;
         card.addEventListener('click', (e) => {
           if (e.target.classList.contains('apply-button')) return;
