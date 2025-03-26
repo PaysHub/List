@@ -721,59 +721,41 @@
       });
     }
 
-    function extractImageUrl(imgField) {
-      if (!imgField) return 'https://via.placeholder.com/200';
-      const match = imgField.match(/\((https:\/\/[^\)]+)\)/);
-      return match ? match[1] : 'https://via.placeholder.com/200';
-    }
-
     function renderTech(containerId, rows) {
       const container = document.getElementById(containerId);
       container.innerHTML = '';
       console.log('Tech data received in renderTech:', rows);
       if (!rows || rows.length === 0) {
-        container.innerHTML = '<p>Данные для "Техрешения" не загружены. Возможные причины: 1) Ошибка подключения к API (проверьте API_TOKEN и TECH_TABLE_ID). 2) Таблица mnliw8pc7zmrw35 пуста. 3) Названия полей в NocoDB не совпадают с ожидаемыми (должны быть: ID name, Name, Type, Short description, Description, Price, Terms, Icon, Link, Buttons, Img). Откройте консоль (F12 → Console) и проверьте "Raw API response" и "Loaded techData".</p>';
+        container.innerHTML = '<p>Данные для "Техрешения" не загружены. Возможные причины: 1) Таблица mnliw8pc7zmrw35 пуста. 2) TECH_TABLE_ID неверный. Откройте консоль (F12 → Console) и проверьте "Raw API response" и "Loaded techData".</p>';
         return;
       }
       rows.forEach(row => {
         console.log('Rendering tech card:', row);
-        const idName = row['ID name'] || 'N/A';
-        const name = row['Name'] || 'Без названия';
-        const type = row['Type'] || 'White Label';
-        const shortDescription = row['Short description'] || 'Описание отсутствует';
-        const description = row['Description'] || 'Подробное описание отсутствует';
-        const price = row['Price'] || 'N/A';
-        const terms = row['Terms'] || 'N/A';
-        const icon = row['Icon'] ? extractImageUrl(row['Icon']) : 'https://via.placeholder.com/200';
-        const img = row['Img'] ? extractImageUrl(row['Img']) : 'https://via.placeholder.com/200';
-        const link = row['Link'] || '#';
-        const buttons = row['Buttons'] || 'Перейти';
-
         const card = document.createElement('div');
-        card.className = 'tech-card';
+        card.className = 'card';
         card.innerHTML = `
-          <img src="${img}" alt="Tech Solution">
-          <div class="tech-info">
-            <div class="id">${idName}</div>
-            <div class="name">${name}</div>
-            <div class="description">${shortDescription}</div>
-            <div class="type">${type}</div>
+          <div class="card-header">
+            <span>${row['ID name'] || 'Без названия'}</span>
+            <span>${row['Price'] || 'N/A'}</span>
+          </div>
+          <div class="card-tags">
+            <span class="tag">${row['Type'] || 'White Label'}</span>
           </div>
           <div class="card-details">
             <div class="details-block">
               <h4>Основная информация</h4>
-              <span class="info-tag">ID: ${idName}</span>
-              <span class="info-tag">Название: ${name}</span>
-              <span class="info-tag">Тип: ${type}</span>
-              <span class="info-tag">Цена: ${price}</span>
-              <span class="info-tag">Условия: ${terms}</span>
+              <span class="info-tag">ID: ${row['ID name'] || 'N/A'}</span>
+              <span class="info-tag">Название: ${row['Name'] || 'N/A'}</span>
+              <span class="info-tag">Тип: ${row['Type'] || 'N/A'}</span>
+              <span class="info-tag">Цена: ${row['Price'] || 'N/A'}</span>
+              <span class="info-tag">Условия: ${row['Terms'] || 'N/A'}</span>
             </div>
             <div class="details-block">
               <h4>Описание</h4>
-              <span class="info-tag" style="display: block;">${description}</span>
+              <span class="info-tag" style="display: block;">${row['Description'] || 'Нет описания'}</span>
             </div>
             <div class="apply-button-container">
-              <button class="apply-button" onclick="window.open('${link}', '_blank')">${buttons}</button>
+              <button class="apply-button" onclick="window.open('${row['Link'] || '#'}', '_blank')">${row['Buttons'] || 'Перейти'}</button>
             </div>
           </div>
         `;
@@ -794,7 +776,7 @@
       techData = await fetchData(TECH_TABLE_ID);
       console.log('Loaded techData:', techData);
       if (!techData || techData.length === 0) {
-        console.log('No tech data loaded. Check API_TOKEN, TECH_TABLE_ID, or table contents.');
+        console.log('No tech data loaded. Check TECH_TABLE_ID or table contents.');
       }
       renderFilters('industry-options', 'industry-button', 'industry-popup', ratesData, 'Industry', 'industry');
       renderFilters('geo-options', 'geo-button', 'geo-popup', ratesData, 'Geo', 'geo');
