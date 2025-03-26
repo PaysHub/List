@@ -511,7 +511,7 @@
     const tg = window.Telegram.WebApp;
     tg.ready();
 
-    const API_TOKEN = '473ECiCPMZ1Iz42hrMGKMJ1QSshcKRKEpX6fsl8H';
+    const API_TOKEN = 'ubicp2nFx8L47YOV3MOyn1FhUIPQ4EMESzFnrL3L'; // Новый токен
     const BASE_URL = 'https://app.nocodb.com/api/v2/tables/';
     const RATES_TABLE_ID = 'mbz9kdbkba6i9t2';
     const TECH_TABLE_ID = 'mnliw8pc7zmrw35';
@@ -559,32 +559,6 @@
       }
     }
 
-    async function fetchAttachment(attachment) {
-      try {
-        console.log('Fetching attachment:', attachment);
-        const signedUrl = attachment.signedUrl;
-        console.log('Signed URL:', signedUrl);
-        const response = await fetch(signedUrl, {
-          headers: {
-            'xc-token': API_TOKEN
-          }
-        });
-        console.log(`Attachment fetch status: ${response.status}`);
-        if (!response.ok) {
-          const errorText = await response.text();
-          console.error(`Failed to fetch attachment: ${errorText}`);
-          return null;
-        }
-        const blob = await response.blob();
-        const imageUrl = URL.createObjectURL(blob);
-        console.log('Generated blob URL:', imageUrl);
-        return imageUrl;
-      } catch (error) {
-        console.error('Error fetching attachment:', error);
-        return null;
-      }
-    }
-
     async function extractImageUrl(imgField) {
       console.log('Processing Img field:', imgField);
 
@@ -593,21 +567,31 @@
         return 'https://placehold.co/200x200';
       }
 
-      if (Array.isArray(imgField) && imgField.length > 0) {
-        const imageObj = imgField[0];
-        console.log('Image object:', imageObj);
-        const imageUrl = await fetchAttachment(imageObj);
-        if (imageUrl) {
-          console.log('Successfully fetched image URL:', imageUrl);
-          return imageUrl;
-        }
-      }
-
+      // Проверяем, является ли imgField строкой (прямой URL)
       if (typeof imgField === 'string') {
+        // Проверяем, является ли строка прямым URL (начинается с http:// или https://)
+        if (imgField.startsWith('http://') || imgField.startsWith('https://')) {
+          console.log('Direct image URL detected:', imgField);
+          return imgField;
+        }
+        // Проверяем, содержит ли строка URL в формате NocoDB (например, "(https://...)")
         const match = imgField.match(/\((https:\/\/[^\)]+)\)/);
         if (match) {
           const imageUrl = match[1];
           console.log('Extracted image URL from string:', imageUrl);
+          const urlWithToken = `${imageUrl}?xc-token=${API_TOKEN}`;
+          console.log('Image URL with token:', urlWithToken);
+          return urlWithToken;
+        }
+      }
+
+      // Проверяем, является ли imgField массивом (вложение NocoDB)
+      if (Array.isArray(imgField) && imgField.length > 0) {
+        const imageObj = imgField[0];
+        console.log('Image object:', imageObj);
+        const imageUrl = imageObj.url;
+        console.log('Extracted image URL from array:', imageUrl);
+        if (imageUrl) {
           const urlWithToken = `${imageUrl}?xc-token=${API_TOKEN}`;
           console.log('Image URL with token:', urlWithToken);
           return urlWithToken;
@@ -847,7 +831,7 @@
             <div class="apply-button-container">
               <button class="apply-button" onclick="window.open('https://t.me/p_fintech?text=Im interested in ${row['ID name']}', '_blank')">Подать заявку</button>
             </div>
-          </ натdiv>
+          </div>
         `;
         card.addEventListener('click', (e) => {
           if (e.target.classList.contains('apply-button')) return;
