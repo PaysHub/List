@@ -15,9 +15,56 @@
       color: #ffffff;
       overflow: hidden;
     }
+    .header {
+      padding: 15px;
+      background: #2a2a2a;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .header h2 {
+      font-size: 18px;
+      font-weight: 600;
+      margin: 0;
+    }
+    .menu-button {
+      background: #007bff;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 12px;
+      color: #fff;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .dropdown-menu {
+      position: absolute;
+      top: 60px;
+      right: 15px;
+      background: #2a2a2a;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      display: none;
+      z-index: 20;
+    }
+    .dropdown-menu.active {
+      display: block;
+    }
+    .dropdown-item {
+      padding: 10px 20px;
+      color: #fff;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .dropdown-item:hover {
+      background: #007bff;
+    }
     .content-container {
       width: 100%;
-      height: calc(100% - 80px);
+      height: calc(100% - 60px);
       position: relative;
       overflow-y: auto;
       z-index: 1;
@@ -93,18 +140,19 @@
     .card-details {
       max-height: 0;
       overflow: hidden;
-      transition: max-height 0.3s ease;
+      transition: max-height 0.5s ease;
       margin-top: 10px;
       font-size: 14px;
       color: #ddd;
     }
     .card-details.active {
-      max-height: 800px;
+      max-height: 1000px;
     }
     .details-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: 1fr 1fr;
       gap: 15px;
+      margin-bottom: 15px;
     }
     .details-block {
       margin-bottom: 15px;
@@ -168,31 +216,6 @@
     .tech-info .type {
       font-size: 12px;
       color: #007bff;
-    }
-    .tabs {
-      display: flex;
-      position: fixed;
-      bottom: 20px;
-      width: 100%;
-      background: #1a1a1a;
-      padding: 10px;
-      box-sizing: border-box;
-      z-index: 10;
-    }
-    .tab {
-      flex: 1;
-      padding: 10px;
-      text-align: center;
-      cursor: pointer;
-      background: #333;
-      color: #fff;
-      border-radius: 8px;
-      margin: 0 5px;
-      font-size: 14px;
-      transition: background 0.3s;
-    }
-    .tab.active {
-      background: #007bff;
     }
     .preloader {
       position: fixed;
@@ -301,11 +324,11 @@
       100% { background-position: 200% 0%; }
     }
     @media (max-width: 600px) {
-      .content-container { height: calc(100vh - 80px); }
-      .tabs { bottom: 20px; padding: 10px; }
-      .tab { font-size: 14px; }
-      .welcome-text { font-size: 18px; }
-      .welcome-text span { font-size: 24px; }
+      .content-container { height: calc(100vh - 60px); }
+      .header h2 { font-size: 16px; }
+      .menu-button { font-size: 12px; padding: 6px 10px; }
+      .dropdown-menu { top: 50px; }
+      .dropdown-item { font-size: 12px; }
       .card, .tech-card { padding: 10px; }
       .card-header, .tech-info .name { font-size: 14px; }
       .card-details, .tech-info .description { font-size: 12px; }
@@ -331,6 +354,15 @@
       <div class="welcome-text">Welcome to <span>PaysHub</span></div>
     </div>
   </div>
+  <div class="header">
+    <h2 id="page-title">Лист ставок</h2>
+    <button class="menu-button" onclick="toggleMenu()">Меню</button>
+    <div class="dropdown-menu" id="dropdown-menu">
+      <div class="dropdown-item" onclick="showTab('rates')">Лист ставок</div>
+      <div class="dropdown-item" onclick="showTab('tech')">Готовые решения</div>
+      <div class="dropdown-item" onclick="openTelegram()">Оператор</div>
+    </div>
+  </div>
   <div class="content-container">
     <div id="rates" class="tab-content active">
       <div class="filter-section">
@@ -350,11 +382,6 @@
     <div id="tech" class="tab-content">
       <div id="tech-content"></div>
     </div>
-  </div>
-  <div class="tabs">
-    <div class="tab active" onclick="showTab('rates')">Ставки</div>
-    <div class="tab" onclick="showTab('tech')">Техрешения</div>
-    <div class="tab" onclick="openTelegram()">Оператор</div>
   </div>
   <script>
     const tg = window.Telegram.WebApp;
@@ -485,25 +512,25 @@
                 <p><strong>Max turnover:</strong> ${row['($) Макс. оборот'] || 'N/A'}</p>
                 <p><strong>Additional fees:</strong> ${row['Доп. платежи'] || 'N/A'}</p>
               </div>
-              <div class="details-block">
-                <h4>Дополнительно</h4>
-                <p><strong>Geo:</strong> ${row['Geo'] || 'N/A'}</p>
-                <p><strong>Type traffic:</strong> ${row['Type traffic'] || 'N/A'}</p>
-                <p><strong>Settlement:</strong> ${row['Settlement'] || 'N/A'}</p>
-                <p><strong>Settlement amount:</strong> ${row['Settlement amount'] || 'N/A'}</p>
-                <p><strong>Прием в:</strong> ${row['Прием в'] || 'N/A'}</p>
-                <p><strong>Расчет в:</strong> ${row['Расчет в'] || 'N/A'}</p>
-                <p><strong>License:</strong> ${row['Лицензия'] || 'N/A'}</p>
-                <p><strong>Integration:</strong> ${row['Интеграция'] || 'N/A'}</p>
-                <p><strong>Compliance:</strong> ${row['Compliance'] || 'N/A'}</p>
-                <p><strong>Support 24/7:</strong> ${row['Support 24/7'] || 'N/A'}</p>
-                <p><strong>Recurrent:</strong> ${row['Рекуррент'] || 'N/A'}</p>
-                <p><strong>Chargeback level:</strong> ${row['Уровень чарджбэков'] || 'N/A'}</p>
-                <p><strong>3DS:</strong> ${row['3DS-авторизация'] || 'N/A'}</p>
-                <p><strong>Liquidity:</strong> ${row['Ликвидность'] || 'N/A'}</p>
-                <p><strong>Conversion:</strong> ${row['Конверсия'] || 'N/A'}</p>
-                <p><strong>Years on market:</strong> ${row['На рынке (лет)'] || 'N/A'}</p>
-              </div>
+            </div>
+            <div class="details-block">
+              <h4>Дополнительно</h4>
+              <p><strong>Geo:</strong> ${row['Geo'] || 'N/A'}</p>
+              <p><strong>Type traffic:</strong> ${row['Type traffic'] || 'N/A'}</p>
+              <p><strong>Settlement:</strong> ${row['Settlement'] || 'N/A'}</p>
+              <p><strong>Settlement amount:</strong> ${row['Settlement amount'] || 'N/A'}</p>
+              <p><strong>Прием в:</strong> ${row['Прием в'] || 'N/A'}</p>
+              <p><strong>Расчет в:</strong> ${row['Расчет в'] || 'N/A'}</p>
+              <p><strong>License:</strong> ${row['Лицензия'] || 'N/A'}</p>
+              <p><strong>Integration:</strong> ${row['Интеграция'] || 'N/A'}</p>
+              <p><strong>Compliance:</strong> ${row['Compliance'] || 'N/A'}</p>
+              <p><strong>Support 24/7:</strong> ${row['Support 24/7'] || 'N/A'}</p>
+              <p><strong>Recurrent:</strong> ${row['Рекуррент'] || 'N/A'}</p>
+              <p><strong>Chargeback level:</strong> ${row['Уровень чарджбэков'] || 'N/A'}</p>
+              <p><strong>3DS:</strong> ${row['3DS-авторизация'] || 'N/A'}</p>
+              <p><strong>Liquidity:</strong> ${row['Ликвидность'] || 'N/A'}</p>
+              <p><strong>Conversion:</strong> ${row['Конверсия'] || 'N/A'}</p>
+              <p><strong>Years on market:</strong> ${row['На рынке (лет)'] || 'N/A'}</p>
             </div>
             <div class="details-block">
               <h4>Комментарии</h4>
@@ -566,6 +593,7 @@
     async function loadTabs() {
       ratesData = await fetchData(RATES_TABLE_ID);
       techData = await fetchData(TECH_TABLE_ID);
+      console.log('Tech Data:', techData); // Для отладки
       renderFilters('industry-filter', ratesData, 'Industry', 'industry');
       renderFilters('geo-filter', ratesData, 'Geo', 'geo');
       renderFilters('risk-filter', ratesData, 'Risk', 'risk');
@@ -574,14 +602,21 @@
     }
 
     function showTab(tabId) {
-      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
       document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-      document.querySelector(`[onclick="showTab('${tabId}')"]`).classList.add('active');
       document.getElementById(tabId).classList.add('active');
+      document.getElementById('dropdown-menu').classList.remove('active');
+      const title = tabId === 'rates' ? 'Лист ставок' : 'Готовые решения';
+      document.getElementById('page-title').textContent = title;
     }
 
     function openTelegram() {
       window.open('https://t.me/p_fintech?text=I%20need%20help%20with%20the%20PaysHub%20service', '_blank');
+      document.getElementById('dropdown-menu').classList.remove('active');
+    }
+
+    function toggleMenu() {
+      const menu = document.getElementById('dropdown-menu');
+      menu.classList.toggle('active');
     }
 
     document.querySelectorAll('.coin').forEach(item => {
