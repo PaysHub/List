@@ -45,7 +45,8 @@
       margin-bottom: 15px;
       display: flex;
       gap: 10px;
-      flex-wrap: wrap;
+      flex-wrap: nowrap; /* Убираем перенос на новую строку */
+      align-items: center;
     }
     .filter-section h3 {
       font-size: 14px;
@@ -55,8 +56,8 @@
     }
     .filter-dropdown {
       position: relative;
-      width: 30%;
-      min-width: 150px;
+      flex: 1; /* Равномерное распределение ширины */
+      min-width: 100px;
     }
     .filter-button {
       padding: 6px 12px;
@@ -358,7 +359,8 @@
       .card-details, .tech-info .description { font-size: 12px; }
       .tech-card img { height: 150px; }
       .details-grid { grid-template-columns: 1fr; }
-      .filter-dropdown { width: 100%; }
+      .filter-section { flex-wrap: wrap; } /* На мобильных фильтры могут переноситься */
+      .filter-dropdown { min-width: 100px; flex: 1; }
     }
   </style>
 </head>
@@ -386,7 +388,7 @@
     <div id="rates" class="tab-content active">
       <div class="filter-section">
         <div class="filter-dropdown">
-          <h3>Индустрия</h3>
+          <h3>Индустр.</h3>
           <div class="filter-button industry" id="industry-button">Выберите индустрию</div>
           <div class="filter-options" id="industry-options"></div>
         </div>
@@ -396,8 +398,8 @@
           <div class="filter-options" id="geo-options"></div>
         </div>
         <div class="filter-dropdown">
-          <h3>Уровень риска</h3>
-          <div class="filter-button risk" id="risk-button">Выберите уровень риска</div>
+          <h3>Риск</h3>
+          <div class="filter-button risk" id="risk-button">Выберите риск</div>
           <div class="filter-options" id="risk-options"></div>
         </div>
       </div>
