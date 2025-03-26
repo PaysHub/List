@@ -21,7 +21,7 @@
       position: relative;
       overflow-y: auto;
       z-index: 1;
-      padding: 60px 15px 15px 15px; /* Уменьшенный начальный отступ */
+      padding: 60px 15px 15px 15px;
       box-sizing: border-box;
       -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
       mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
@@ -42,30 +42,30 @@
       left: 0;
       width: 100%;
       background: #1a1a1a;
-      padding: 10px 15px; /* Уменьшенный padding */
+      padding: 10px 15px;
       display: flex;
-      gap: 8px; /* Уменьшенный gap */
+      gap: 8px;
       flex-wrap: nowrap;
       align-items: center;
       z-index: 10;
       box-sizing: border-box;
     }
     .filter-section h3 {
-      font-size: 12px; /* Уменьшенный шрифт */
+      font-size: 12px;
       font-weight: 500;
       color: #aaa;
-      margin-bottom: 6px; /* Уменьшенный отступ */
+      margin-bottom: 6px;
     }
     .filter-dropdown {
       position: relative;
       flex: 1;
-      min-width: 90px; /* Уменьшенная минимальная ширина */
+      min-width: 90px;
     }
     .filter-button {
-      padding: 4px 10px; /* Уменьшенный padding */
-      border-radius: 6px; /* Уменьшенный радиус */
+      padding: 4px 10px;
+      border-radius: 6px;
       cursor: pointer;
-      font-size: 12px; /* Уменьшенный шрифт */
+      font-size: 12px;
       color: #fff;
       background: #333;
       display: flex;
@@ -83,7 +83,7 @@
       position: fixed;
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%) scale(0.95);
       width: 80%;
       max-height: 70vh;
       background: #2a2a2a;
@@ -93,9 +93,13 @@
       display: none;
       z-index: 30;
       overflow-y: auto;
+      opacity: 0;
+      transition: opacity 0.3s ease, transform 0.3s ease;
     }
     .filter-popup.active {
       display: block;
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
     }
     .filter-popup h4 {
       font-size: 16px;
@@ -449,38 +453,14 @@
         <div class="filter-dropdown">
           <h3>Индустрия</h3>
           <div class="filter-button" id="industry-button">Все</div>
-          <div class="filter-popup" id="industry-popup">
-            <h4>Выберите индустрии</h4>
-            <div class="filter-tags" id="industry-options"></div>
-            <div class="popup-actions">
-              <div class="popup-button apply" onclick="applyFilter('industry')">Применить</div>
-              <div class="popup-button cancel" onclick="closePopup('industry-popup')">Закрыть</div>
-            </div>
-          </div>
         </div>
         <div class="filter-dropdown">
           <h3>Гео</h3>
           <div class="filter-button" id="geo-button">Все</div>
-          <div class="filter-popup" id="geo-popup">
-            <h4>Выберите регионы</h4>
-            <div class="filter-tags" id="geo-options"></div>
-            <div class="popup-actions">
-              <div class="popup-button apply" onclick="applyFilter('geo')">Применить</div>
-              <div class="popup-button cancel" onclick="closePopup('geo-popup')">Закрыть</div>
-            </div>
-          </div>
         </div>
         <div class="filter-dropdown">
           <h3>Риск</h3>
           <div class="filter-button" id="risk-button">Все</div>
-          <div class="filter-popup" id="risk-popup">
-            <h4>Выберите уровни риска</h4>
-            <div class="filter-tags" id="risk-options"></div>
-            <div class="popup-actions">
-              <div class="popup-button apply" onclick="applyFilter('risk')">Применить</div>
-              <div class="popup-button cancel" onclick="closePopup('risk-popup')">Закрыть</div>
-            </div>
-          </div>
         </div>
       </div>
       <div id="rates-content"></div>
@@ -494,6 +474,33 @@
     <div class="tab" onclick="showTab('tech')">Техрешения</div>
     <div class="tab" onclick="openTelegram()">Оператор</div>
   </div>
+
+  <!-- Попапы вынесены в body -->
+  <div class="filter-popup" id="industry-popup">
+    <h4>Выберите индустрии</h4>
+    <div class="filter-tags" id="industry-options"></div>
+    <div class="popup-actions">
+      <div class="popup-button apply" onclick="applyFilter('industry')">Применить</div>
+      <div class="popup-button cancel" onclick="closePopup('industry-popup')">Закрыть</div>
+    </div>
+  </div>
+  <div class="filter-popup" id="geo-popup">
+    <h4>Выберите регионы</h4>
+    <div class="filter-tags" id="geo-options"></div>
+    <div class="popup-actions">
+      <div class="popup-button apply" onclick="applyFilter('geo')">Применить</div>
+      <div class="popup-button cancel" onclick="closePopup('geo-popup')">Закрыть</div>
+    </div>
+  </div>
+  <div class="filter-popup" id="risk-popup">
+    <h4>Выберите уровни риска</h4>
+    <div class="filter-tags" id="risk-options"></div>
+    <div class="popup-actions">
+      <div class="popup-button apply" onclick="applyFilter('risk')">Применить</div>
+      <div class="popup-button cancel" onclick="closePopup('risk-popup')">Закрыть</div>
+    </div>
+  </div>
+
   <script>
     const tg = window.Telegram.WebApp;
     tg.setHeaderColor('#1a1a1a');
