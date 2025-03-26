@@ -145,7 +145,7 @@
     .popup-button.cancel {
       background: #555;
     }
-    .card {
+    .card, .tech-card {
       background: #2a2a2a;
       border-radius: 12px;
       padding: 15px;
@@ -155,10 +155,10 @@
       position: relative;
       border: 3px solid transparent;
     }
-    .card:hover {
+    .card:hover, .tech-card:hover {
       transform: translateY(-3px);
     }
-    .card.active {
+    .card.active, .tech-card.active {
       border: 3px solid transparent;
       background: linear-gradient(#2a2a2a, #2a2a2a) padding-box,
                   linear-gradient(90deg, #007bff, #00c4b4, #007bff) border-box;
@@ -197,8 +197,8 @@
       flex-direction: column;
     }
     .card-details.active {
-      max-height: none; /* Убрали ограничение по высоте */
-      overflow: visible; /* Убрали прокрутку */
+      max-height: none;
+      overflow: visible;
       padding: 10px 0 0 0;
     }
     .details-block {
@@ -248,17 +248,7 @@
     }
     .apply-button-container {
       padding: 10px 0;
-      border-top: 1px solid #333; /* Разделительная линия сверху */
-    }
-    .tech-card {
-      background: #2a2a2a;
-      border-radius: 12px;
-      margin-bottom: 15px;
-      cursor: pointer;
-      transition: transform 0.3s ease;
-    }
-    .tech-card:hover {
-      transform: translateY(-3px);
+      border-top: 1px solid #333;
     }
     .tech-card img {
       width: 100%;
@@ -745,9 +735,23 @@
             <div class="type">${row['Type'] || 'White Label'}</div>
           </div>
           <div class="card-details">
-            <span class="info-tag">ID: ${row['ID name'] || 'N/A'}</span>
-            <span class="info-tag">Название: ${row['Name'] || 'N/A'}</span>
-            <span class="info-tag" style="display: block;">Описание: ${row['Description'] || 'Готовое решение для Telegram (добавьте больше информации позже)'}</span>
+            <div class="details-block">
+              <h4>Основная информация</h4>
+              <span class="info-tag">ID: ${row['ID name'] || 'N/A'}</span>
+              <span class="info-tag">Название: ${row['Name'] || 'N/A'}</span>
+              <span class="info-tag">Тип: ${row['Type'] || 'N/A'}</span>
+            </div>
+            <div class="details-block">
+              <h4>Описание</h4>
+              <span class="info-tag" style="display: block;">${row['Description'] || 'Готовое решение для Telegram (добавьте больше информации позже)'}</span>
+            </div>
+            <div class="details-block">
+              <h4>Дополнительно</h4>
+              <span class="info-tag">Интеграция: ${row['Интеграция'] || 'N/A'}</span>
+              <span class="info-tag">Лицензия: ${row['Лицензия'] || 'N/A'}</span>
+              <span class="info-tag">Поддержка 24/7: ${row['Support 24/7'] || 'N/A'}</span>
+              <span class="info-tag">На рынке (лет): ${row['На рынке (лет)'] || 'N/A'}</span>
+            </div>
             <div class="apply-button-container">
               <button class="apply-button" onclick="window.open('https://t.me/p_fintech?text=Im interested in ${row['ID name']}', '_blank')">Подать заявку</button>
             </div>
@@ -757,6 +761,7 @@
           if (e.target.classList.contains('apply-button')) return;
           const details = card.querySelector('.card-details');
           details.classList.toggle('active');
+          card.classList.toggle('active');
         });
         container.appendChild(card);
       });
