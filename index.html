@@ -87,7 +87,7 @@
       color: #ddd;
     }
     .card-details.active {
-      max-height: 400px;
+      max-height: 600px;
     }
     .apply-button {
       margin-top: 15px;
@@ -308,6 +308,7 @@
     <div id="rates" class="tab-content active">
       <div class="filter-container" id="industry-filter"></div>
       <div class="filter-container" id="geo-filter"></div>
+      <div class="filter-container" id="risk-filter"></div>
       <div id="rates-content"></div>
     </div>
     <div id="tech" class="tab-content">
@@ -334,6 +335,7 @@
     let techData = [];
     let activeIndustryFilter = null;
     let activeGeoFilter = null;
+    let activeRiskFilter = null;
 
     async function fetchData(tableId) {
       try {
@@ -371,8 +373,10 @@
           filterTag.classList.add('active');
           if (filterType === 'industry') {
             activeIndustryFilter = tag;
-          } else {
+          } else if (filterType === 'geo') {
             activeGeoFilter = tag;
+          } else if (filterType === 'risk') {
+            activeRiskFilter = tag;
           }
           renderRates('rates-content', ratesData);
         });
@@ -386,8 +390,10 @@
         resetFilter.classList.add('active');
         if (filterType === 'industry') {
           activeIndustryFilter = null;
-        } else {
+        } else if (filterType === 'geo') {
           activeGeoFilter = null;
+        } else if (filterType === 'risk') {
+          activeRiskFilter = null;
         }
         renderRates('rates-content', ratesData);
       });
@@ -403,6 +409,9 @@
       }
       if (activeGeoFilter) {
         filteredRows = filteredRows.filter(row => getTags(row, 'Geo').includes(activeGeoFilter));
+      }
+      if (activeRiskFilter) {
+        filteredRows = filteredRows.filter(row => getTags(row, 'Risk').includes(activeRiskFilter));
       }
       if (filteredRows.length === 0) {
         container.innerHTML = '<p>Нет данных для отображения</p>';
@@ -428,11 +437,25 @@
             <p><strong>Roll reserve:</strong> ${row['Roll reserve'] || 'N/A'}</p>
             <p><strong>Refund fee:</strong> ${row['Refound fee'] || 'N/A'}</p>
             <p><strong>Min trans:</strong> ${row['($) Min transaction'] || 'N/A'}</p>
-            <p><strong>Geo:</strong> ${row['Geo'] || 'N/A'}</p>
-            <p><strong>Type traffic:</strong> ${row['Type traffic'] || 'N/A'}</p>
+            <p><strong>Max trans:</strong> ${row['($) Max transaction'] || 'N/A'}</p>
+            <p><strong>Min turnover:</strong> ${row['($) Мин. оборот'] || 'N/A'}</p>
+            <p><strong>Max turnover:</strong> ${row['($) Макс. оборот'] || 'N/A'}</p>
+            <p><strong>Additional fees:</strong> ${row['Доп. платежи'] || 'N/A'}</p>
             <p><strong>Settlement:</strong> ${row['Settlement'] || 'N/A'}</p>
+            <p><strong>Settlement amount:</strong> ${row['Settlement amount'] || 'N/A'}</p>
             <p><strong>Прием в:</strong> ${row['Прием в'] || 'N/A'}</p>
             <p><strong>Расчет в:</strong> ${row['Расчет в'] || 'N/A'}</p>
+            <p><strong>License:</strong> ${row['Лицензия'] || 'N/A'}</p>
+            <p><strong>Integration:</strong> ${row['Интеграция'] || 'N/A'}</p>
+            <p><strong>Compliance:</strong> ${row['Compliance'] || 'N/A'}</p>
+            <p><strong>Support 24/7:</strong> ${row['Support 24/7'] || 'N/A'}</p>
+            <p><strong>Recurrent:</strong> ${row['Рекуррент'] || 'N/A'}</p>
+            <p><strong>Chargeback level:</strong> ${row['Уровень чарджбэков'] || 'N/A'}</p>
+            <p><strong>3DS:</strong> ${row['3DS-авторизация'] || 'N/A'}</p>
+            <p><strong>Liquidity:</strong> ${row['Ликвидность'] || 'N/A'}</p>
+            <p><strong>Conversion:</strong> ${row['Конверсия'] || 'N/A'}</p>
+            <p><strong>Years on market:</strong> ${row['На рынке (лет)'] || 'N/A'}</p>
+            <p><strong>Comments:</strong> ${row['Комментарии'] || 'Нет комментариев'}</p>
             <button class="apply-button" onclick="window.open('https://t.me/p_fintech?text=Im interested in ${row['ID Name']}', '_blank')">Подать заявку</button>
           </div>
         `;
@@ -460,7 +483,7 @@
       }
       rows.forEach(row => {
         console.log('Строка данных (Tech):', row);
-        const imageUrl = extractImageUrl(row['Img']);
+        const imageUrl = row['Img'] ? extractImageUrl(row['Img']) : 'https://via.placeholder.com/200';
         const card = document.createElement('div');
         card.className = 'tech-card';
         card.innerHTML = `
@@ -468,13 +491,13 @@
           <div class="tech-info">
             <div class="id">${row['ID name'] || 'N/A'}</div>
             <div class="name">${row['Name'] || 'Без названия'}</div>
-            <div class="description">Готовое решение для Telegram</div>
-            <div class="type">White Label</div>
+            <div class="description">${row['Description'] || 'Готовое решение для Telegram'}</div>
+            <div class="type">${row['Type'] || 'White Label'}</div>
           </div>
           <div class="card-details">
             <p><strong>ID:</strong> ${row['ID name'] || 'N/A'}</p>
             <p><strong>Название:</strong> ${row['Name'] || 'N/A'}</p>
-            <p><strong>Описание:</strong> Готовое решение для Telegram (добавьте больше информации позже)</p>
+            <p><strong>Описание:</strong> ${row['Description'] || 'Готовое решение для Telegram (добавьте больше информации позже)'}</p>
             <button class="apply-button" onclick="window.open('https://t.me/p_fintech?text=Im interested in ${row['ID name']}', '_blank')">Подать заявку</button>
           </div>
         `;
@@ -492,6 +515,7 @@
       techData = await fetchData(TECH_TABLE_ID);
       renderFilters('industry-filter', ratesData, 'Industry', 'industry');
       renderFilters('geo-filter', ratesData, 'Geo', 'geo');
+      renderFilters('risk-filter', ratesData, 'Risk', 'risk');
       renderRates('rates-content', ratesData);
       renderTech('tech-content', techData);
     }
