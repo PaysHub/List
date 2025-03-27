@@ -719,6 +719,10 @@
       container.innerHTML = '';
       let filteredRows = rows;
 
+      // Фильтруем строки, показывая только те, у которых On = true
+      filteredRows = filteredRows.filter(row => row['On'] === true);
+
+      // Применяем остальные фильтры
       if (activeFilters.industry.size > 0) {
         filteredRows = filteredRows.filter(row => 
           getTags(row, 'Industry').some(tag => activeFilters.industry.has(tag))
@@ -854,6 +858,11 @@
       }
 
       let filteredRows = rows;
+
+      // Фильтруем строки, показывая только те, у которых On = true
+      filteredRows = filteredRows.filter(row => row['On'] === true);
+
+      // Применяем остальные фильтры
       if (activeFilters.type.size > 0) {
         filteredRows = filteredRows.filter(row => 
           activeFilters.type.has(row['Type'] || 'N/A')
