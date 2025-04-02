@@ -2,36 +2,31 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>PaysHub - Marketplace for Payment Solutions</title>
     <style>
         /* Your existing styles from the initial post */
-        body {
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
             font-family: 'Inter', sans-serif;
             background-color: #1a1a1a;
             color: #ffffff;
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
-        }
-
-        .preloader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #1a1a1a;
-            z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            overflow: hidden;
         }
 
         .content-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
+            width: 100%;
+            height: calc(100% - 50px);
+            position: relative;
+            overflow-y: auto;
+            z-index: 1;
+            padding: 60px 15px 70px 15px;
+            box-sizing: border-box;
+            -webkit-mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
+            mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
+            transition: filter 0.3s ease;
         }
 
         .tab-content {
@@ -70,29 +65,51 @@
 
         .tabs {
             display: flex;
-            justify-content: space-around;
-            background-color: #2a2a2a;
-            padding: 10px 0;
             position: fixed;
-            bottom: 0;
+            bottom: 20px;
             width: 100%;
-            z-index: 1000;
+            background: #1a1a1a;
+            padding: 10px;
+            box-sizing: border-box;
+            z-index: 10;
+            transition: filter 0.3s ease;
         }
 
         .tab {
-            color: #ffffff;
+            flex: 1;
+            padding: 10px;
             text-align: center;
             cursor: pointer;
-            padding: 10px;
-            font-size: 16px;
+            background: #333;
+            color: #fff;
+            border-radius: 8px;
+            margin: 0 5px;
+            font-size: 14px;
+            transition: background 0.3s;
         }
 
         .tab.active {
-            background-color: #4a4a4a;
+            background: #007bff;
         }
 
-        .filter-section {
-            margin-bottom: 20px;
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #1a1a1a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            transition: opacity 0.3s ease;
+            opacity: 1;
+        }
+
+        .preloader.hidden {
+            opacity: 0;
+            pointer-events: none;
         }
 
         /* Additional styles for the new design */
@@ -140,7 +157,7 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             padding: 20px;
             margin: 10px;
-            width: calc(33.333% - 20px);
+            width: calc(100% - 20px);
             text-align: center;
         }
 
@@ -204,12 +221,47 @@
         .footer-tab-content.active {
             display: block;
         }
+
+        @media (max-width: 600px) {
+            .content-container { height: calc(100vh - 50px); }
+            .tabs { bottom: 20px; padding: 10px; }
+            .tab { font-size: 12px; }
+            .hero { padding: 30px 10px; }
+            .slider { max-width: 100%; }
+            .cta { font-size: 14px; padding: 8px 16px; }
+            .features { padding: 10px; }
+            .panel { width: 100%; margin: 5px 0; }
+            .panel img { width: 40px; height: 40px; }
+            .panel h3 { font-size: 18px; }
+            .panel p { font-size: 14px; }
+            .panel button { font-size: 12px; padding: 4px 8px; }
+            .ai-recommendations, .partners { padding: 10px; margin: 10px; }
+            .ai-recommendations h2, .partners h2 { font-size: 20px; }
+            .ai-recommendations p, .partners p { font-size: 14px; }
+            .ai-recommendations button, .partners button { font-size: 12px; padding: 4px 8px; }
+            footer { padding: 10px; }
+            .footer-tabs { margin-bottom: 10px; }
+            .footer-tab { padding: 8px 16px; font-size: 12px; }
+            .footer-tab-content p { font-size: 14px; }
+        }
     </style>
 </head>
 <body>
     <div class="preloader" id="preloader">
-        <!-- Your existing preloader animation -->
-        <div class="loader"></div>
+        <div class="wallet-container">
+            <div class="wallet"></div>
+            <div class="coin" style="left: 30px; animation-delay: 0s;"></div>
+            <div class="coin" style="left: 60px; animation-delay: 0.2s;"></div>
+            <div class="coin" style="left: 90px; animation-delay: 0.4s;"></div>
+            <div class="coin" style="left: 45px; animation-delay: 0.6s;"></div>
+            <div class="coin" style="left: 75px; animation-delay: 0.8s;"></div>
+            <div class="coin" style="left: 37.5px; animation-delay: 1s;"></div>
+            <div class="coin" style="left: 82.5px; animation-delay: 1.2s;"></div>
+            <div class="coin" style="left: 52.5px; animation-delay: 1.4s;"></div>
+            <div class="coin" style="left: 67.5px; animation-delay: 1.6s;"></div>
+            <div class="coin" style="left: 97.5px; animation-delay: 1.8s;"></div>
+            <div class="welcome-text">Welcome to <span>PaysHub</span></div>
+        </div>
     </div>
     <div class="content-container">
         <header>
@@ -323,12 +375,39 @@
         }
 
         function openTelegram() {
-            Telegram.WebApp.openTelegramLink('https://t.me/p_fintech');
+            window.open('https://t.me/p_fintech?text=I%20need%20help%20with%20the%20PaysHub%20service', '_blank');
         }
 
-        window.onload = function() {
-            document.getElementById('preloader').style.display = 'none';
-        };
+        document.querySelectorAll('.coin').forEach(item => {
+            const randomLeft = Math.random() * 90 + 30;
+            item.style.left = `${randomLeft}px`;
+            item.style.top = '-30px';
+        });
+
+        window.addEventListener('load', () => {
+            const preloader = document.getElementById('preloader');
+            setTimeout(() => {
+                preloader.classList.add('hidden');
+                preloader.addEventListener('transitionend', () => {
+                    preloader.style.display = 'none';
+                }, { once: true });
+            }, 2000);
+        });
+
+        // Yandex Metrika
+        (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+        (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+        ym(100499634, "init", {
+            clickmap: true,
+            trackLinks: true,
+            accurateTrackBounce: true,
+            webvisor: true
+        });
     </script>
+    <noscript><div><img src="https://mc.yandex.ru/watch/100499634" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 </body>
 </html>
