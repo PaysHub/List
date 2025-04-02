@@ -1,416 +1,1176 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>PaysHub - Маркетплейс для платежных решений</title>
-    <style>
-        /* Ваши существующие стили из начального поста */
-        html, body {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            font-family: 'Inter', sans-serif;
-            background-color: #1a1a1a;
-            color: #ffffff;
-            overflow: hidden;
-        }
-
-        .content-container {
-            width: 100%;
-            height: calc(100% - 50px);
-            position: relative;
-            overflow-y: auto;
-            z-index: 1;
-            padding: 60px 15px 70px 15px;
-            box-sizing: border-box;
-            -webkit-mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
-            mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
-            transition: filter 0.3s ease;
-        }
-
-        .tab-content {
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        h2 {
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-
-        p {
-            font-size: 16px;
-            line-height: 1.5;
-            margin-bottom: 10px;
-        }
-
-        nav ul {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        nav ul li {
-            margin-bottom: 10px;
-        }
-
-        nav ul li a {
-            color: #ffffff;
-            text-decoration: none;
-            font-size: 18px;
-        }
-
-        .tabs {
-            display: flex;
-            position: fixed;
-            bottom: 20px;
-            width: 100%;
-            background: #1a1a1a;
-            padding: 10px;
-            box-sizing: border-box;
-            z-index: 10;
-            transition: filter 0.3s ease;
-        }
-
-        .tab {
-            flex: 1;
-            padding: 10px;
-            text-align: center;
-            cursor: pointer;
-            background: #333;
-            color: #fff;
-            border-radius: 8px;
-            margin: 0 5px;
-            font-size: 14px;
-            transition: background 0.3s;
-        }
-
-        .tab.active {
-            background: #007bff;
-        }
-
-        .preloader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #1a1a1a;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 100;
-            transition: opacity 0.3s ease;
-            opacity: 1;
-        }
-
-        .preloader.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        /* Дополнительные стили для нового дизайна */
-        .hero {
-            background-color: #4a4a4a;
-            color: white;
-            text-align: center;
-            padding: 50px 20px;
-        }
-
-        .slider {
-            max-width: 800px;
-            margin: 0 auto;
-            overflow: hidden;
-        }
-
-        .slide {
-            display: none;
-        }
-
-        .slide.active {
-            display: block;
-        }
-
-        .cta {
-            background-color: #ff5722;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            margin-top: 20px;
-        }
-
-        .features {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            padding: 20px;
-        }
-
-        .panel {
-            background-color: #2a2a2a;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            padding: 20px;
-            margin: 10px;
-            width: calc(100% - 20px);
-            text-align: center;
-        }
-
-        .panel img {
-            width: 50px;
-            height: 50px;
-        }
-
-        .panel h3 {
-            margin: 10px 0;
-        }
-
-        .panel p {
-            margin-bottom: 10px;
-        }
-
-        .panel button {
-            background-color: #333;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            cursor: pointer;
-        }
-
-        .ai-recommendations, .partners {
-            background-color: #2a2a2a;
-            padding: 20px;
-            margin: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        footer {
-            background-color: #333;
-            color: white;
-            padding: 20px;
-        }
-
-        .footer-tabs {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-
-        .footer-tab {
-            background-color: #4a4a4a;
-            color: white;
-            padding: 10px 20px;
-            margin: 0 5px;
-            cursor: pointer;
-        }
-
-        .footer-tab.active {
-            background-color: #ff5722;
-        }
-
-        .footer-tab-content {
-            display: none;
-        }
-
-        .footer-tab-content.active {
-            display: block;
-        }
-
-        @media (max-width: 600px) {
-            .content-container { height: calc(100vh - 50px); }
-            .tabs { bottom: 20px; padding: 10px; }
-            .tab { font-size: 12px; }
-            .hero { padding: 30px 10px; }
-            .slider { max-width: 100%; }
-            .cta { font-size: 14px; padding: 8px 16px; }
-            .features { padding: 10px; }
-            .panel { width: 100%; margin: 5px 0; }
-            .panel img { width: 40px; height: 40px; }
-            .panel h3 { font-size: 18px; }
-            .panel p { font-size: 14px; }
-            .panel button { font-size: 12px; padding: 4px 8px; }
-            .ai-recommendations, .partners { padding: 10px; margin: 10px; }
-            .ai-recommendations h2, .partners h2 { font-size: 20px; }
-            .ai-recommendations p, .partners p { font-size: 14px; }
-            .ai-recommendations button, .partners button { font-size: 12px; padding: 4px 8px; }
-            footer { padding: 10px; }
-            .footer-tabs { margin-bottom: 10px; }
-            .footer-tab { padding: 8px 16px; font-size: 12px; }
-            .footer-tab-content p { font-size: 14px; }
-        }
-    </style>
+  <title>Payment Systems</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Inter', sans-serif;
+      background-color: #1a1a1a;
+      color: #ffffff;
+      overflow: hidden;
+    }
+    .content-container {
+      width: 100%;
+      height: calc(100% - 50px);
+      position: relative;
+      overflow-y: auto;
+      z-index: 1;
+      padding: 15px 15px 70px 15px;
+      box-sizing: border-box;
+      -webkit-mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
+      mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
+      transition: filter 0.3s ease;
+    }
+    .content-container.blurred {
+      filter: blur(5px) brightness(0.5);
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    .filter-section {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: #1a1a1a;
+      padding: 10px 15px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: nowrap;
+      align-items: center;
+      z-index: 10;
+      box-sizing: border-box;
+    }
+    .filter-section h3 {
+      font-size: 12px;
+      font-weight: 500;
+      color: #aaa;
+      margin-bottom: 6px;
+    }
+    .filter-dropdown {
+      position: relative;
+      flex: 1;
+      min-width: 90px;
+    }
+    .filter-button {
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      color: #fff;
+      background: #333;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .filter-button.active {
+      background: linear-gradient(90deg, #007bff, #00c4b4, #007bff);
+      background-size: 200% 100%;
+      animation: gradientShift 3s infinite linear;
+    }
+    .filter-popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.95);
+      width: 80%;
+      max-height: 70vh;
+      background: #2a2a2a;
+      border-radius: 12px;
+      padding: 15px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+      display: none;
+      z-index: 30;
+      overflow-y: auto;
+      opacity: 0;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .filter-popup.active {
+      display: block;
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    .filter-popup h4 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: #fff;
+    }
+    .filter-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+    .filter-tag {
+      padding: 6px 12px;
+      border-radius: 12px;
+      background: #333;
+      color: #fff;
+      font-size: 13px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .filter-tag.selected {
+      background: #007bff;
+    }
+    .popup-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+    .popup-button {
+      flex: 1;
+      padding: 8px;
+      border-radius: 8px;
+      text-align: center;
+      cursor: pointer;
+      font-size: 14px;
+      color: #fff;
+    }
+    .popup-button.apply {
+      background: #007bff;
+    }
+    .popup-button.cancel {
+      background: #555;
+    }
+    .card, .tech-card {
+      background: #2a2a2a;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      position: relative;
+      border: 3px solid transparent;
+      width: 100%;
+      max-width: 400px;
+      box-sizing: border-box;
+    }
+    .card:hover, .tech-card:hover {
+      transform: translateY(-3px);
+    }
+    .card.active, .tech-card.active {
+      border: 3px solid transparent;
+      background: linear-gradient(#2a2a2a, #2a2a2a) padding-box,
+                  linear-gradient(90deg, #007bff, #00c4b4, #007bff) border-box;
+      background-size: 200% 100%;
+      animation: gradientShift 3s infinite linear;
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+      font-size: 16px;
+      padding: 15px;
+    }
+    .card-tags {
+      margin-top: 8px;
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      padding: 0 15px;
+      margin-bottom: 15px;
+    }
+    .tag {
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      color: #fff;
+      background: #333;
+    }
+    .tag.service, .tag.tech-type {
+      background: linear-gradient(90deg, #007bff, #00c4b4, #007bff);
+      background-size: 200% 100%;
+      animation: gradientShift 3s infinite linear;
+    }
+    .card-details {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease;
+      margin-top: 10px;
+      font-size: 14px;
+      color: #ddd;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      padding: 0 15px;
+    }
+    .card-details.active {
+      max-height: none;
+      overflow: visible;
+      padding: 10px 15px 0 15px;
+    }
+    .details-block {
+      margin-bottom: 15px;
+    }
+    .details-block h4 {
+      font-size: 14px;
+      font-weight: 600;
+      color: #aaa;
+      margin-bottom: 8px;
+    }
+    .info-tag {
+      display: inline-block;
+      padding: 6px 10px;
+      margin: 4px 4px 0 0;
+      border-radius: 12px;
+      font-size: 13px;
+      color: #fff;
+      background: #333;
+      transition: opacity 0.3s ease;
+      opacity: 0;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+    .card-details.active .info-tag {
+      opacity: 1;
+      animation: fadeIn 0.3s ease forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .apply-button {
+      margin-top: 15px;
+      padding: 10px;
+      background: #007bff;
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      font-weight: 500;
+      cursor: pointer;
+      text-align: center;
+      display: block;
+      width: 100%;
+      transition: background 0.3s;
+    }
+    .apply-button:hover {
+      background: #0056b3;
+    }
+    .apply-button-container {
+      padding: 10px 0;
+      border-top: 1px solid #333;
+    }
+    .tech-card img {
+      width: 100%;
+      height: 276px;
+      border-radius: 12px 12px 0 0;
+      display: block;
+      object-fit: cover;
+    }
+    .tech-card .short-description {
+      padding: 0 15px 15px 15px;
+      font-size: 14px;
+      color: #ccc;
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .tabs {
+      display: flex;
+      position: fixed;
+      bottom: 20px;
+      width: 100%;
+      background: #1a1a1a;
+      padding: 10px;
+      box-sizing: border-box;
+      z-index: 10;
+      transition: filter 0.3s ease;
+    }
+    .tabs.blurred {
+      filter: blur(5px) brightness(0.5);
+    }
+    .tab {
+      flex: 1;
+      padding: 10px;
+      text-align: center;
+      cursor: pointer;
+      background: #333;
+      color: #fff;
+      border-radius: 8px;
+      margin: 0 5px;
+      font-size: 14px;
+      transition: background 0.3s;
+    }
+    .tab.active {
+      background: #007bff;
+    }
+    @keyframes gradientShift {
+      0% { background-position: 0% 0%; }
+      100% { background-position: 200% 0%; }
+    }
+    /* Стили для главной страницы */
+    #home {
+      padding: 0;
+    }
+    .intro-section {
+      background: #2a2a2a;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .intro-section h1 {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      background: linear-gradient(90deg, #007bff, #00c4b4, #007bff);
+      background-size: 200% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: gradientShift 3s infinite linear;
+    }
+    .intro-section .subtitle {
+      font-size: 16px;
+      color: #ddd;
+      margin-bottom: 20px;
+    }
+    .intro-buttons {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .intro-buttons .apply-button {
+      flex: 1;
+      max-width: 200px;
+    }
+    .slider-container {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+    .slider {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    .slide {
+      flex: 0 0 100%;
+      background: #333;
+      border-radius: 12px;
+      padding: 15px;
+      box-sizing: border-box;
+      text-align: left;
+    }
+    .slide h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #00c4b4;
+      margin-bottom: 10px;
+    }
+    .slide p {
+      font-size: 14px;
+      color: #ddd;
+      margin-bottom: 15px;
+    }
+    .slide .apply-button {
+      margin-top: 0;
+    }
+    .slider-dots {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .dot {
+      width: 8px;
+      height: 8px;
+      background: #555;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+    .dot.active {
+      background: #007bff;
+    }
+    .intro-section p {
+      font-size: 14px;
+      color: #ddd;
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+    .intro-section .highlight {
+      color: #00c4b4;
+      font-weight: 600;
+    }
+    .intro-section .resources {
+      margin-top: 15px;
+    }
+    .intro-section a {
+      color: #007bff;
+      text-decoration: none;
+    }
+    .intro-section a:hover {
+      text-decoration: underline;
+    }
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 15px;
+      color: #fff;
+      cursor: pointer;
+    }
+    .section-title:hover {
+      color: #007bff;
+    }
+    .cards-container {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      align-items: center;
+    }
+    .ai-assistant-section {
+      background: #2a2a2a;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 20px 0;
+      text-align: center;
+    }
+    .ai-assistant-section h2 {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+    .ai-assistant-section p {
+      font-size: 14px;
+      color: #ddd;
+      margin-bottom: 15px;
+    }
+    .partners-section {
+      background: #2a2a2a;
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 20px;
+      text-align: center;
+    }
+    .partners-section h2 {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+    .partners-section p {
+      font-size: 14px;
+      color: #ddd;
+      margin-bottom: 15px;
+    }
+    @media (max-width: 600px) {
+      .content-container { height: calc(100vh - 50px); }
+      .tabs { bottom: 20px; padding: 10px; }
+      .tab { font-size: 12px; }
+      .card, .tech-card {
+        width: 100%;
+        max-width: 400px;
+      }
+      .card-header { font-size: 14px; padding: 10px; }
+      .card-details { font-size: 12px; }
+      .tech-card img {
+        width: 100%;
+        height: auto;
+        max-height: 276px;
+      }
+      .filter-section { flex-wrap: wrap; gap: 6px; padding: 8px 15px; }
+      .filter-dropdown { min-width: 80px; }
+      .filter-button { padding: 3px 8px; font-size: 11px; }
+      .filter-section h3 { font-size: 11px; margin-bottom: 4px; }
+      .filter-popup { width: 90%; }
+      .intro-section h1 { font-size: 20px; }
+      .intro-section .subtitle { font-size: 14px; }
+      .intro-section p { font-size: 13px; }
+      .intro-buttons { flex-direction: column; }
+      .intro-buttons .apply-button { max-width: none; }
+      .slide h3 { font-size: 16px; }
+      .slide p { font-size: 13px; }
+      .section-title { font-size: 16px; }
+      .ai-assistant-section h2 { font-size: 18px; }
+      .ai-assistant-section p { font-size: 13px; }
+      .partners-section h2 { font-size: 18px; }
+      .partners-section p { font-size: 13px; }
+    }
+  </style>
 </head>
 <body>
-    <div class="preloader" id="preloader">
-        <div class="wallet-container">
-            <div class="wallet"></div>
-            <div class="coin" style="left: 30px; animation-delay: 0s;"></div>
-            <div class="coin" style="left: 60px; animation-delay: 0.2s;"></div>
-            <div class="coin" style="left: 90px; animation-delay: 0.4s;"></div>
-            <div class="coin" style="left: 45px; animation-delay: 0.6s;"></div>
-            <div class="coin" style="left: 75px; animation-delay: 0.8s;"></div>
-            <div class="coin" style="left: 37.5px; animation-delay: 1s;"></div>
-            <div class="coin" style="left: 82.5px; animation-delay: 1.2s;"></div>
-            <div class="coin" style="left: 52.5px; animation-delay: 1.4s;"></div>
-            <div class="coin" style="left: 67.5px; animation-delay: 1.6s;"></div>
-            <div class="coin" style="left: 97.5px; animation-delay: 1.8s;"></div>
-            <div class="welcome-text">Добро пожаловать в <span>PaysHub</span></div>
+  <div class="content-container">
+    <!-- Вкладка "Главная" -->
+    <div id="home" class="tab-content active">
+      <div class="intro-section">
+        <h1>PaysHub - Ваш партнёр в мире платёжных решений!</h1>
+        <div class="subtitle">Единая точка входа для клиентов, PSP, банков и инвесторов</div>
+        <div class="intro-buttons">
+          <button class="apply-button" onclick="window.open('https://t.me/pasyhub_bot?start=add_request', '_blank')">Добавить запрос</button>
+          <button class="apply-button" onclick="window.open('https://t.me/pasyhub_bot?start=add_psp', '_blank')">Добавить PSP</button>
         </div>
-    </div>
-    <div class="content-container">
-        <header>
-            <div class="logo">PaysHub</div>
-            <nav>
-                <ul>
-                    <li><a href="#rates">Ставки</a></li>
-                    <li><a href="#tech">Техрешения</a></li>
-                    <li><a href="#investments">Инвестиции</a></li>
-                    <li><a href="#agents">Агенты</a></li>
-                    <li><a href="#ai">ИИ</a></li>
-                </ul>
-            </nav>
-        </header>
-        <main>
-            <section class="hero">
-                <div class="slider">
-                    <div class="slide active">
-                        <h2>Революционизируйте свои платежи</h2>
-                        <p>Откройте для себя будущее платежных решений с PaysHub.</p>
-                        <img src="https://placehold.co/400x276" alt="Революционизируйте свои платежи">
-                    </div>
-                    <div class="slide">
-                        <h2>Бесшовная интеграция</h2>
-                        <p>Наши решения легко интегрируются с вашими существующими системами.</p>
-                        <img src="https://placehold.co/400x276" alt="Бесшовная интеграция">
-                    </div>
-                    <div class="slide">
-                        <h2>Безопасно и надежно</h2>
-                        <p>Доверьтесь нашей безопасной и надежной обработке платежей.</p>
-                        <img src="https://placehold.co/400x276" alt="Безопасно и надежно">
-                    </div>
-                </div>
-                <button class="cta">Исследовать маркетплейс</button>
-            </section>
-            <section class="features">
-                <div class="panel">
-                    <img src="payment-icon.png" alt="Платежные решения">
-                    <h3>Платежные решения</h3>
-                    <p>Исследуйте наш ассортимент платежных опций, адаптированных к вашим бизнес-потребностям.</p>
-                    <button>Просмотреть варианты</button>
-                </div>
-                <div class="panel">
-                    <img src="tech-icon.png" alt="Технические услуги">
-                    <h3>Технические услуги</h3>
-                    <p>Получите техническую поддержку, необходимую для внедрения наших решений.</p>
-                    <button>Узнать больше</button>
-                </div>
-                <div class="panel">
-                    <img src="investment-icon.png" alt="Инвестиционные возможности">
-                    <h3>Инвестиционные возможности</h3>
-                    <p>Откройте для себя проекты для инвестиций в акции в платежной индустрии.</p>
-                    <button>Открыть проекты</button>
-                </div>
-            </section>
-            <section class="ai-recommendations">
-                <h2>Рекомендации ИИ</h2>
-                <p>Позвольте нашему ИИ помочь вам найти лучшие платежные решения для вашего бизнеса.</p>
-                <button>Получить рекомендации</button>
-            </section>
-            <section class="partners">
-                <h2>Партнеры и агенты</h2>
-                <p>Присоединяйтесь к нашей сети партнеров и агентов, чтобы расширить свое влияние и зарабатывать комиссионные.</p>
-                <button>Присоединиться к нам</button>
-            </section>
-        </main>
-        <footer>
-            <div class="footer-tabs">
-                <div class="footer-tab active" onclick="showFooterTab('requests')">Запросы для платежных систем</div>
-                <div class="footer-tab" onclick="showFooterTab('subscribe')">Подписаться</div>
+
+        <div class="slider-container">
+          <div class="slider" id="intro-slider">
+            <div class="slide">
+              <h3>1️⃣ Для клиентов</h3>
+              <p>Подбираем оптимальные платёжные системы для бизнеса любого уровня (low & high).</p>
+              <button class="apply-button" onclick="window.open('https://t.me/p_fintech?text=Хочу узнать больше о решениях для клиентов', '_blank')">Подробнее</button>
             </div>
-            <div id="requests" class="footer-tab-content active">
-                <p>Отправьте свои запросы на платежные системы через наш <a href="https://t.me/p_fintech" target="_blank">канал в Telegram</a>.</p>
+            <div class="slide">
+              <h3>2️⃣ Для платёжек и банков</h3>
+              <p>Объединяем PSP, банки и финтех в B2B-коллаборации. Продажа и аренда готовых технических решений и White Label.</p>
+              <button class="apply-button" onclick="window.open('https://t.me/p_fintech?text=Хочу узнать больше о решениях для платёжек и банков', '_blank')">Подробнее</button>
             </div>
-            <div id="subscribe" class="footer-tab-content">
-                <p>Оставайтесь в курсе последних новостей и предложений, подписавшись на наш <a href="https://t.me/p_fintech" target="_blank">канал в Telegram</a>.</p>
+            <div class="slide">
+              <h3>3️⃣ Инвестиции</h3>
+              <p>Привлекаем капитал для масштабирования платёжных систем – лицензии, новые регионы, ликвидность – за долю в компании.</p>
+              <button class="apply-button" onclick="window.open('https://t.me/p_fintech?text=Хочу узнать больше об инвестициях', '_blank')">Подробнее</button>
             </div>
-        </footer>
+          </div>
+          <div class="slider-dots" id="slider-dots"></div>
+        </div>
+
+        <p><strong>Почему мы?</strong><br>
+          ✅ Единая точка входа.<br>
+          ✅ Готовые тех. и юр. решения.<br>
+          ✅ Широкая сеть партнёров.</p>
+        <p class="resources"><strong>Ресурсы:</strong><br>
+          🔗 Канал <a href="https://t.me/pays_hub" target="_blank">@pays_hub</a> - публикуем новые заявки, следите и подписывайтесь!<br>
+          🤖 Бот <a href="https://t.me/pasyhub_bot" target="_blank">@pasyhub_bot</a> – клиенты и PSP оставляют заявки, смотрят каталог платёжных и техрешений + связь с менеджером.<br>
+          Оператор <a href="https://t.me/p_fintech" target="_blank">@p_fintech</a></p>
+      </div>
+
+      <div class="latest-rates">
+        <div class="section-title" onclick="showTab('rates')">Последние ставки</div>
+        <div class="cards-container" id="latest-rates-content"></div>
+      </div>
+
+      <div class="latest-tech">
+        <div class="section-title" onclick="showTab('tech')">Последние решения</div>
+        <div class="cards-container" id="latest-tech-content"></div>
+      </div>
+
+      <div class="ai-assistant-section">
+        <h2>ИИ-ассистент</h2>
+        <p>Наш ИИ-ассистент поможет подобрать идеальное платёжное решение для вашего бизнеса. Опишите свои потребности, и мы найдём лучшее предложение!</p>
+        <button class="apply-button" onclick="window.open('https://t.me/p_fintech?text=Хочу подобрать платёжное решение с помощью ИИ-ассистента', '_blank')">Попробовать</button>
+      </div>
+
+      <div class="partners-section">
+        <h2>Агентам и партнёрам</h2>
+        <p>Присоединяйтесь к нашей сети! Зарабатывайте, привлекая клиентов и партнёров в экосистему PaysHub. Свяжитесь с нами для получения условий.</p>
+        <button class="apply-button" onclick="window.open('https://t.me/p_fintech?text=Я хочу стать агентом или партнёром PaysHub', '_blank')">Стать партнёром</button>
+      </div>
     </div>
-    <div class="tabs">
-        <div class="tab active" onclick="showTab('home')">Главная</div>
-        <div class="tab" onclick="showTab('rates')">Ставки</div>
-        <div class="tab" onclick="showTab('tech')">Техрешения</div>
-        <div class="tab" onclick="showTab('investments')">Инвестиции</div>
-        <div class="tab" onclick="showTab('agents')">Агенты</div>
-        <div class="tab" onclick="showTab('ai')">ИИ</div>
-        <div class="tab" onclick="openTelegram()">Оператор</div>
+
+    <!-- Вкладка "Ставки" -->
+    <div id="rates" class="tab-content">
+      <div class="filter-section">
+        <div class="filter-dropdown">
+          <h3>Индустрия</h3>
+          <div class="filter-button" id="industry-button">Все</div>
+        </div>
+        <div class="filter-dropdown">
+          <h3>Гео</h3>
+          <div class="filter-button" id="geo-button">Все</div>
+        </div>
+        <div class="filter-dropdown">
+          <h3>Риск</h3>
+          <div class="filter-button" id="risk-button">Все</div>
+        </div>
+      </div>
+      <div id="rates-content"></div>
     </div>
-    <script>
-        // Ваш существующий JavaScript код
-        let slides = document.querySelectorAll('.slide');
-        let currentSlide = 0;
 
-        function showSlide(n) {
-            slides[currentSlide].classList.remove('active');
-            currentSlide = (n + slides.length) % slides.length;
-            slides[currentSlide].classList.add('active');
-        }
+    <!-- Вкладка "Техрешения" -->
+    <div id="tech" class="tab-content">
+      <div class="filter-section">
+        <div class="filter-dropdown">
+          <h3>Тип</h3>
+          <div class="filter-button" id="type-button">Все</div>
+        </div>
+      </div>
+      <div id="tech-content"><p>Загрузка...</p></div>
+    </div>
+  </div>
 
-        setInterval(() => showSlide(currentSlide + 1), 5000);
+  <div class="tabs">
+    <div class="tab active" onclick="showTab('home')">Главная</div>
+    <div class="tab" onclick="showTab('rates')">Ставки</div>
+    <div class="tab" onclick="showTab('tech')">Техрешения</div>
+  </div>
 
-        function showTab(tabId) {
-            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-            document.querySelector(`[onclick="showTab('${tabId}')"]`).classList.add('active');
-            document.getElementById(tabId).classList.add('active');
-        }
+  <!-- Попапы -->
+  <div class="filter-popup" id="industry-popup">
+    <h4>Выберите индустрии</h4>
+    <div class="filter-tags" id="industry-options"></div>
+    <div class="popup-actions">
+      <div class="popup-button apply" onclick="applyFilter('industry')">Применить</div>
+      <div class="popup-button cancel" onclick="closePopup('industry-popup')">Закрыть</div>
+    </div>
+  </div>
+  <div class="filter-popup" id="geo-popup">
+    <h4>Выберите регионы</h4>
+    <div class="filter-tags" id="geo-options"></div>
+    <div class="popup-actions">
+      <div class="popup-button apply" onclick="applyFilter('geo')">Применить</div>
+      <div class="popup-button cancel" onclick="closePopup('geo-popup')">Закрыть</div>
+    </div>
+  </div>
+  <div class="filter-popup" id="risk-popup">
+    <h4>Выберите уровни риска</h4>
+    <div class="filter-tags" id="risk-options"></div>
+    <div class="popup-actions">
+      <div class="popup-button apply" onclick="applyFilter('risk')">Применить</div>
+      <div class="popup-button cancel" onclick="closePopup('risk-popup')">Закрыть</div>
+    </div>
+  </div>
+  <div class="filter-popup" id="type-popup">
+    <h4>Выберите тип</h4>
+    <div class="filter-tags" id="type-options"></div>
+    <div class="popup-actions">
+      <div class="popup-button apply" onclick="applyFilter('type')">Применить</div>
+      <div class="popup-button cancel" onclick="closePopup('type-popup')">Закрыть</div>
+    </div>
+  </div>
 
-        function showFooterTab(tabId) {
-            document.querySelectorAll('.footer-tab').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.footer-tab-content').forEach(content => content.classList.remove('active'));
-            document.querySelector(`[onclick="showFooterTab('${tabId}')"]`).classList.add('active');
-            document.getElementById(tabId).classList.add('active');
-        }
+  <script>
+    const tg = window.Telegram.WebApp;
+    tg.ready();
+    tg.expand();
 
-        function openTelegram() {
-            window.open('https://t.me/p_fintech?text=I%20need%20help%20with%20the%20PaysHub%20service', '_blank');
-        }
+    const API_TOKEN = 'ubicp2nFx8L47YOV3MOyn1FhUIPQ4EMESzFnrL3L';
+    const BASE_URL = 'https://app.nocodb.com/api/v2/tables/';
+    const RATES_TABLE_ID = 'mbz9kdbkba6i9t2';
+    const TECH_TABLE_ID = 'mnliw8pc7zmrw35';
 
-        document.querySelectorAll('.coin').forEach(item => {
-            const randomLeft = Math.random() * 90 + 30;
-            item.style.left = `${randomLeft}px`;
-            item.style.top = '-30px';
+    let ratesData = [];
+    let techData = [];
+    let activeFilters = {
+      industry: new Set(),
+      geo: new Set(),
+      risk: new Set(),
+      type: new Set()
+    };
+
+    function adjustContentPadding() {
+      const filterSection = document.querySelector('.filter-section');
+      const contentContainer = document.querySelector('.content-container');
+      const tabs = document.querySelector('.tabs');
+      const activeTab = document.querySelector('.tab-content.active');
+      if (activeTab.id === 'home') {
+        contentContainer.style.padding
+Top: '0';
+        contentContainer.style.paddingBottom = `${tabs.offsetHeight + 20}px`;
+      } else {
+        const filterHeight = filterSection ? filterSection.offsetHeight : 0;
+        contentContainer.style.paddingTop = `${filterHeight + 10}px`;
+        contentContainer.style.paddingBottom = `${tabs.offsetHeight + 20}px`;
+      }
+    }
+
+    async function fetchData(tableId) {
+      try {
+        console.log(`Fetching data for table ${tableId}...`);
+        console.log(`Using API_TOKEN: ${API_TOKEN}`);
+        console.log(`Request URL: ${BASE_URL}${tableId}/records?offset=0&limit=100`);
+        const response = await fetch(`${BASE_URL}${tableId}/records?offset=0&limit=100`, {
+          headers: {
+            'xc-token': API_TOKEN
+          }
         });
+        console.log(`Response status: ${response.status}`);
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error(`HTTP error! Status: ${response.status}, Response: ${errorText}`);
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log(`Raw API response for table ${tableId}:`, data);
+        const records = data.list || [];
+        console.log(`Extracted records for table ${tableId}:`, records);
+        return records;
+      } catch (error) {
+        console.error(`Ошибка при получении данных для tableId ${tableId}:`, error);
+        return [];
+      }
+    }
 
-        window.addEventListener('load', () => {
-            const preloader = document.getElementById('preloader');
-            setTimeout(() => {
-                preloader.classList.add('hidden');
-                preloader.addEventListener('transitionend', () => {
-                    preloader.style.display = 'none';
-                }, { once: true });
-            }, 2000);
+    async function extractImageUrl(imgField) {
+      console.log('Processing Img field:', imgField);
+
+      if (!imgField) {
+        console.log('Img field is empty or undefined');
+        return 'https://placehold.co/400x276';
+      }
+
+      if (typeof imgField === 'string') {
+        if (imgField.startsWith('http://') || imgField.startsWith('https://')) {
+          if (imgField.includes('raw.githubusercontent.com')) {
+            console.log('GitHub raw image URL detected:', imgField);
+          } else {
+            console.log('Direct image URL detected:', imgField);
+          }
+          return imgField;
+        }
+        const match = imgField.match(/\((https:\/\/[^\)]+)\)/);
+        if (match) {
+          const imageUrl = match[1];
+          console.log('Extracted image URL from string (NocoDB format):', imageUrl);
+          const urlWithToken = `${imageUrl}?xc-token=${API_TOKEN}`;
+          console.log('Image URL with token:', urlWithToken);
+          return urlWithToken;
+        }
+      }
+
+      if (Array.isArray(imgField) && imgField.length > 0) {
+        const imageObj = imgField[0];
+        console.log('Image object (NocoDB attachment):', imageObj);
+        const imageUrl = imageObj.url;
+        console.log('Extracted image URL from array:', imageUrl);
+        if (imageUrl) {
+          const urlWithToken = `${imageUrl}?xc-token=${API_TOKEN}`;
+          console.log('Image URL with token:', urlWithToken);
+          return urlWithToken;
+        }
+      }
+
+      console.log('Could not extract image URL, returning placeholder');
+      return 'https://placehold.co/400x276';
+    }
+
+    function getTags(row, field) {
+      return row[field] ? row[field].split(',').map(tag => tag.trim()) : [];
+    }
+
+    function isEmptyValue(value) {
+      return !value || value === 'N/A' || value.trim() === '';
+    }
+
+    function formatText(text) {
+      if (!text) return '';
+      return text.replace(/\n/g, '<br>');
+    }
+
+    function renderFilters(containerId, buttonId, popupId, rows, field, filterType) {
+      const container = document.getElementById(containerId);
+      const button = document.getElementById(buttonId);
+      const popup = document.getElementById(popupId);
+      const tags = new Set(['Все']);
+      rows.forEach(row => {
+        if (filterType === 'type') {
+          const tag = row[field] || 'N/A';
+          tags.add(tag);
+        } else {
+          getTags(row, field).forEach(tag => tags.add(tag));
+        }
+      });
+
+      button.addEventListener('click', (e) => {
+        e.stopPropagation();
+        document.querySelectorAll('.filter-popup').forEach(p => {
+          if (p !== popup) p.classList.remove('active');
         });
+        popup.classList.toggle('active');
+        document.querySelector('.content-container').classList.toggle('blurred');
+        document.querySelector('.tabs').classList.toggle('blurred');
+      });
 
-        // Yandex Metrika
-        (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-        m[i].l=1*new Date();
-        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-        (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-
-        ym(100499634, "init", {
-            clickmap: true,
-            trackLinks: true,
-            accurateTrackBounce: true,
-            webvisor: true
+      Array.from(tags).sort().forEach(tag => {
+        const tagElement = document.createElement('div');
+        tagElement.className = 'filter-tag';
+        tagElement.textContent = tag;
+        tagElement.dataset.value = tag;
+        if (activeFilters[filterType].has(tag)) {
+          tagElement.classList.add('selected');
+        }
+        tagElement.addEventListener('click', () => {
+          if (tag === 'Все') {
+            const allTags = container.querySelectorAll('.filter-tag');
+            allTags.forEach(t => t.classList.remove('selected'));
+            tagElement.classList.add('selected');
+          } else {
+            const allTag = container.querySelector('.filter-tag[data-value="Все"]');
+            allTag.classList.remove('selected');
+            tagElement.classList.toggle('selected');
+          }
         });
-    </script>
-    <noscript><div><img src="https://mc.yandex.ru/watch/100499634" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+        container.appendChild(tagElement);
+      });
+    }
+
+    function applyFilter(filterType) {
+      const popup = document.getElementById(`${filterType}-popup`);
+      const button = document.getElementById(`${filterType}-button`);
+      const selectedTags = popup.querySelectorAll('.filter-tag.selected');
+      activeFilters[filterType].clear();
+      const selectedValues = Array.from(selectedTags).map(tag => tag.dataset.value);
+
+      if (selectedValues.length === 0 || selectedValues.includes('Все')) {
+        activeFilters[filterType].clear();
+        button.textContent = 'Все';
+        button.classList.remove('active');
+      } else {
+        selectedValues.forEach(tag => activeFilters[filterType].add(tag));
+        button.textContent = selectedValues.join(', ');
+        button.classList.add('active');
+      }
+
+      if (filterType === 'type') {
+        renderTech('tech-content', techData);
+      } else {
+        renderRates('rates-content', ratesData);
+      }
+      closePopup(`${filterType}-popup`);
+    }
+
+    function closePopup(popupId) {
+      const popup = document.getElementById(popupId);
+      popup.classList.remove('active');
+      document.querySelector('.content-container').classList.remove('blurred');
+      document.querySelector('.tabs').classList.remove('blurred');
+    }
+
+    function renderRates(containerId, rows, limit = null) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
+      let filteredRows = rows;
+
+      filteredRows = filteredRows.filter(row => row['On'] === true);
+
+      if (containerId === 'rates-content') {
+        if (activeFilters.industry.size > 0) {
+          filteredRows = filteredRows.filter(row => 
+            getTags(row, 'Industry').some(tag => activeFilters.industry.has(tag))
+          );
+        }
+        if (activeFilters.geo.size > 0) {
+          filteredRows = filteredRows.filter(row => 
+            getTags(row, 'Geo').some(tag => activeFilters.geo.has(tag))
+          );
+        }
+        if (activeFilters.risk.size > 0) {
+          filteredRows = filteredRows.filter(row => 
+            getTags(row, 'Risk').some(tag => activeFilters.risk.has(tag))
+          );
+        }
+      }
+
+      if (limit) {
+        filteredRows = filteredRows.slice(0, limit);
+      }
+
+      if (filteredRows.length === 0) {
+        container.innerHTML = '<p>Нет данных для отображения</p>';
+        return;
+      }
+
+      filteredRows.forEach(row => {
+        const card = document.createElement('div');
+        card.className = 'card';
+
+        const tariffsBlock = [
+          { label: 'Pay in', value: row['Pay in (%)'] },
+          { label: 'Pay out', value: row['Pay out (%)'] },
+          { label: 'Method', value: row['Method'] },
+          { label: 'Roll reserve', value: row['Roll reserve'] },
+          { label: 'Refund fee', value: row['Refound fee'] }
+        ].filter(item => !isEmptyValue(item.value)).map(item => `<span class="info-tag">${item.label}: ${item.value}</span>`).join('');
+
+        const transactionsBlock = [
+          { label: 'Min trans', value: row['($) Min transaction'] },
+          { label: 'Max trans', value: row['($) Max transaction'] },
+          { label: 'Min turnover', value: row['($) Мин. оборот'] },
+          { label: 'Max turnover', value: row['($) Макс. оборот'] },
+          { label: 'Additional fees', value: row['Доп. платежи'] },
+          { label: 'Прием в', value: row['Прием в'] },
+          { label: 'Расчет в', value: row['Расчет в'] }
+        ].filter(item => !isEmptyValue(item.value)).map(item => `<span class="info-tag">${item.label}: ${item.value}</span>`).join('');
+
+        const mainInfoBlock = [
+          { label: 'Индустрия', value: row['Industry'] },
+          { label: 'Гео', value: row['Geo'] },
+          { label: 'Риск', value: row['Risk'] }
+        ].filter(item => !isEmptyValue(item.value)).map(item => `<span class="info-tag">${item.label}: ${item.value}</span>`).join('');
+
+        const additionalBlock = [
+          { label: 'Type traffic', value: row['Type traffic'] },
+          { label: 'Settlement', value: row['Settlement'] },
+          { label: 'Settlement amount', value: row['Settlement amount'] },
+          { label: 'License', value: row['Лицензия'] },
+          { label: 'Integration', value: row['Интеграция'] },
+          { label: 'Compliance', value: row['Compliance'] },
+          { label: 'Support 24/7', value: row['Support 24/7'] },
+          { label: 'Recurrent', value: row['Рекуррент'] },
+          { label: 'Chargeback level', value: row['Уровень чарджбэков'] },
+          { label: '3DS', value: row['3DS-авторизация'] },
+          { label: 'Liquidity', value: row['Ликвидность'] },
+          { label: 'Conversion', value: row['Конверсия'] },
+          { label: 'Years on market', value: row['На рынке (лет)'] }
+        ].filter(item => !isEmptyValue(item.value)).map(item => `<span class="info-tag">${item.label}: ${item.value}</span>`).join('');
+
+        const commentsBlock = !isEmptyValue(row['Комментарии']) ? `<span class="info-tag" style="display: block;">${formatText(row['Комментарии'])}</span>` : '';
+
+        card.innerHTML = `
+          <div class="card-header">
+            <span>${row['ID Name'] || 'Без названия'}</span>
+            <span>${row['Pay in (%)'] || ''}</span>
+          </div>
+          <div class="card-tags">
+            <span class="tag service">${row['Service'] || 'N/A'}</span>
+            ${getTags(row, 'Industry').slice(0, 1).map(tag => `<span class="tag">${tag}</span>`).join('')}
+            ${getTags(row, 'Geo').slice(0, 1).map(tag => `<span class="tag">${tag}</span>`).join('')}
+            ${getTags(row, 'Risk').slice(0, 1).map(tag => `<span class="tag">${tag}</span>`).join('')}
+          </div>
+          ${containerId === 'rates-content' ? `
+            <div class="card-details">
+              ${mainInfoBlock ? `
+                <div class="details-block">
+                  <h4>Основная информация</h4>
+                  ${mainInfoBlock}
+                </div>
+              ` : ''}
+              ${tariffsBlock ? `
+                <div class="details-block">
+                  <h4>Тарифы</h4>
+                  ${tariffsBlock}
+                </div>
+              ` : ''}
+              ${transactionsBlock ? `
+                <div class="details-block">
+                  <h4>Транзакции</h4>
+                  ${transactionsBlock}
+                </div>
+              ` : ''}
+              ${additionalBlock ? `
+                <div class="details-block">
+                  <h4>Дополнительно</h4>
+                  ${additionalBlock}
+                </div>
+              ` : ''}
+              ${commentsBlock ? `
+                <div class="details-block">
+                  <h4>Комментарии</h4>
+                  ${commentsBlock}
+                </div>
+              ` : ''}
+              <div class="apply-button-container">
+                <button class="apply-button" onclick="window.open('https://t.me/p_fintech?text=Im interested in ${row['ID Name']}', '_blank')">Подать заявку</button>
+              </div>
+            </div>
+          ` : ''}
+        `;
+        if (containerId === 'rates-content') {
+          card.addEventListener('click', (e) => {
+            if (e.target.classList.contains('apply-button')) return;
+            const details = card.querySelector('.card-details');
+            details.classList.toggle('active');
+            card.classList.toggle('active');
+          });
+        }
+        container.appendChild(card);
+      });
+    }
+
+    async function renderTech(containerId, rows, limit = null) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
+      console.log('Tech data received in renderTech:', rows);
+      if (!rows || rows.length === 0) {
+        container.innerHTML = '<p>Данные для "Техрешения" не загружены. Возможные причины: 1) Таблица mnliw8pc7zmrw35 пуста. 2) TECH_TABLE_ID неверный. Откройте консоль (F12 → Console) и проверьте "Raw API response" и "Loaded techData".</p>';
+        return;
+      }
+
+      let filteredRows = rows;
+
+      filteredRows = filteredRows.filter(row => row['On'] === true);
+
+      if (containerId === 'tech-content') {
+        if (activeFilters.type.size > 0) {
+          filteredRows = filteredRows.filter(row => 
+            activeFilters.type.has(row['Type'] || 'N/A')
+          );
+        }
+      }
+
+      if (limit) {
+        filteredRows = filteredRows.slice(0, limit);
+      }
+
+      if (filteredRows.length === 0) {
+        container.innerHTML = '<p>Нет данных для отображения</p>';
+        return;
+      }
+
+      for (const row of filteredRows) {
+        console.log('Rendering tech card:', row);
+        const imgUrl = await extractImageUrl(row['Img']);
+        console.log('Extracted image URL for card:', imgUrl);
+        const card = document.createElement('div');
+        card.className = 'tech-card';
+
+        const mainInfoBlock = [
+          { label: 'ID', value: row['ID name'] },
+          { label: 'Название', value: row['Name'] },
+          { label: 'Тип', value: row['Type'] },
+          { label: 'Цена', value: row['Price'] },
+          { label: 'Условия', value: row['Terms'] }
+        ].filter(item => !isEmptyValue(item.value)).map(item => `<span class="info-tag">${item.label}: ${item.value}</span>`).join('');
+
+        const descriptionBlock = !isEmptyValue(row['Description']) ? `<span class="info-tag" style="display: block;">${formatText(row['Description'])}</span>` : '';
+
+        card.innerHTML = `
+          <img src="${imgUrl}" alt="Tech Solution" onerror="this.src='https://placehold.co/400x276'; console.log('Failed to load image: ${imgUrl}');">
+          <div class="card-header">
+            <span>${row['Name'] || 'Без названия'}</span>
+            <span>${row['Price'] || ''}</span>
+          </div>
+          <div class="card-tags">
+            <span class="tag tech-type">${row['Type'] || 'White Label'}</span>
+          </div>
+          <div class="short-description">${row['Short description'] || 'Нет краткого описания'}</div>
+          ${containerId === 'tech-content' ? `
+            <div class="card-details">
+              ${mainInfoBlock ? `
+                <div class="details-block">
+                  <h4>Основная информация</h4>
+                  ${mainInfoBlock}
+                </div>
+              ` : ''}
+              ${descriptionBlock ? `
+                <div class="details-block">
+                  <h4>Описание</h4>
+                  ${descriptionBlock}
+                </div>
+              ` : ''}
+              <div class="apply-button-container">
+                <button class="apply-button" onclick="window.open('https://t.me/p_fintech?text=Im interested in ${row['ID name']}', '_blank')">Подать заявку</button>
+              </div>
+            </div>
+          ` : ''}
+        `;
+        if (containerId === 'tech-content') {
+          card.addEventListener('click', (e) => {
+            if (e.target.classList.contains('apply-button')) return;
+            const details = card.querySelector('.card-details');
+            details.classList.toggle('active');
+            card.classList.toggle('active');
+          });
+        }
+        container.appendChild(card);
+      });
+    }
+
+    async function loadTabs() {
+      console.log('Starting to load tabs...');
+      const [rates, tech] = await Promise.all([
+        fetchData(RATES_TABLE_ID),
+        fetchData(TECH_TABLE_ID)
+      ]);
+      
+      ratesData = rates;
+      techData = tech;
+      
+      console.log('Loaded ratesData:', ratesData);
+      console.log('Loaded techData:', techData);
+      
+      if (!techData || techData.length === 0) {
+        console.log('No tech data loaded. Check TECH_TABLE_ID or table contents.');
+      }
+      
+      renderFilters('industry-options', 'industry-button', 'industry-popup', ratesData, 'Industry', 'industry');
+      renderFilters('geo-options', 'geo-button', 'geo-popup', ratesData, 'Geo', 'geo');
+      renderFilters('risk-options', 'risk-button', 'risk-popup', ratesData, 'Risk', 'risk');
+      renderFilters('type-options', 'type-button', 'type-popup', techData, 'Type', 'type');
+      
+      renderRates('rates-content', ratesData);
+      renderRates('latest-rates-content', ratesData, 3);
+      await renderTech('tech-content', techData);
+      await renderTech('latest-tech-content', techData, 3);
+      
+      adjustContentPadding();
+      console.log('Finished loading tabs.');
+    }
+
+    function showTab(tabId) {
+      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+      document.querySelector(`[onclick="showTab('${tabId}')"]`).classList.add('active');
+      document.getElementById(tabId).classList.add('active');
+      adjustContentPadding();
+      console.log(`Switched to tab: ${tabId}`);
+    }
+
+    // Слайдер
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.dot');
+    const slider = document.getElementById('intro-slider');
+
+    function updateSlider() {
+      slider.style.transform = `translateX(-${currentSlide * 100}%)`;
+      dots.forEach((dot, index) => {
+        dot.classList.toggle('active', index === currentSlide);
+      });
+    }
+
+    function initSlider() {
+      const dotsContainer = document.getElementById('slider-dots');
+      slides.forEach((_, index) => {
+        const dot = document.createElement('div');
+        dot.className = 'dot';
+        dot.addEventListener('click', () => {
+          currentSlide = index;
+          updateSlider();
+        });
+        dotsContainer.appendChild(dot);
+      });
+      dots = document.querySelectorAll('.dot');
+      dots[0].classList.add('active');
+      setInterval(() => {
+        currentSlide = (currentSlide + 1) % slides.length;
+        updateSlider();
+      }, 5000);
+    }
+
+    window.addEventListener('load', () => {
+      loadTabs();
+      initSlider();
+    });
+
+    window.addEventListener('resize', adjustContentPadding);
+
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.filter-dropdown') && !e.target.closest('.filter-popup')) {
+        document.querySelectorAll('.filter-popup').forEach(popup => {
+          popup.classList.remove('active');
+          document.querySelector('.content-container').classList.remove('blurred');
+          document.querySelector('.tabs').classList.remove('blurred');
+        });
+      }
+    });
+  </script>
+
+  <script type="text/javascript">
+    (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+    m[i].l=1*new Date();
+    for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+    k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+    (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+    ym(100499634, "init", {
+      clickmap: true,
+      trackLinks: true,
+      accurateTrackBounce: true,
+      webvisor: true
+    });
+  </script>
+  <noscript><div><img src="https://mc.yandex.ru/watch/100499634" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 </body>
 </html>
