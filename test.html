@@ -1,254 +1,232 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Payment Systems</title>
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <style>
-    /* Стили для вашего приложения */
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: #1a1a1a;
-      color: #ffffff;
-      margin: 0;
-      padding: 0;
-      overflow-x: hidden;
-    }
-
-    .preloader {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: #1a1a1a;
-      z-index: 9999;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .content-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-
-    .tab-content {
-      display: none;
-    }
-
-    .tab-content.active {
-      display: block;
-    }
-
-    h2 {
-      font-size: 24px;
-      margin-bottom: 20px;
-    }
-
-    p {
-      font-size: 16px;
-      line-height: 1.5;
-      margin-bottom: 10px;
-    }
-
-    nav ul {
-      list-style-type: none;
-      padding: 0;
-    }
-
-    nav ul li {
-      margin-bottom: 10px;
-    }
-
-    nav ul li a {
-      color: #ffffff;
-      text-decoration: none;
-      font-size: 18px;
-    }
-
-    .tabs {
-      display: flex;
-      justify-content: space-around;
-      background-color: #2a2a2a;
-      padding: 10px 0;
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      z-index: 1000;
-    }
-
-    .tab {
-      color: #ffffff;
-      text-align: center;
-      cursor: pointer;
-      padding: 10px;
-      font-size: 16px;
-    }
-
-    .tab.active {
-      background-color: #4a4a4a;
-    }
-
-    .filter-section {
-      margin-bottom: 20px;
-    }
-
-    /* Анимации */
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    .tab-content {
-      animation: fadeIn 0.5s ease-in-out;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PaysHub - Marketplace for Payment Solutions</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+        nav ul li {
+            margin-left: 20px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+        }
+        .hero {
+            background-color: #4a4a4a;
+            color: white;
+            text-align: center;
+            padding: 50px 20px;
+        }
+        .slider {
+            max-width: 800px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+        .slide {
+            display: none;
+        }
+        .slide.active {
+            display: block;
+        }
+        .cta {
+            background-color: #ff5722;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            padding: 20px;
+        }
+        .panel {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin: 10px;
+            width: calc(33.333% - 20px);
+            text-align: center;
+        }
+        .panel img {
+            width: 50px;
+            height: 50px;
+        }
+        .panel h3 {
+            margin: 10px 0;
+        }
+        .panel p {
+            margin-bottom: 10px;
+        }
+        .panel button {
+            background-color: #333;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        .ai-recommendations, .partners {
+            background-color: white;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 20px;
+        }
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .tab {
+            background-color: #4a4a4a;
+            color: white;
+            padding: 10px 20px;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+        .tab.active {
+            background-color: #ff5722;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
 </head>
 <body>
-  <div class="preloader" id="preloader">
-    <!-- Ваша анимация загрузки здесь -->
-    <div class="loader"></div>
-  </div>
-  <div class="content-container">
-    <div id="home" class="tab-content active">
-      <h2>Добро пожаловать на PaysHub</h2>
-      <p>Здесь вы найдете все необходимое для вашего бизнеса: платежные решения, технические услуги и инвестиционные возможности.</p>
-      <p>Подписывайтесь на наш <a href="https://t.me/p_fintech" target="_blank">Telegram-канал</a> для получения последних новостей и предложений.</p>
-      <nav>
-        <ul>
-          <li><a href="#rates">Ставки и платежные возможности</a></li>
-          <li><a href="#tech">Технические решения и услуги</a></li>
-          <li><a href="#investments">Инвестиционные возможности</a></li>
-          <li><a href="#agents">Агентам и партнерам</a></li>
-          <li><a href="#ai">ИИ для подбора платежных решений</a></li>
-        </ul>
-      </nav>
-    </div>
-    <div id="rates" class="tab-content">
-      <div class="filter-section">
-        <!-- Ваши фильтры здесь -->
-      </div>
-      <div id="rates-content"></div>
-    </div>
-    <div id="tech" class="tab-content">
-      <div class="filter-section">
-        <!-- Ваши фильтры здесь -->
-      </div>
-      <div id="tech-content"></div>
-    </div>
-    <div id="investments" class="tab-content">
-      <h3>Инвестиционные возможности</h3>
-      <p>Здесь вы можете найти проекты для инвестиций за долю.</p>
-      <div id="investments-content"></div>
-    </div>
-    <div id="agents" class="tab-content">
-      <h3>Агентам и партнерам</h3>
-      <p>Информация для агентов и партнеров.</p>
-      <h4>Партнерская программа для агентов</h4>
-      <p>Присоединяйтесь к нашей партнерской программе и получайте комиссионные за привлечение клиентов.</p>
-      <div id="agents-content"></div>
-    </div>
-    <div id="ai" class="tab-content">
-      <h3>ИИ для подбора платежных решений</h3>
-      <p>Запросите рекомендации по платежным решениям, подходящим для вашего бизнеса.</p>
-      <div id="ai-content"></div>
-    </div>
-  </div>
-  <div class="tabs">
-    <div class="tab active" onclick="showTab('home')">Главная</div>
-    <div class="tab" onclick="showTab('rates')">Ставки</div>
-    <div class="tab" onclick="showTab('tech')">Техрешения</div>
-    <div class="tab" onclick="showTab('investments')">Инвестиции</div>
-    <div class="tab" onclick="showTab('agents')">Агенты</div>
-    <div class="tab" onclick="showTab('ai')">ИИ</div>
-    <div class="tab" onclick="openTelegram()">Оператор</div>
-  </div>
+    <header>
+        <div class="logo">PaysHub</div>
+        <nav>
+            <ul>
+                <li><a href="#rates">Ставки</a></li>
+                <li><a href="#tech">Техрешения</a></li>
+                <li><a href="#investments">Инвестиции</a></li>
+                <li><a href="#agents">Агенты</a></li>
+                <li><a href="#ai">ИИ</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="hero">
+            <div class="slider">
+                <div class="slide active">
+                    <h2>Revolutionize Your Payments</h2>
+                    <p>Discover the future of payment solutions with PaysHub.</p>
+                </div>
+                <div class="slide">
+                    <h2>Seamless Integration</h2>
+                    <p>Our solutions integrate effortlessly with your existing systems.</p>
+                </div>
+                <div class="slide">
+                    <h2>Secure and Reliable</h2>
+                    <p>Trust in our secure and reliable payment processing.</p>
+                </div>
+            </div>
+            <button class="cta">Explore Marketplace</button>
+        </section>
+        <section class="features">
+            <div class="panel">
+                <img src="payment-icon.png" alt="Payment Solutions">
+                <h3>Payment Solutions</h3>
+                <p>Explore our range of payment options tailored to your business needs.</p>
+                <button>View Options</button>
+            </div>
+            <div class="panel">
+                <img src="tech-icon.png" alt="Technical Services">
+                <h3>Technical Services</h3>
+                <p>Get the technical support you need to implement our solutions.</p>
+                <button>Learn More</button>
+            </div>
+            <div class="panel">
+                <img src="investment-icon.png" alt="Investment Opportunities">
+                <h3>Investment Opportunities</h3>
+                <p>Discover projects for equity investment in the payment industry.</p>
+                <button>Discover Projects</button>
+            </div>
+        </section>
+        <section class="ai-recommendations">
+            <h2>AI Recommendations</h2>
+            <p>Let our AI help you find the best payment solutions for your business.</p>
+            <button>Get Recommendations</button>
+        </section>
+        <section class="partners">
+            <h2>Partners and Agents</h2>
+            <p>Join our network of partners and agents to expand your reach and earn commissions.</p>
+            <button>Join Us</button>
+        </section>
+    </main>
+    <footer>
+        <div class="tabs">
+            <div class="tab active" onclick="showTab('requests')">Запросы для платежных систем</div>
+            <div class="tab" onclick="showTab('subscribe')">Подписаться</div>
+        </div>
+        <div id="requests" class="tab-content active">
+            <p>Submit your payment system requests through our <a href="https://t.me/p_fintech" target="_blank">Telegram channel</a>.</p>
+        </div>
+        <div id="subscribe" class="tab-content">
+            <p>Stay updated with the latest news and offers by subscribing to our <a href="https://t.me/p_fintech" target="_blank">Telegram channel</a>.</p>
+        </div>
+    </footer>
+    <script>
+        // Slider functionality
+        let slides = document.querySelectorAll('.slide');
+        let currentSlide = 0;
 
-  <!-- Ваши всплывающие окна фильтров здесь -->
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + slides.length) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }
 
-  <script>
-    // Ваш существующий JavaScript код здесь
+        setInterval(() => showSlide(currentSlide + 1), 5000);
 
-    // Добавьте новые функции для новых разделов
-    function renderInvestments(containerId, rows) {
-      const container = document.getElementById(containerId);
-      container.innerHTML = '';
-      // Реализация рендеринга инвестиционных проектов
-    }
+        // Tab functionality
+        function showTab(tabId) {
+            let tabs = document.querySelectorAll('.tab');
+            let tabContents = document.querySelectorAll('.tab-content');
 
-    function renderAgents(containerId, rows) {
-      const container = document.getElementById(containerId);
-      container.innerHTML = '';
-      // Реализация рендеринга информации для агентов и партнеров
-    }
+            tabs.forEach(tab => tab.classList.remove('active'));
+            tabContents.forEach(content => content.classList.remove('active'));
 
-    function renderAI(containerId, rows) {
-      const container = document.getElementById(containerId);
-      container.innerHTML = '';
-      // Реализация рендеринга ИИ для подбора платежных решений
-    }
-
-    // Обновите функцию loadTabs для загрузки данных для новых разделов
-    async function loadTabs() {
-      // Ваш существующий код загрузки данных для ставок и технических решений
-
-      // Загрузка данных для новых разделов
-      const investments = await fetchData('INVESTMENTS_TABLE_ID');
-      const agents = await fetchData('AGENTS_TABLE_ID');
-      const aiData = await fetchData('AI_TABLE_ID');
-
-      // Рендеринг новых разделов
-      renderInvestments('investments-content', investments);
-      renderAgents('agents-content', agents);
-      renderAI('ai-content', aiData);
-
-      // Ваш существующий код рендеринга ставок и технических решений
-    }
-
-    // Обновите функцию showTab для новых вкладок
-    function showTab(tabId) {
-      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-      document.querySelector(`[onclick="showTab('${tabId}')"]`).classList.add('active');
-      document.getElementById(tabId).classList.add('active');
-    }
-
-    // Функция для открытия Telegram
-    function openTelegram() {
-      Telegram.WebApp.openTelegramLink('https://t.me/p_fintech');
-    }
-
-    // Функция для загрузки данных из NocoDB
-    async function fetchData(tableId) {
-      // Ваш код для загрузки данных из NocoDB
-      return [];
-    }
-
-    // Загрузка данных при загрузке страницы
-    window.onload = async function() {
-      await loadTabs();
-      document.getElementById('preloader').style.display = 'none';
-    };
-  </script>
-
-  <!-- Ваш код для Yandex Metrika здесь -->
-  <!-- Yandex.Metrika counter -->
-  <script type="text/javascript" >
-    (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-    m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-    (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-
-    ym(87654321, "init", {
-      clickmap:true,
-      trackLinks:true,
-      accurateTrackBounce:true,
-      webvisor:true
-    });
-  </script>
-  <noscript><div><img src="https://mc.yandex.ru/watch/87654321" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-  <!-- /Yandex.Metrika counter -->
+            document.querySelector(`[onclick="showTab('${tabId}')"]`).classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+    </script>
 </body>
 </html>
