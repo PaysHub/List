@@ -42,6 +42,24 @@
       color: #ddd;
       margin-bottom: 20px;
     }
+    .header-section .divider {
+      width: 50%;
+      height: 1px;
+      background: #555;
+      margin: 20px auto;
+    }
+    .header-section .why-us h3 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+    .header-section .why-us p {
+      font-size: 14px;
+      color: #ddd;
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
     .slider-section {
       background: #2a2a2a; /* Тёмный фон для блока слайдера */
       border-radius: 12px;
@@ -120,19 +138,29 @@
       font-size: 18px;
       font-weight: 600;
       color: #fff;
-      margin-bottom: 10px;
+      margin-bottom: 15px;
     }
-    .info-section p {
+    .resources {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .resource-card {
+      background: #333;
+      border-radius: 8px;
+      padding: 15px;
+      text-align: center;
+    }
+    .resource-card p {
       font-size: 14px;
       color: #ddd;
-      margin-bottom: 10px;
-      line-height: 1.5;
+      margin: 0;
     }
-    .info-section a {
+    .resource-card a {
       color: #007bff;
       text-decoration: none;
     }
-    .info-section a:hover {
+    .resource-card a:hover {
       text-decoration: underline;
     }
     @keyframes gradientShift {
@@ -143,11 +171,13 @@
       .header-section h1 { font-size: 24px; }
       .header-section .subtitle { font-size: 18px; }
       .header-section .description { font-size: 13px; }
+      .header-section .why-us h3 { font-size: 16px; }
+      .header-section .why-us p { font-size: 13px; }
       .slide h3 { font-size: 16px; }
       .slide p { font-size: 13px; }
       .slide .apply-button { max-width: none; }
       .info-section h3 { font-size: 16px; }
-      .info-section p { font-size: 13px; }
+      .resource-card p { font-size: 13px; }
     }
   </style>
 </head>
@@ -156,6 +186,13 @@
     <h1>PaysHub</h1>
     <div class="subtitle">Агрегатор платежных решений</div>
     <div class="description">Ваш партнёр в мире платёжных решений!</div>
+    <div class="divider"></div>
+    <div class="why-us">
+      <h3>Почему мы?</h3>
+      <p>Единая точка входа для всех платёжных решений.</p>
+      <p>Готовые технические и юридические решения для бизнеса.</p>
+      <p>Широкая сеть партнёров по всему миру.</p>
+    </div>
   </div>
 
   <div class="slider-section">
@@ -182,14 +219,20 @@
   </div>
 
   <div class="info-section">
-    <h3>Почему мы?</h3>
-    <p>✅ Единая точка входа.</p>
-    <p>✅ Готовые тех. и юр. решения.</p>
-    <p>✅ Широкая сеть партнёров.</p>
     <h3>Ресурсы:</h3>
-    <p>🔗 Канал <a href="https://t.me/pays_hub" target="_blank">@pays_hub</a> - публикуем новые заявки, следите и подписывайтесь!</p>
-    <p>🤖 Бот <a href="https://t.me/pasyhub_bot" target="_blank">@pasyhub_bot</a> – клиенты и PSP оставляют заявки, смотрят каталог платёжных и техрешений + связь с менеджером.</p>
-    <p>Оператор <a href="https://t.me/p_fintech" target="_blank">@p_fintech</a></p>
+    <div class="resources">
+      <div class="resource-card">
+        <p>Подписывайтесь на канал и отслеживайте заявки</p>
+        <p><a href="https://t.me/pays_hub" target="_blank">@pays_hub</a></p>
+      </div>
+      <div class="resource-card">
+        <p>Канал с заявками и обновлениями для банков и PSP</p>
+        <p><a href="https://t.me/pasyhub_bot" target="_blank">@pasyhub_bot</a></p>
+      </div>
+      <div class="resource-card">
+        <p>Оператор <a href="https://t.me/p_fintech" target="_blank">@p_fintech</a></p>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -242,7 +285,7 @@
       if (Math.abs(diffX) > 50) { // Минимальное расстояние для свайпа
         if (diffX > 0) {
           // Свайп влево
-          currentSlide = Math.min(slides.length - 1, currentSlide + 1);
+          currentSlide = Math.min(slides.length - currentSlide + 1);
         } else {
           // Свайп вправо
           currentSlide = Math.max(0, currentSlide - 1);
