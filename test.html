@@ -200,14 +200,24 @@
     }
     .rates-cards-container {
       display: flex;
-      flex-wrap: wrap; /* Карточки переносятся на следующую строку */
-      overflow-x: hidden; /* Убрали горизонтальную прокрутку */
+      overflow-x: auto;
       gap: 15px;
+      padding-bottom: 10px;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      max-width: 100%;
+      /* Скрываем полосу прокрутки */
+      -ms-overflow-style: none; /* Для Internet Explorer и Edge */
+      scrollbar-width: none; /* Для Firefox */
+    }
+    .rates-cards-container::-webkit-scrollbar {
+      display: none; /* Для Chrome, Safari и других WebKit-браузеров */
     }
     .rate-card {
       flex: 0 0 250px;
       background: #2a2a2a;
       border-radius: 12px;
+      scroll-snap-align: start;
       transition: transform 0.3s ease;
     }
     .rate-card:hover {
@@ -290,15 +300,25 @@
     }
     .tech-cards-container {
       display: flex;
-      flex-wrap: wrap; /* Карточки переносятся на следующую строку */
-      overflow-x: hidden; /* Убрали горизонтальную прокрутку */
+      overflow-x: auto;
       gap: 15px;
+      padding-bottom: 10px;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      max-width: 100%;
+      /* Скрываем полосу прокрутки */
+      -ms-overflow-style: none; /* Для Internet Explorer и Edge */
+      scrollbar-width: none; /* Для Firefox */
+    }
+    .tech-cards-container::-webkit-scrollbar {
+      display: none; /* Для Chrome, Safari и других WebKit-браузеров */
     }
     .tech-card {
       flex: 0 0 250px;
       background: #2a2a2a;
       border-radius: 12px;
       overflow: hidden;
+      scroll-snap-align: start;
       transition: transform 0.3s ease;
     }
     .tech-card:hover {
@@ -656,7 +676,7 @@
 
   <!-- Блок "Для агентов" -->
   <div class="for-agents">
-    <div class="section-title">Для агентов</div>
+       <div class="section-title">Для агентов</div>
     <div class="section-subtitle">Зарабатывайте с нами</div>
     <div class="description">
       Присоединяйтесь к нашей партнёрской программе и получайте доход за привлечение клиентов.
@@ -697,8 +717,7 @@
 
     // Функция обновления слайдера
     function updateSlider() {
-      currentSlide = Math
-      Math.max(0, Math.min(currentSlide, slides.length - 1));
+      currentSlide = Math.max(0, Math.min(currentSlide, slides.length - 1));
       slider.style.transform = `translateX(-${currentSlide * (100 - (30 / window.innerWidth) * 100)}%)`;
       slides.forEach((slide, index) => {
         slide.classList.toggle('active', index === currentSlide);
