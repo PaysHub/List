@@ -5,54 +5,118 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PaysHub - Marketplace for Payment Solutions</title>
     <style>
+        /* Your existing styles from the initial post */
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Inter', sans-serif;
+            background-color: #1a1a1a;
+            color: #ffffff;
             margin: 0;
             padding: 0;
-            background-color: #f0f0f0;
+            overflow-x: hidden;
         }
-        header {
-            background-color: #333;
-            color: white;
-            padding: 10px 20px;
+
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #1a1a1a;
+            z-index: 9999;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
         }
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
+
+        .content-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
         }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+
         nav ul {
             list-style-type: none;
-            margin: 0;
             padding: 0;
-            display: flex;
         }
+
         nav ul li {
-            margin-left: 20px;
+            margin-bottom: 10px;
         }
+
         nav ul li a {
-            color: white;
+            color: #ffffff;
             text-decoration: none;
+            font-size: 18px;
         }
+
+        .tabs {
+            display: flex;
+            justify-content: space-around;
+            background-color: #2a2a2a;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .tab {
+            color: #ffffff;
+            text-align: center;
+            cursor: pointer;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        .tab.active {
+            background-color: #4a4a4a;
+        }
+
+        .filter-section {
+            margin-bottom: 20px;
+        }
+
+        /* Additional styles for the new design */
         .hero {
             background-color: #4a4a4a;
             color: white;
             text-align: center;
             padding: 50px 20px;
         }
+
         .slider {
             max-width: 800px;
             margin: 0 auto;
             overflow: hidden;
         }
+
         .slide {
             display: none;
         }
+
         .slide.active {
             display: block;
         }
+
         .cta {
             background-color: #ff5722;
             color: white;
@@ -62,14 +126,16 @@
             cursor: pointer;
             margin-top: 20px;
         }
+
         .features {
             display: flex;
             flex-wrap: wrap;
             justify-content: space-around;
             padding: 20px;
         }
+
         .panel {
-            background-color: white;
+            background-color: #2a2a2a;
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             padding: 20px;
@@ -77,16 +143,20 @@
             width: calc(33.333% - 20px);
             text-align: center;
         }
+
         .panel img {
             width: 50px;
             height: 50px;
         }
+
         .panel h3 {
             margin: 10px 0;
         }
+
         .panel p {
             margin-bottom: 10px;
         }
+
         .panel button {
             background-color: #333;
             color: white;
@@ -94,117 +164,139 @@
             padding: 5px 10px;
             cursor: pointer;
         }
+
         .ai-recommendations, .partners {
-            background-color: white;
+            background-color: #2a2a2a;
             padding: 20px;
             margin: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
+
         footer {
             background-color: #333;
             color: white;
             padding: 20px;
         }
-        .tabs {
+
+        .footer-tabs {
             display: flex;
             justify-content: center;
             margin-bottom: 20px;
         }
-        .tab {
+
+        .footer-tab {
             background-color: #4a4a4a;
             color: white;
             padding: 10px 20px;
             margin: 0 5px;
             cursor: pointer;
         }
-        .tab.active {
+
+        .footer-tab.active {
             background-color: #ff5722;
         }
-        .tab-content {
+
+        .footer-tab-content {
             display: none;
         }
-        .tab-content.active {
+
+        .footer-tab-content.active {
             display: block;
         }
     </style>
 </head>
 <body>
-    <header>
-        <div class="logo">PaysHub</div>
-        <nav>
-            <ul>
-                <li><a href="#rates">Ставки</a></li>
-                <li><a href="#tech">Техрешения</a></li>
-                <li><a href="#investments">Инвестиции</a></li>
-                <li><a href="#agents">Агенты</a></li>
-                <li><a href="#ai">ИИ</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
-        <section class="hero">
-            <div class="slider">
-                <div class="slide active">
-                    <h2>Revolutionize Your Payments</h2>
-                    <p>Discover the future of payment solutions with PaysHub.</p>
+    <div class="preloader" id="preloader">
+        <!-- Your existing preloader animation -->
+        <div class="loader"></div>
+    </div>
+    <div class="content-container">
+        <header>
+            <div class="logo">PaysHub</div>
+            <nav>
+                <ul>
+                    <li><a href="#rates">Ставки</a></li>
+                    <li><a href="#tech">Техрешения</a></li>
+                    <li><a href="#investments">Инвестиции</a></li>
+                    <li><a href="#agents">Агенты</a></li>
+                    <li><a href="#ai">ИИ</a></li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <section class="hero">
+                <div class="slider">
+                    <div class="slide active">
+                        <h2>Revolutionize Your Payments</h2>
+                        <p>Discover the future of payment solutions with PaysHub.</p>
+                    </div>
+                    <div class="slide">
+                        <h2>Seamless Integration</h2>
+                        <p>Our solutions integrate effortlessly with your existing systems.</p>
+                    </div>
+                    <div class="slide">
+                        <h2>Secure and Reliable</h2>
+                        <p>Trust in our secure and reliable payment processing.</p>
+                    </div>
                 </div>
-                <div class="slide">
-                    <h2>Seamless Integration</h2>
-                    <p>Our solutions integrate effortlessly with your existing systems.</p>
+                <button class="cta">Explore Marketplace</button>
+            </section>
+            <section class="features">
+                <div class="panel">
+                    <img src="payment-icon.png" alt="Payment Solutions">
+                    <h3>Payment Solutions</h3>
+                    <p>Explore our range of payment options tailored to your business needs.</p>
+                    <button>View Options</button>
                 </div>
-                <div class="slide">
-                    <h2>Secure and Reliable</h2>
-                    <p>Trust in our secure and reliable payment processing.</p>
+                <div class="panel">
+                    <img src="tech-icon.png" alt="Technical Services">
+                    <h3>Technical Services</h3>
+                    <p>Get the technical support you need to implement our solutions.</p>
+                    <button>Learn More</button>
                 </div>
+                <div class="panel">
+                    <img src="investment-icon.png" alt="Investment Opportunities">
+                    <h3>Investment Opportunities</h3>
+                    <p>Discover projects for equity investment in the payment industry.</p>
+                    <button>Discover Projects</button>
+                </div>
+            </section>
+            <section class="ai-recommendations">
+                <h2>AI Recommendations</h2>
+                <p>Let our AI help you find the best payment solutions for your business.</p>
+                <button>Get Recommendations</button>
+            </section>
+            <section class="partners">
+                <h2>Partners and Agents</h2>
+                <p>Join our network of partners and agents to expand your reach and earn commissions.</p>
+                <button>Join Us</button>
+            </section>
+        </main>
+        <footer>
+            <div class="footer-tabs">
+                <div class="footer-tab active" onclick="showFooterTab('requests')">Запросы для платежных систем</div>
+                <div class="footer-tab" onclick="showFooterTab('subscribe')">Подписаться</div>
             </div>
-            <button class="cta">Explore Marketplace</button>
-        </section>
-        <section class="features">
-            <div class="panel">
-                <img src="payment-icon.png" alt="Payment Solutions">
-                <h3>Payment Solutions</h3>
-                <p>Explore our range of payment options tailored to your business needs.</p>
-                <button>View Options</button>
+            <div id="requests" class="footer-tab-content active">
+                <p>Submit your payment system requests through our <a href="https://t.me/p_fintech" target="_blank">Telegram channel</a>.</p>
             </div>
-            <div class="panel">
-                <img src="tech-icon.png" alt="Technical Services">
-                <h3>Technical Services</h3>
-                <p>Get the technical support you need to implement our solutions.</p>
-                <button>Learn More</button>
+            <div id="subscribe" class="footer-tab-content">
+                <p>Stay updated with the latest news and offers by subscribing to our <a href="https://t.me/p_fintech" target="_blank">Telegram channel</a>.</p>
             </div>
-            <div class="panel">
-                <img src="investment-icon.png" alt="Investment Opportunities">
-                <h3>Investment Opportunities</h3>
-                <p>Discover projects for equity investment in the payment industry.</p>
-                <button>Discover Projects</button>
-            </div>
-        </section>
-        <section class="ai-recommendations">
-            <h2>AI Recommendations</h2>
-            <p>Let our AI help you find the best payment solutions for your business.</p>
-            <button>Get Recommendations</button>
-        </section>
-        <section class="partners">
-            <h2>Partners and Agents</h2>
-            <p>Join our network of partners and agents to expand your reach and earn commissions.</p>
-            <button>Join Us</button>
-        </section>
-    </main>
-    <footer>
-        <div class="tabs">
-            <div class="tab active" onclick="showTab('requests')">Запросы для платежных систем</div>
-            <div class="tab" onclick="showTab('subscribe')">Подписаться</div>
-        </div>
-        <div id="requests" class="tab-content active">
-            <p>Submit your payment system requests through our <a href="https://t.me/p_fintech" target="_blank">Telegram channel</a>.</p>
-        </div>
-        <div id="subscribe" class="tab-content">
-            <p>Stay updated with the latest news and offers by subscribing to our <a href="https://t.me/p_fintech" target="_blank">Telegram channel</a>.</p>
-        </div>
-    </footer>
+        </footer>
+    </div>
+    <div class="tabs">
+        <div class="tab active" onclick="showTab('home')">Главная</div>
+        <div class="tab" onclick="showTab('rates')">Ставки</div>
+        <div class="tab" onclick="showTab('tech')">Техрешения</div>
+        <div class="tab" onclick="showTab('investments')">Инвестиции</div>
+        <div class="tab" onclick="showTab('agents')">Агенты</div>
+        <div class="tab" onclick="showTab('ai')">ИИ</div>
+        <div class="tab" onclick="openTelegram()">Оператор</div>
+    </div>
     <script>
-        // Slider functionality
+        // Your existing JavaScript code
         let slides = document.querySelectorAll('.slide');
         let currentSlide = 0;
 
@@ -216,17 +308,27 @@
 
         setInterval(() => showSlide(currentSlide + 1), 5000);
 
-        // Tab functionality
         function showTab(tabId) {
-            let tabs = document.querySelectorAll('.tab');
-            let tabContents = document.querySelectorAll('.tab-content');
-
-            tabs.forEach(tab => tab.classList.remove('active'));
-            tabContents.forEach(content => content.classList.remove('active'));
-
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
             document.querySelector(`[onclick="showTab('${tabId}')"]`).classList.add('active');
             document.getElementById(tabId).classList.add('active');
         }
+
+        function showFooterTab(tabId) {
+            document.querySelectorAll('.footer-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.footer-tab-content').forEach(content => content.classList.remove('active'));
+            document.querySelector(`[onclick="showFooterTab('${tabId}')"]`).classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        function openTelegram() {
+            Telegram.WebApp.openTelegramLink('https://t.me/p_fintech');
+        }
+
+        window.onload = function() {
+            document.getElementById('preloader').style.display = 'none';
+        };
     </script>
 </body>
 </html>
