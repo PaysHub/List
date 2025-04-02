@@ -14,7 +14,7 @@
       font-family: 'Inter', sans-serif;
       background-color: #1a1a1a;
       color: #ffffff;
-      overflow-x: hidden; /* Убираем горизонтальный скролл на странице */
+      overflow-x: hidden;
     }
     .header-section {
       background: #000000;
@@ -164,7 +164,7 @@
       padding-bottom: 10px;
       scroll-snap-type: x mandatory;
       -webkit-overflow-scrolling: touch;
-      max-width: 100%; /* Ограничиваем ширину контейнера */
+      max-width: 100%;
     }
     .rate-card {
       flex: 0 0 250px;
@@ -237,7 +237,7 @@
       padding-bottom: 10px;
       scroll-snap-type: x mandatory;
       -webkit-overflow-scrolling: touch;
-      max-width: 100%; /* Ограничиваем ширину контейнера */
+      max-width: 100%;
     }
     .tech-card {
       flex: 0 0 250px;
@@ -281,6 +281,59 @@
       font-size: 12px;
       color: #fff;
       background: linear-gradient(90deg, #007bff, #00c4b4);
+    }
+    /* Блок "ИИ-ассистент" */
+    .ai-assistant {
+      background: #2a2a2a;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    .ai-assistant .section-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 5px;
+      position: relative;
+      display: inline-block;
+    }
+    .ai-assistant .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, #007bff, #00c4b4);
+      transition: width 0.3s ease;
+    }
+    .ai-assistant .section-subtitle {
+      font-size: 14px;
+      color: #aaa;
+      margin-bottom: 15px;
+    }
+    .ai-assistant .description {
+      font-size: 14px;
+      color: #ddd;
+      margin-bottom: 15px;
+      line-height: 1.5;
+    }
+    .ai-assistant .try-button {
+      display: inline-block;
+      padding: 8px 15px;
+      border: 1px solid #fff;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: background 0.3s, color 0.3s;
+    }
+    .ai-assistant .try-button:hover {
+      background: linear-gradient(90deg, #007bff, #00c4b4);
+      color: #fff;
+      border-color: transparent;
     }
     .info-section {
       background: #2a2a2a;
@@ -355,6 +408,9 @@
       .tech-card { flex: 0 0 200px; }
       .tech-card img { height: 120px; }
       .tech-card .card-header { font-size: 14px; }
+      .ai-assistant .section-title { font-size: 18px; }
+      .ai-assistant .section-subtitle { font-size: 13px; }
+      .ai-assistant .description { font-size: 13px; }
       .info-section h3 { font-size: 16px; }
       .resource-card p { font-size: 13px; }
     }
@@ -403,7 +459,7 @@
 
   <!-- Блок "Последние ставки" -->
   <div class="latest-rates">
-    <div class="section-title" onclick="showTab('rates')">Последние ставки</div>
+    <div class="section-title">Последние ставки</div>
     <div class="section-subtitle">Самые актуальные предложения по ставкам</div>
     <div class="rates-cards-container">
       <div class="rate-card">
@@ -440,12 +496,12 @@
         </div>
       </div>
     </div>
-    <a href="#" class="see-all-button" onclick="showTab('rates')">Все ставки →</a>
+    <a href="#" class="see-all-button">Все ставки →</a>
   </div>
 
   <!-- Блок "Последние решения" -->
   <div class="latest-tech">
-    <div class="section-title" onclick="showTab('tech')">Новые решения для бизнеса</div>
+    <div class="section-title">Новые решения для бизнеса</div>
     <div class="section-subtitle">Инновационные технологии для вашего бизнеса</div>
     <div class="tech-cards-container">
       <div class="tech-card">
@@ -479,7 +535,17 @@
         </div>
       </div>
     </div>
-    <a href="#" class="see-all-button" onclick="showTab('tech')">Все решения →</a>
+    <a href="#" class="see-all-button">Все решения →</a>
+  </div>
+
+  <!-- Блок "ИИ-ассистент" -->
+  <div class="ai-assistant">
+    <div class="section-title">ИИ-ассистент для вашего бизнеса</div>
+    <div class="section-subtitle">Автоматизируйте подбор решений с помощью ИИ</div>
+    <div class="description">
+      Наш ИИ-ассистент анализирует ваши потребности и подбирает оптимальные платёжные решения за секунды.
+    </div>
+    <a href="#" class="try-button">Попробовать ИИ-ассистента →</a>
   </div>
 
   <div class="info-section">
