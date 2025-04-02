@@ -71,7 +71,7 @@
       touch-action: pan-y;
     }
     .slide {
-      flex: 0 0 calc(100% - 30px); /* Учитываем отступы контейнера */
+      flex: 0 0 calc(100% - 30px);
       height: 200px;
       background: #333;
       border-radius: 12px;
@@ -92,7 +92,7 @@
       flex-direction: column;
       justify-content: center;
       text-align: left;
-      margin-right: 15px; /* Отступ между текстом и картинкой */
+      margin-right: 15px;
     }
     .slide h3 {
       font-size: 18px;
@@ -134,7 +134,7 @@
       gap: 8px;
       margin-top: 10px;
       margin-bottom: 15px;
-      padding-right: 30px; /* Увеличили отступ справа для точек */
+      padding-right: 30px;
     }
     .dot {
       width: 8px;
@@ -150,11 +150,16 @@
     .latest-rates {
       margin: 30px 15px;
     }
+    .latest-rates .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 5px;
+    }
     .latest-rates .section-title {
       font-size: 20px;
       font-weight: 600;
       color: #fff;
-      margin-bottom: 5px;
       position: relative;
       display: inline-block;
       cursor: pointer;
@@ -171,6 +176,22 @@
     }
     .latest-rates .section-title:hover::after {
       width: 50%;
+    }
+    .latest-rates .see-all-button {
+      display: inline-block;
+      padding: 8px 15px;
+      border: 1px solid #fff;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: background 0.3s, color 0.3s;
+    }
+    .latest-rates .see-all-button:hover {
+      background: linear-gradient(90deg, #007bff, #00c4b4);
+      color: #fff;
+      border-color: transparent;
     }
     .latest-rates .section-subtitle {
       font-size: 14px;
@@ -219,15 +240,20 @@
       color: #fff;
       background: linear-gradient(90deg, #007bff, #00c4b4);
     }
-    /* Блок "Последние решения" */
+    /* Блок "Новые решения" */
     .latest-tech {
       margin: 30px 15px;
+    }
+    .latest-tech .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 5px;
     }
     .latest-tech .section-title {
       font-size: 20px;
       font-weight: 600;
       color: #fff;
-      margin-bottom: 5px;
       position: relative;
       display: inline-block;
       cursor: pointer;
@@ -244,6 +270,22 @@
     }
     .latest-tech .section-title:hover::after {
       width: 50%;
+    }
+    .latest-tech .see-all-button {
+      display: inline-block;
+      padding: 8px 15px;
+      border: 1px solid #fff;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: background 0.3s, color 0.3s;
+    }
+    .latest-tech .see-all-button:hover {
+      background: linear-gradient(90deg, #007bff, #00c4b4);
+      color: #fff;
+      border-color: transparent;
     }
     .latest-tech .section-subtitle {
       font-size: 14px;
@@ -443,23 +485,6 @@
     .resource-card a:hover {
       text-decoration: underline;
     }
-    .see-all-button {
-      display: inline-block;
-      margin-top: 10px;
-      padding: 8px 15px;
-      border: 1px solid #fff;
-      border-radius: 8px;
-      color: #fff;
-      font-size: 14px;
-      font-weight: 500;
-      text-decoration: none;
-      transition: background 0.3s, color 0.3s;
-    }
-    .see-all-button:hover {
-      background: linear-gradient(90deg, #007bff, #00c4b4);
-      color: #fff;
-      border-color: transparent;
-    }
     @keyframes gradientShift {
       0% { background-position: 0% 0%; }
       100% { background-position: 200% 0%; }
@@ -545,7 +570,10 @@
 
   <!-- Блок "Последние ставки" -->
   <div class="latest-rates">
-    <div class="section-title">Последние ставки</div>
+    <div class="header-row">
+      <div class="section-title">Последние ставки</div>
+      <a href="#" class="see-all-button">Все</a>
+    </div>
     <div class="section-subtitle">Самые актуальные предложения по ставкам</div>
     <div class="rates-cards-container">
       <div class="rate-card">
@@ -582,12 +610,14 @@
         </div>
       </div>
     </div>
-    <a href="#" class="see-all-button">Все ставки →</a>
   </div>
 
-  <!-- Блок "Последние решения" -->
+  <!-- Блок "Новые решения" -->
   <div class="latest-tech">
-    <div class="section-title">Новые решения для бизнеса</div>
+    <div class="header-row">
+      <div class="section-title">Новые решения</div>
+      <a href="#" class="see-all-button">Все</a>
+    </div>
     <div class="section-subtitle">Инновационные технологии для вашего бизнеса</div>
     <div class="tech-cards-container">
       <div class="tech-card">
@@ -621,7 +651,6 @@
         </div>
       </div>
     </div>
-    <a href="#" class="see-all-button">Все решения →</a>
   </div>
 
   <!-- Блок "ИИ-ассистент" -->
@@ -648,7 +677,7 @@
     <h3>Ресурсы:</h3>
     <div class="resources">
       <div class="resource-card">
-        <p>Подписывайтесь на канал и отслеживайте заявки</p>
+                <p>Подписывайтесь на канал и отслеживайте заявки</p>
         <p><a href="https://t.me/pays_hub" target="_blank">@pays_hub</a></p>
       </div>
       <div class="resource-card">
@@ -687,7 +716,7 @@
     // Функция обновления слайдера
     function updateSlider() {
       currentSlide = Math.max(0, Math.min(currentSlide, slides.length - 1));
-      slider.style.transform = `translateX(-${currentSlide * (100 - (30 / window.innerWidth) * 100)}%)`; /* Учитываем отступы */
+      slider.style.transform = `translateX(-${currentSlide * (100 - (30 / window.innerWidth) * 100)}%)`;
       slides.forEach((slide, index) => {
         slide.classList.toggle('active', index === currentSlide);
       });
