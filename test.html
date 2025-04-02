@@ -68,7 +68,6 @@
     }
     .slider {
       display: flex;
-      gap: 15px; /* Отступ между слайдами */
       transition: transform 0.5s ease;
       touch-action: pan-y; /* Ограничиваем прокрутку по оси Y, чтобы слайдер листался по X */
     }
@@ -267,7 +266,7 @@
     function updateSlider() {
       // Ограничиваем currentSlide, чтобы не листать дальше последнего слайда
       currentSlide = Math.max(0, Math.min(currentSlide, slides.length - 1));
-      slider.style.transform = `translateX(-${currentSlide * (100 + (15 / window.innerWidth) * 100)}%)`; // Учитываем gap
+      slider.style.transform = `translateX(-${currentSlide * 100}%)`; // Убираем влияние gap
       slides.forEach((slide, index) => {
         slide.classList.toggle('active', index === currentSlide);
       });
