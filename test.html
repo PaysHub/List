@@ -35,36 +35,27 @@
     .header-section .subtitle {
       font-size: 20px;
       color: #ddd;
-      margin-bottom: 5px;
-    }
-    .header-section .description {
-      font-size: 14px;
-      color: #ddd;
       margin-bottom: 20px;
     }
-    .header-section .divider {
-      width: 50%;
-      height: 1px;
-      background: #555;
-      margin: 20px auto;
+    .header-section .stats {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
     }
-    .header-section .why-us h3 {
-      font-size: 18px;
+    .header-section .stat {
+      text-align: center;
+    }
+    .header-section .stat h3 {
+      font-size: 14px;
+      font-weight: 500;
+      color: #aaa;
+      margin-bottom: 5px;
+    }
+    .header-section .stat p {
+      font-size: 24px;
       font-weight: 600;
       color: #fff;
-      margin-bottom: 10px;
-    }
-    .header-section .why-us p {
-      font-size: 14px;
-      color: #ddd;
-      margin-bottom: 10px;
-      line-height: 1.5;
-    }
-    .slider-section {
-      background: #2a2a2a; /* Тёмный фон для блока слайдера */
-      border-radius: 12px;
-      padding: 20px;
-      margin: 15px;
+      margin: 0;
     }
     .slider-container {
       position: relative;
@@ -83,11 +74,12 @@
       padding: 15px;
       box-sizing: border-box;
       text-align: left;
+      margin: 15px; /* Отступы для слайдов */
     }
     .slide h3 {
       font-size: 18px;
       font-weight: 600;
-      color: #00c4b4;
+      color: #fff; /* Заголовки слайдов теперь белые */
       margin-bottom: 10px;
     }
     .slide p {
@@ -170,9 +162,8 @@
     @media (max-width: 600px) {
       .header-section h1 { font-size: 24px; }
       .header-section .subtitle { font-size: 18px; }
-      .header-section .description { font-size: 13px; }
-      .header-section .why-us h3 { font-size: 16px; }
-      .header-section .why-us p { font-size: 13px; }
+      .header-section .stat h3 { font-size: 12px; }
+      .header-section .stat p { font-size: 20px; }
       .slide h3 { font-size: 16px; }
       .slide p { font-size: 13px; }
       .slide .apply-button { max-width: none; }
@@ -185,37 +176,41 @@
   <div class="header-section">
     <h1>PaysHub</h1>
     <div class="subtitle">Агрегатор платежных решений</div>
-    <div class="description">Ваш партнёр в мире платёжных решений!</div>
-    <div class="divider"></div>
-    <div class="why-us">
-      <h3>Почему мы?</h3>
-      <p>Единая точка входа для всех платёжных решений.</p>
-      <p>Готовые технические и юридические решения для бизнеса.</p>
-      <p>Широкая сеть партнёров по всему миру.</p>
+    <div class="stats">
+      <div class="stat">
+        <h3>PSP</h3>
+        <p>15+</p>
+      </div>
+      <div class="stat">
+        <h3>Решений</h3>
+        <p>50+</p>
+      </div>
+      <div class="stat">
+        <h3>Партнеров</h3>
+        <p>1000+</p>
+      </div>
     </div>
   </div>
 
-  <div class="slider-section">
-    <div class="slider-container">
-      <div class="slider" id="intro-slider">
-        <div class="slide">
-          <h3>Для клиентов</h3>
-          <p>Подбираем оптимальные платёжные системы для бизнеса любого уровня (low & high).</p>
-          <button class="apply-button" onclick="window.open('https://t.me/pasyhub_bot?start=add_request', '_blank')">Оставить запрос</button>
-        </div>
-        <div class="slide">
-          <h3>Для платёжек и банков</h3>
-          <p>Объединяем PSP, банки и финтех в B2B-коллаборации. Продажа и аренда готовых технических решений и White Label.</p>
-          <button class="apply-button" onclick="window.open('https://t.me/pasyhub_bot?start=add_psp', '_blank')">Добавить PSP</button>
-        </div>
-        <div class="slide">
-          <h3>Инвестиции</h3>
-          <p>Привлекаем капитал для масштабирования платёжных систем – лицензии, новые регионы, ликвидность – за долю в компании.</p>
-          <button class="apply-button" onclick="window.open('https://t.me/p_fintech?text=Хочу узнать больше об инвестициях', '_blank')">Подробнее</button>
-        </div>
+  <div class="slider-container">
+    <div class="slider" id="intro-slider">
+      <div class="slide">
+        <h3>Для клиентов</h3>
+        <p>Подбираем оптимальные платёжные системы для бизнеса любого уровня (low & high).</p>
+        <button class="apply-button" onclick="window.open('https://t.me/pasyhub_bot?start=add_request', '_blank')">Оставить запрос</button>
       </div>
-      <div class="slider-dots" id="slider-dots"></div>
+      <div class="slide">
+        <h3>Для платёжек и банков</h3>
+        <p>Объединяем PSP, банки и финтех в B2B-коллаборации. Продажа и аренда готовых технических решений и White Label.</p>
+        <button class="apply-button" onclick="window.open('https://t.me/pasyhub_bot?start=add_psp', '_blank')">Добавить PSP</button>
+      </div>
+      <div class="slide">
+        <h3>Инвестиции</h3>
+        <p>Привлекаем капитал для масштабирования платёжных систем – лицензии, новые регионы, ликвидность – за долю в компании.</p>
+        <button class="apply-button" onclick="window.open('https://t.me/p_fintech?text=Хочу узнать больше об инвестициях', '_blank')">Подробнее</button>
+      </div>
     </div>
+    <div class="slider-dots" id="slider-dots"></div>
   </div>
 
   <div class="info-section">
@@ -285,7 +280,7 @@
       if (Math.abs(diffX) > 50) { // Минимальное расстояние для свайпа
         if (diffX > 0) {
           // Свайп влево
-          currentSlide = Math.min(slides.length - currentSlide + 1);
+          currentSlide = Math.min(slides.length - 1, currentSlide + 1);
         } else {
           // Свайп вправо
           currentSlide = Math.max(0, currentSlide - 1);
