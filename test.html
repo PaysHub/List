@@ -21,7 +21,7 @@
       border-radius: 12px;
       padding: 20px;
       text-align: center;
-      margin: 30px 15px; /* Увеличили margin сверху и снизу */
+      margin: 30px 15px;
     }
     .header-section h1 {
       font-size: 28px;
@@ -63,23 +63,35 @@
       position: relative;
       width: 100%;
       overflow: hidden;
-      margin: 30px 15px; /* Увеличили margin сверху и снизу */
+      margin: 30px 15px;
     }
     .slider {
-      position: relative;
-      width: 100%;
+      display: flex;
+      transition: transform 0.5s ease;
+      touch-action: pan-y;
     }
     .slide {
-      display: none;
-      width: calc(100% - 30px);
+      flex: 0 0 100%;
+      height: 200px; /* Фиксированная высота для всех слайдов */
       background: #333;
       border-radius: 12px;
       padding: 15px;
       box-sizing: border-box;
-      text-align: left;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      opacity: 0;
+      transition: opacity 0.5s ease;
     }
     .slide.active {
-      display: block;
+      opacity: 1;
+    }
+    .slide .content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: left; /* Выравнивание текста по левой стороне */
     }
     .slide h3 {
       font-size: 18px;
@@ -101,7 +113,6 @@
       font-weight: 500;
       cursor: pointer;
       text-align: center;
-      display: block;
       width: 100%;
       max-width: 200px;
       transition: background 0.3s;
@@ -109,12 +120,21 @@
     .slide .apply-button:hover {
       background: #0056b3;
     }
+    .slide .image {
+      flex: 0 0 40%; /* Картинка занимает 40% ширины слайда */
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      border-radius: 8px;
+    }
     .slider-dots {
+      position: absolute;
+      top: 50%;
+      right: 15px; /* Точки навигации в правой части */
+      transform: translateY(-50%);
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       gap: 8px;
-      margin-top: 10px;
-      margin-bottom: 15px;
     }
     .dot {
       width: 8px;
@@ -128,7 +148,7 @@
     }
     /* Блок "Последние ставки" */
     .latest-rates {
-      margin: 30px 15px; /* Увеличили margin сверху и снизу */
+      margin: 30px 15px;
     }
     .latest-rates .section-title {
       font-size: 20px;
@@ -201,7 +221,7 @@
     }
     /* Блок "Последние решения" */
     .latest-tech {
-      margin: 30px 15px; /* Увеличили margin сверху и снизу */
+      margin: 30px 15px;
     }
     .latest-tech .section-title {
       font-size: 20px;
@@ -287,7 +307,7 @@
       background: #2a2a2a;
       border-radius: 12px;
       padding: 20px;
-      margin: 30px 15px; /* Увеличили margin сверху и снизу */
+      margin: 30px 15px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     }
     .ai-assistant .section-title {
@@ -340,7 +360,7 @@
       background: #2a2a2a;
       border-radius: 12px;
       padding: 20px;
-      margin: 30px 15px; /* Увеличили margin сверху и снизу */
+      margin: 30px 15px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     }
     .for-agents .section-title {
@@ -392,7 +412,7 @@
       background: #2a2a2a;
       border-radius: 12px;
       padding: 20px;
-      margin: 30px 15px; /* Увеличили margin сверху и снизу */
+      margin: 30px 15px;
     }
     .info-section h3 {
       font-size: 18px;
@@ -495,19 +515,28 @@
   <div class="slider-container">
     <div class="slider" id="intro-slider">
       <div class="slide">
-        <h3>Для клиентов</h3>
-        <p>Подбираем оптимальные платёжные системы для бизнеса любого уровня (low & high).</p>
-        <button class="apply-button" onclick="window.open('https://t.me/pasyhub_bot?start=add_request', '_blank')">Оставить запрос</button>
+        <div class="content">
+          <h3>Для клиентов</h3>
+          <p>Подбираем оптимальные платёжные системы для бизнеса любого уровня (low & high).</p>
+          <button class="apply-button" onclick="window.open('https://t.me/pasyhub_bot?start=add_request', '_blank')">Оставить запрос</button>
+        </div>
+        <div class="image" style="background-image: url('https://placehold.co/200x200');"></div>
       </div>
       <div class="slide">
-        <h3>Для платёжек и банков</h3>
-        <p>Объединяем PSP, банки и финтех в B2B-коллаборации. Продажа и аренда готовых технических решений и White Label.</p>
-        <button class="apply-button" onclick="window.open('https://t.me/pasyhub_bot?start=add_psp', '_blank')">Добавить PSP</button>
+        <div class="content">
+          <h3>Для платёжек и банков</h3>
+          <p>Объединяем PSP, банки и финтех в B2B-коллаборации. Продажа и аренда готовых технических решений и White Label.</p>
+          <button class="apply-button" onclick="window.open('https://t.me/pasyhub_bot?start=add_psp', '_blank')">Добавить PSP</button>
+        </div>
+        <div class="image" style="background-image: url('https://placehold.co/200x200');"></div>
       </div>
       <div class="slide">
-        <h3>Инвестиции</h3>
-        <p>Привлекаем капитал для масштабирования платёжных систем – лицензии, новые регионы, ликвидность – за долю в компании.</p>
-        <button class="apply-button" onclick="window.open('https://t.me/p_fintech?text=Хочу узнать больше об инвестициях', '_blank')">Подробнее</button>
+        <div class="content">
+          <h3>Инвестиции</h3>
+          <p>Привлекаем капитал для масштабирования платёжных систем – лицензии, новые регионы, ликвидность – за долю в компании.</p>
+          <button class="apply-button" onclick="window.open('https://t.me/p_fintech?text=Хочу узнать больше об инвестициях', '_blank')">Подробнее</button>
+        </div>
+        <div class="image" style="background-image: url('https://placehold.co/200x200');"></div>
       </div>
     </div>
     <div class="slider-dots" id="slider-dots"></div>
@@ -597,9 +626,10 @@
   <!-- Блок "ИИ-ассистент" -->
   <div class="ai-assistant">
     <div class="section-title">ИИ-ассистент для вашего бизнеса</div>
-    <div class="section-subtitle">Автоматизируйте подбор решений с помощью ИИ</div>
+    <div>
+          <div class="section-subtitle">Автоматизируйте подбор решений с помощью ИИ</div>
     <div class="description">
-      Наш ИИ-ассистент анализирует ваши потребности и подбирает оптимальныеплатёжные решения за секунды.
+      Наш ИИ-ассистент анализирует ваши потребности и подбирает оптимальные платёжные решения за секунды.
     </div>
     <a href="#" class="try-button">Попробовать ИИ-ассистента →</a>
   </div>
@@ -657,6 +687,7 @@
     // Функция обновления слайдера
     function updateSlider() {
       currentSlide = Math.max(0, Math.min(currentSlide, slides.length - 1));
+      slider.style.transform = `translateX(-${currentSlide * 100}%)`;
       slides.forEach((slide, index) => {
         slide.classList.toggle('active', index === currentSlide);
       });
