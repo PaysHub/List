@@ -71,7 +71,7 @@
       touch-action: pan-y;
     }
     .slide {
-      flex: 0 0 100%;
+      flex: 0 0 calc(100% - 30px); /* Учитываем отступы контейнера */
       height: 200px;
       background: #333;
       border-radius: 12px;
@@ -82,10 +82,6 @@
       justify-content: space-between;
       opacity: 0;
       transition: opacity 0.5s ease;
-      margin-right: 15px; /* Добавили отступ справа */
-    }
-    .slide:last-child {
-      margin-right: 0; /* Убрали отступ у последнего слайда */
     }
     .slide.active {
       opacity: 1;
@@ -96,6 +92,7 @@
       flex-direction: column;
       justify-content: center;
       text-align: left;
+      margin-right: 15px; /* Отступ между текстом и картинкой */
     }
     .slide h3 {
       font-size: 18px;
@@ -133,11 +130,11 @@
     }
     .slider-dots {
       display: flex;
-      justify-content: flex-end; /* Выровняли точки по правой стороне */
+      justify-content: flex-end;
       gap: 8px;
       margin-top: 10px;
       margin-bottom: 15px;
-      padding-right: 15px; /* Отступ справа для выравнивания */
+      padding-right: 15px;
     }
     .dot {
       width: 8px;
@@ -653,8 +650,7 @@
       <div class="resource-card">
         <p>Подписывайтесь на канал и отслеживайте заявки</p>
         <p><a href="https://t.me/pays_hub" target="_blank">@pays_hub</a></p>
-      </div>
-      <div class="resource-card">
+           <div class="resource-card">
         <p>Канал с заявками и обновлениями для банков и PSP</p>
         <p><a href="https://t.me/pasyhub_bot" target="_blank">@pasyhub_bot</a></p>
       </div>
