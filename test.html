@@ -21,7 +21,7 @@
       border-radius: 12px;
       padding: 20px;
       text-align: center;
-      margin: 15px;
+      margin: 30px 15px; /* Увеличили margin сверху и снизу */
     }
     .header-section h1 {
       font-size: 28px;
@@ -63,7 +63,7 @@
       position: relative;
       width: 100%;
       overflow: hidden;
-      margin: 15px;
+      margin: 30px 15px; /* Увеличили margin сверху и снизу */
     }
     .slider {
       position: relative;
@@ -128,7 +128,7 @@
     }
     /* Блок "Последние ставки" */
     .latest-rates {
-      margin: 15px;
+      margin: 30px 15px; /* Увеличили margin сверху и снизу */
     }
     .latest-rates .section-title {
       font-size: 20px;
@@ -201,7 +201,7 @@
     }
     /* Блок "Последние решения" */
     .latest-tech {
-      margin: 15px;
+      margin: 30px 15px; /* Увеличили margin сверху и снизу */
     }
     .latest-tech .section-title {
       font-size: 20px;
@@ -287,7 +287,7 @@
       background: #2a2a2a;
       border-radius: 12px;
       padding: 20px;
-      margin: 15px;
+      margin: 30px 15px; /* Увеличили margin сверху и снизу */
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     }
     .ai-assistant .section-title {
@@ -335,11 +335,64 @@
       color: #fff;
       border-color: transparent;
     }
+    /* Блок "Для агентов" */
+    .for-agents {
+      background: #2a2a2a;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 30px 15px; /* Увеличили margin сверху и снизу */
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    .for-agents .section-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 5px;
+      position: relative;
+      display: inline-block;
+    }
+    .for-agents .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, #007bff, #00c4b4);
+      transition: width 0.3s ease;
+    }
+    .for-agents .section-subtitle {
+      font-size: 14px;
+      color: #aaa;
+      margin-bottom: 15px;
+    }
+    .for-agents .description {
+      font-size: 14px;
+      color: #ddd;
+      margin-bottom: 15px;
+      line-height: 1.5;
+    }
+    .for-agents .agent-button {
+      display: inline-block;
+      padding: 8px 15px;
+      border: 1px solid #fff;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: background 0.3s, color 0.3s;
+    }
+    .for-agents .agent-button:hover {
+      background: linear-gradient(90deg, #007bff, #00c4b4);
+      color: #fff;
+      border-color: transparent;
+    }
     .info-section {
       background: #2a2a2a;
       border-radius: 12px;
       padding: 20px;
-      margin: 15px;
+      margin: 30px 15px; /* Увеличили margin сверху и снизу */
     }
     .info-section h3 {
       font-size: 18px;
@@ -411,6 +464,9 @@
       .ai-assistant .section-title { font-size: 18px; }
       .ai-assistant .section-subtitle { font-size: 13px; }
       .ai-assistant .description { font-size: 13px; }
+      .for-agents .section-title { font-size: 18px; }
+      .for-agents .section-subtitle { font-size: 13px; }
+      .for-agents .description { font-size: 13px; }
       .info-section h3 { font-size: 16px; }
       .resource-card p { font-size: 13px; }
     }
@@ -543,9 +599,19 @@
     <div class="section-title">ИИ-ассистент для вашего бизнеса</div>
     <div class="section-subtitle">Автоматизируйте подбор решений с помощью ИИ</div>
     <div class="description">
-      Наш ИИ-ассистент анализирует ваши потребности и подбирает оптимальные платёжные решения за секунды.
+      Наш ИИ-ассистент анализирует ваши потребности и подбирает оптимальныеплатёжные решения за секунды.
     </div>
     <a href="#" class="try-button">Попробовать ИИ-ассистента →</a>
+  </div>
+
+  <!-- Блок "Для агентов" -->
+  <div class="for-agents">
+    <div class="section-title">Для агентов</div>
+    <div class="section-subtitle">Зарабатывайте с нами</div>
+    <div class="description">
+      Присоединяйтесь к нашей партнёрской программе и получайте доход за привлечение клиентов.
+    </div>
+    <a href="#" class="agent-button">Стать агентом →</a>
   </div>
 
   <div class="info-section">
