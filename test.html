@@ -697,7 +697,8 @@
 
     // Функция обновления слайдера
     function updateSlider() {
-      currentSlide = Math.max(0, Math.min(currentSlide, slides.length - 1));
+      currentSlide = Math
+      Math.max(0, Math.min(currentSlide, slides.length - 1));
       slider.style.transform = `translateX(-${currentSlide * (100 - (30 / window.innerWidth) * 100)}%)`;
       slides.forEach((slide, index) => {
         slide.classList.toggle('active', index === currentSlide);
