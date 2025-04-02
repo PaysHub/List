@@ -82,6 +82,10 @@
       justify-content: space-between;
       opacity: 0;
       transition: opacity 0.5s ease;
+      margin-right: 15px; /* Добавили отступ справа */
+    }
+    .slide:last-child {
+      margin-right: 0; /* Убрали отступ у последнего слайда */
     }
     .slide.active {
       opacity: 1;
@@ -121,20 +125,19 @@
       background: #0056b3;
     }
     .slide .image {
-      flex: 0 0 120px; /* Уменьшили размер картинки */
-      height: 120px; /* Высота равна ширине */
+      flex: 0 0 120px;
+      height: 120px;
       background-size: cover;
       background-position: center;
-      border-radius: 50%; /* Сделали картинку круглой */
+      border-radius: 50%;
     }
     .slider-dots {
-      position: absolute;
-      top: 50%;
-      right: 15px;
-      transform: translateY(-50%);
       display: flex;
-      flex-direction: column;
+      justify-content: flex-end; /* Выровняли точки по правой стороне */
       gap: 8px;
+      margin-top: 10px;
+      margin-bottom: 15px;
+      padding-right: 15px; /* Отступ справа для выравнивания */
     }
     .dot {
       width: 8px;
@@ -472,7 +475,7 @@
       .slide h3 { font-size: 16px; }
       .slide p { font-size: 13px; }
       .slide .apply-button { max-width: none; }
-      .slide .image { flex: 0 0 100px; height: 100px; } /* Уменьшили размер картинки для мобильных */
+      .slide .image { flex: 0 0 100px; height: 100px; }
       .latest-rates .section-title { font-size: 18px; }
       .latest-rates .section-subtitle { font-size: 13px; }
       .rate-card { flex: 0 0 200px; }
