@@ -72,7 +72,7 @@
     }
     .slide {
       flex: 0 0 100%;
-      height: 200px; /* Фиксированная высота для всех слайдов */
+      height: 200px;
       background: #333;
       border-radius: 12px;
       padding: 15px;
@@ -91,7 +91,7 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      text-align: left; /* Выравнивание текста по левой стороне */
+      text-align: left;
     }
     .slide h3 {
       font-size: 18px;
@@ -121,16 +121,16 @@
       background: #0056b3;
     }
     .slide .image {
-      flex: 0 0 40%; /* Картинка занимает 40% ширины слайда */
-      height: 100%;
+      flex: 0 0 120px; /* Уменьшили размер картинки */
+      height: 120px; /* Высота равна ширине */
       background-size: cover;
       background-position: center;
-      border-radius: 8px;
+      border-radius: 50%; /* Сделали картинку круглой */
     }
     .slider-dots {
       position: absolute;
       top: 50%;
-      right: 15px; /* Точки навигации в правой части */
+      right: 15px;
       transform: translateY(-50%);
       display: flex;
       flex-direction: column;
@@ -472,6 +472,7 @@
       .slide h3 { font-size: 16px; }
       .slide p { font-size: 13px; }
       .slide .apply-button { max-width: none; }
+      .slide .image { flex: 0 0 100px; height: 100px; } /* Уменьшили размер картинки для мобильных */
       .latest-rates .section-title { font-size: 18px; }
       .latest-rates .section-subtitle { font-size: 13px; }
       .rate-card { flex: 0 0 200px; }
@@ -626,8 +627,7 @@
   <!-- Блок "ИИ-ассистент" -->
   <div class="ai-assistant">
     <div class="section-title">ИИ-ассистент для вашего бизнеса</div>
-    
-          <div class="section-subtitle">Автоматизируйте подбор решений с помощью ИИ</div>
+    <div class="section-subtitle">Автоматизируйте подбор решений с помощью ИИ</div>
     <div class="description">
       Наш ИИ-ассистент анализирует ваши потребности и подбирает оптимальные платёжные решения за секунды.
     </div>
