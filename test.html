@@ -134,7 +134,7 @@
       gap: 8px;
       margin-top: 10px;
       margin-bottom: 15px;
-      padding-right: 15px;
+      padding-right: 30px; /* Увеличили отступ справа для точек */
     }
     .dot {
       width: 8px;
@@ -650,7 +650,8 @@
       <div class="resource-card">
         <p>Подписывайтесь на канал и отслеживайте заявки</p>
         <p><a href="https://t.me/pays_hub" target="_blank">@pays_hub</a></p>
-           <div class="resource-card">
+      </div>
+      <div class="resource-card">
         <p>Канал с заявками и обновлениями для банков и PSP</p>
         <p><a href="https://t.me/pasyhub_bot" target="_blank">@pasyhub_bot</a></p>
       </div>
@@ -686,7 +687,7 @@
     // Функция обновления слайдера
     function updateSlider() {
       currentSlide = Math.max(0, Math.min(currentSlide, slides.length - 1));
-      slider.style.transform = `translateX(-${currentSlide * 100}%)`;
+      slider.style.transform = `translateX(-${currentSlide * (100 - (30 / window.innerWidth) * 100)}%)`; /* Учитываем отступы */
       slides.forEach((slide, index) => {
         slide.classList.toggle('active', index === currentSlide);
       });
