@@ -68,16 +68,22 @@
     }
     .slider {
       display: flex;
+      gap: 15px; /* Отступ между слайдами */
       transition: transform 0.5s ease;
       touch-action: pan-y; /* Ограничиваем прокрутку по оси Y, чтобы слайдер листался по X */
     }
     .slide {
-      flex: 0 0 calc(100% - 30px); /* Учитываем отступы слева и справа (15px + 15px) */
+      flex: 0 0 calc(100% - 30px); /* Учитываем отступы контейнера */
       background: #333;
       border-radius: 12px;
       padding: 15px;
       box-sizing: border-box;
       text-align: left;
+      opacity: 0; /* По умолчанию слайд невидим */
+      transition: opacity 0.5s ease; /* Плавное появление/исчезновение */
+    }
+    .slide.active {
+      opacity: 1; /* Только активный слайд видим */
     }
     .slide h3 {
       font-size: 18px;
@@ -254,11 +260,17 @@
     const dots = document.querySelectorAll('.dot');
     dots[0].classList.add('active');
 
+    // Устанавливаем начальную видимость активного слайда
+    slides[0].classList.add('active');
+
     // Функция обновления слайдера
     function updateSlider() {
       // Ограничиваем currentSlide, чтобы не листать дальше последнего слайда
       currentSlide = Math.max(0, Math.min(currentSlide, slides.length - 1));
-      slider.style.transform = `translateX(-${currentSlide * 100}%)`;
+      slider.style.transform = `translateX(-${currentSlide * (100 + (15 / window.innerWidth) * 100)}%)`; // Учитываем gap
+      slides.forEach((slide, index) => {
+        slide.classList.toggle('active', index === currentSlide);
+      });
       dots.forEach((dot, index) => {
         dot.classList.toggle('active', index === currentSlide);
       });
