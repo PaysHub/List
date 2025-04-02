@@ -200,18 +200,14 @@
     }
     .rates-cards-container {
       display: flex;
-      overflow-x: auto;
+      flex-wrap: wrap; /* Карточки переносятся на следующую строку */
+      overflow-x: hidden; /* Убрали горизонтальную прокрутку */
       gap: 15px;
-      padding-bottom: 10px;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-      max-width: 100%;
     }
     .rate-card {
       flex: 0 0 250px;
       background: #2a2a2a;
       border-radius: 12px;
-      scroll-snap-align: start;
       transition: transform 0.3s ease;
     }
     .rate-card:hover {
@@ -294,19 +290,15 @@
     }
     .tech-cards-container {
       display: flex;
-      overflow-x: auto;
+      flex-wrap: wrap; /* Карточки переносятся на следующую строку */
+      overflow-x: hidden; /* Убрали горизонтальную прокрутку */
       gap: 15px;
-      padding-bottom: 10px;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-      max-width: 100%;
     }
     .tech-card {
       flex: 0 0 250px;
       background: #2a2a2a;
       border-radius: 12px;
       overflow: hidden;
-      scroll-snap-align: start;
       transition: transform 0.3s ease;
     }
     .tech-card:hover {
@@ -450,6 +442,7 @@
       color: #fff;
       border-color: transparent;
     }
+    /* Блок "Ресурсы" */
     .info-section {
       background: #2a2a2a;
       border-radius: 12px;
@@ -464,26 +457,23 @@
     }
     .resources {
       display: flex;
-      flex-direction: column;
+      justify-content: space-between;
       gap: 10px;
     }
-    .resource-card {
-      background: #333;
+    .resource-button {
+      flex: 1;
+      background: linear-gradient(90deg, #007bff, #00c4b4);
       border-radius: 8px;
       padding: 15px;
       text-align: center;
-    }
-    .resource-card p {
-      font-size: 14px;
-      color: #ddd;
-      margin: 0;
-    }
-    .resource-card a {
-      color: #007bff;
       text-decoration: none;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 500;
+      transition: transform 0.3s ease;
     }
-    .resource-card a:hover {
-      text-decoration: underline;
+    .resource-button:hover {
+      transform: scale(1.02);
     }
     @keyframes gradientShift {
       0% { background-position: 0% 0%; }
@@ -514,7 +504,8 @@
       .for-agents .section-subtitle { font-size: 13px; }
       .for-agents .description { font-size: 13px; }
       .info-section h3 { font-size: 16px; }
-      .resource-card p { font-size: 13px; }
+      .resources { flex-direction: column; }
+      .resource-button { font-size: 13px; }
     }
   </style>
 </head>
@@ -676,17 +667,8 @@
   <div class="info-section">
     <h3>Ресурсы:</h3>
     <div class="resources">
-      <div class="resource-card">
-                <p>Подписывайтесь на канал и отслеживайте заявки</p>
-        <p><a href="https://t.me/pays_hub" target="_blank">@pays_hub</a></p>
-      </div>
-      <div class="resource-card">
-        <p>Канал с заявками и обновлениями для банков и PSP</p>
-        <p><a href="https://t.me/pasyhub_bot" target="_blank">@pasyhub_bot</a></p>
-      </div>
-      <div class="resource-card">
-        <p>Оператор <a href="https://t.me/p_fintech" target="_blank">@p_fintech</a></p>
-      </div>
+      <a href="https://t.me/pays_hub" target="_blank" class="resource-button">Канал @pays_hub</a>
+      <a href="https://t.me/p_fintech" target="_blank" class="resource-button">Оператор @p_fintech</a>
     </div>
   </div>
 
