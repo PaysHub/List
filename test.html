@@ -17,7 +17,7 @@
       overflow-x: hidden;
     }
     .header-section {
-      background: #000000;
+      background: linear-gradient(135deg, #1a2a44, #1a3c34); /* Градиент с цветами из картинки */
       border-radius: 12px;
       padding: 20px;
       text-align: center;
@@ -206,12 +206,11 @@
       scroll-snap-type: x mandatory;
       -webkit-overflow-scrolling: touch;
       max-width: 100%;
-      /* Скрываем полосу прокрутки */
-      -ms-overflow-style: none; /* Для Internet Explorer и Edge */
-      scrollbar-width: none; /* Для Firefox */
+      -ms-overflow-style: none;
+      scrollbar-width: none;
     }
     .rates-cards-container::-webkit-scrollbar {
-      display: none; /* Для Chrome, Safari и других WebKit-браузеров */
+      display: none;
     }
     .rate-card {
       flex: 0 0 250px;
@@ -306,12 +305,11 @@
       scroll-snap-type: x mandatory;
       -webkit-overflow-scrolling: touch;
       max-width: 100%;
-      /* Скрываем полосу прокрутки */
-      -ms-overflow-style: none; /* Для Internet Explorer и Edge */
-      scrollbar-width: none; /* Для Firefox */
+      -ms-overflow-style: none;
+      scrollbar-width: none;
     }
     .tech-cards-container::-webkit-scrollbar {
-      display: none; /* Для Chrome, Safari и других WebKit-браузеров */
+      display: none;
     }
     .tech-card {
       flex: 0 0 250px;
@@ -676,7 +674,7 @@
 
   <!-- Блок "Для агентов" -->
   <div class="for-agents">
-       <div class="section-title">Для агентов</div>
+    <div class="section-title">Для агентов</div>
     <div class="section-subtitle">Зарабатывайте с нами</div>
     <div class="description">
       Присоединяйтесь к нашей партнёрской программе и получайте доход за привлечение клиентов.
