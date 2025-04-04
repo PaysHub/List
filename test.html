@@ -409,7 +409,7 @@
     }
     .tech-card .card-header {
       display: flex;
-      flex-direction: column; /* Меняем на колонку для цены на второй строке */
+      flex-direction: column;
       align-items: flex-start;
       font-weight: 600;
       font-size: 16px;
@@ -533,11 +533,13 @@
       padding: 8px 15px;
       border: 1px solid #fff;
       border-radius: 8px;
+      background: transparent; /* Прозрачный фон */
       color: #fff;
       font-size: 14px;
       font-weight: 500;
       text-decoration: none;
       transition: background 0.3s, color 0.3s;
+      cursor: pointer;
     }
     .for-agents .agent-button:hover {
       background: linear-gradient(90deg, #007bff, #00c4b4);
@@ -747,7 +749,7 @@
       <div class="stats">
         <div class="stat">
           <h3>PSP</h3>
-          <p>20+</p> <!-- Изменено с 15+ на 20+ -->
+          <p>20+</p>
         </div>
         <div class="stat">
           <h3>Решений</h3>
@@ -1017,29 +1019,40 @@
     // Поддержка свайпа пальцем
     let startX = 0;
     let isDragging = false;
+    let moved = false; // Флаг для отслеживания движения
 
     slider.addEventListener('touchstart', (e) => {
       startX = e.touches[0].clientX;
       isDragging = true;
+      moved = false; // Сбрасываем флаг движения
     });
 
     slider.addEventListener('touchmove', (e) => {
       if (!isDragging) return;
       const currentX = e.touches[0].clientX;
       const diffX = startX - currentX;
-      if (Math.abs(diffX) > 50) {
+      moved = true; // Устанавливаем флаг движения
+
+      // Уменьшаем порог для свайпа до 30px для более плавного переключения
+      if (Math.abs(diffX) > 30) {
         if (diffX > 0) {
+          // Свайп влево (вперёд)
           currentSlide = Math.min(slides.length - 1, currentSlide + 1);
         } else {
+          // Свайп вправо (назад)
           currentSlide = Math.max(0, currentSlide - 1);
         }
         updateSlider();
-        isDragging = false;
+        isDragging = false; // Завершаем свайп
       }
     });
 
     slider.addEventListener('touchend', () => {
       isDragging = false;
+      // Если не было движения, можно добавить обработку клика (например, открыть попап)
+      if (!moved) {
+        console.log('Тап по слайдеру, можно добавить действие');
+      }
     });
 
     // Функция для показа уведомления
