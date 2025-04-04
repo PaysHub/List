@@ -71,13 +71,20 @@
     .slider-container {
       position: relative;
       width: 100%;
-      overflow: hidden;
       margin: 30px 15px;
     }
     .slider {
       display: flex;
-      transition: transform 0.5s ease;
-      touch-action: pan-y;
+      overflow-x: auto; /* Включаем горизонтальную прокрутку */
+      gap: 15px; /* Расстояние между слайдами */
+      padding-bottom: 10px;
+      scroll-snap-type: x mandatory; /* Плавное перелистывание с привязкой */
+      -webkit-overflow-scrolling: touch; /* Плавная прокрутка на iOS */
+      -ms-overflow-style: none; /* Скрываем скроллбар в IE/Edge */
+      scrollbar-width: none; /* Скрываем скроллбар в Firefox */
+    }
+    .slider::-webkit-scrollbar {
+      display: none; /* Скрываем скроллбар в Chrome/Safari */
     }
     .slide {
       flex: 0 0 calc(100% - 30px);
@@ -89,11 +96,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      opacity: 0;
-      transition: opacity 0.5s ease;
-    }
-    .slide.active {
-      opacity: 1;
+      scroll-snap-align: start; /* Привязка к началу слайда */
     }
     .slide .content {
       flex: 1;
@@ -533,7 +536,7 @@
       padding: 8px 15px;
       border: 1px solid #fff;
       border-radius: 8px;
-      background: transparent; /* Прозрачный фон */
+      background: transparent;
       color: #fff;
       font-size: 14px;
       font-weight: 500;
@@ -995,65 +998,30 @@
     const dots = document.querySelectorAll('.dot');
     dots[0].classList.add('active');
 
-    // Устанавливаем начальную видимость активного слайда
-    slides[0].classList.add('active');
+    // Функция обновления точек навигации при скролле
+    function updateSliderDots() {
+      const slideWidth = slides[0].offsetWidth + 15; // Ширина слайда + gap
+      const scrollPosition = slider.scrollLeft;
+      const newSlideIndex = Math.round(scrollPosition / slideWidth);
+      currentSlide = Math.max(0, Math.min(slides.length - 1, newSlideIndex));
 
-    // Функция обновления слайдера
-    function updateSlider() {
-      currentSlide = Math.max(0, Math.min(currentSlide, slides.length - 1));
-      slider.style.transform = `translateX(-${currentSlide * (100 - (30 / window.innerWidth) * 100)}%)`;
-      slides.forEach((slide, index) => {
-        slide.classList.toggle('active', index === currentSlide);
-      });
       dots.forEach((dot, index) => {
         dot.classList.toggle('active', index === currentSlide);
       });
     }
 
+    // Обновляем точки при скролле
+    slider.addEventListener('scroll', updateSliderDots);
+
     // Автоматическая прокрутка каждые 5 секунд
     setInterval(() => {
       currentSlide = (currentSlide + 1) % slides.length;
-      updateSlider();
+      const slideWidth = slides[0].offsetWidth + 15; // Ширина слайда + gap
+      slider.scrollTo({
+        left: currentSlide * slideWidth,
+        behavior: 'smooth'
+      });
     }, 5000);
-
-    // Поддержка свайпа пальцем
-    let startX = 0;
-    let isDragging = false;
-    let moved = false; // Флаг для отслеживания движения
-
-    slider.addEventListener('touchstart', (e) => {
-      startX = e.touches[0].clientX;
-      isDragging = true;
-      moved = false; // Сбрасываем флаг движения
-    });
-
-    slider.addEventListener('touchmove', (e) => {
-      if (!isDragging) return;
-      const currentX = e.touches[0].clientX;
-      const diffX = startX - currentX;
-      moved = true; // Устанавливаем флаг движения
-
-      // Уменьшаем порог для свайпа до 30px для более плавного переключения
-      if (Math.abs(diffX) > 30) {
-        if (diffX > 0) {
-          // Свайп влево (вперёд)
-          currentSlide = Math.min(slides.length - 1, currentSlide + 1);
-        } else {
-          // Свайп вправо (назад)
-          currentSlide = Math.max(0, currentSlide - 1);
-        }
-        updateSlider();
-        isDragging = false; // Завершаем свайп
-      }
-    });
-
-    slider.addEventListener('touchend', () => {
-      isDragging = false;
-      // Если не было движения, можно добавить обработку клика (например, открыть попап)
-      if (!moved) {
-        console.log('Тап по слайдеру, можно добавить действие');
-      }
-    });
 
     // Функция для показа уведомления
     function showNotification(message) {
@@ -1125,6 +1093,7 @@
     // Предотвращаем исчезновение блюра при фокусе на полях ввода
     document.querySelectorAll('input, textarea').forEach(input => {
       input.addEventListener('focus', () => {
+        // Убедимся, что блюр остаётся активным
         document.querySelector('.content-container').classList.add('blurred');
       });
       input.addEventListener('blur', () => {
