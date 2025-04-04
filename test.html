@@ -1295,73 +1295,147 @@
     });
 
     // Обработка отправки формы подбора PSP
-    document.getElementById('feedback-form').addEventListener('submit', (e) => {
+    document.getElementById('feedback-form').addEventListener('submit', async (e) => {
       e.preventDefault();
 
       const telegram = document.getElementById('feedback-telegram').value;
       const message = document.getElementById('feedback-message').value;
 
-      // Формируем текст сообщения
-      const text = `Новая заявка на подбор PSP:\n\nTelegram: ${telegram}\nСообщение: ${message}`;
-      // Перенаправляем пользователя в Telegram-чат с ботом
-      const botUsername = '@PaysHubFeedbackBot';
-      const telegramUrl = `https://t.me/${botUsername}?start=${encodeURIComponent(text)}`;
-      window.open(telegramUrl, '_blank');
+      const serverUrl = 'https://payshub-feedback-bot.glitch.me/send-message';
 
-      showNotification('Вы будете перенаправлены в Telegram для отправки заявки.');
-      closeFeedbackPopup();
-      document.getElementById('feedback-form').reset();
+      try {
+        const response = await fetch(serverUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            telegram: telegram,
+            message: `Новая заявка на подбор PSP:\n\n${message}`,
+          }),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          showNotification('Заявка успешно отправлена!');
+          closeFeedbackPopup();
+          document.getElementById('feedback-form').reset();
+        } else {
+          showNotification(result.error || 'Ошибка при отправке заявки. Попробуйте снова.');
+        }
+      } catch (error) {
+        console.error('Ошибка:', error);
+        showNotification('Произошла ошибка. Проверьте консоль для деталей.');
+      }
     });
 
     // Обработка отправки формы добавления PSP
-    document.getElementById('add-psp-form').addEventListener('submit', (e) => {
+    document.getElementById('add-psp-form').addEventListener('submit', async (e) => {
       e.preventDefault();
 
       const telegram = document.getElementById('add-psp-telegram').value;
       const message = document.getElementById('add-psp-message').value;
 
-      const text = `Новая заявка на добавление PSP:\n\nTelegram: ${telegram}\nСообщение: ${message}`;
-      const botUsername = '@PaysHubFeedbackBot';
-      const telegramUrl = `https://t.me/${botUsername}?start=${encodeURIComponent(text)}`;
-      window.open(telegramUrl, '_blank');
+      const serverUrl = 'https://payshub-feedback-bot.glitch.me/send-message';
 
-      showNotification('Вы будете перенаправлены в Telegram для отправки заявки.');
-      closeAddPspPopup();
-      document.getElementById('add-psp-form').reset();
+      try {
+        const response = await fetch(serverUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            telegram: telegram,
+            message: `Новая заявка на добавление PSP:\n\n${message}`,
+          }),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          showNotification('Заявка успешно отправлена!');
+          closeAddPspPopup();
+          document.getElementById('add-psp-form').reset();
+        } else {
+          showNotification(result.error || 'Ошибка при отправке заявки. Попробуйте снова.');
+        }
+      } catch (error) {
+        console.error('Ошибка:', error);
+        showNotification('Произошла ошибка. Проверьте консоль для деталей.');
+      }
     });
 
     // Обработка отправки формы для инвестиций
-    document.getElementById('invest-form').addEventListener('submit', (e) => {
+    document.getElementById('invest-form').addEventListener('submit', async (e) => {
       e.preventDefault();
 
       const telegram = document.getElementById('invest-telegram').value;
       const message = document.getElementById('invest-message').value;
 
-      const text = `Новая заявка на инвестиции:\n\nTelegram: ${telegram}\nСообщение: ${message}`;
-      const botUsername = '@PaysHubFeedbackBot';
-      const telegramUrl = `https://t.me/${botUsername}?start=${encodeURIComponent(text)}`;
-      window.open(telegramUrl, '_blank');
+      const serverUrl = 'https://payshub-feedback-bot.glitch.me/send-message';
 
-      showNotification('Вы будете перенаправлены в Telegram для отправки заявки.');
-      closeInvestPopup();
-      document.getElementById('invest-form').reset();
+      try {
+        const response = await fetch(serverUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            telegram: telegram,
+            message: `Новая заявка на инвестиции:\n\n${message}`,
+          }),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          showNotification('Заявка успешно отправлена!');
+          closeInvestPopup();
+          document.getElementById('invest-form').reset();
+        } else {
+          showNotification(result.error || 'Ошибка при отправке заявки. Попробуйте снова.');
+        }
+      } catch (error) {
+        console.error('Ошибка:', error);
+        showNotification('Произошла ошибка. Проверьте консоль для деталей.');
+      }
     });
 
     // Обработка отправки формы для агентов
-    document.getElementById('agent-form').addEventListener('submit', (e) => {
+    document.getElementById('agent-form').addEventListener('submit', async (e) => {
       e.preventDefault();
 
       const telegram = document.getElementById('agent-telegram').value;
       const message = document.getElementById('agent-message').value;
 
-      const text = `Новая заявка на участие в партнёрской программе:\n\nTelegram: ${telegram}\nСообщение: ${message}`;
-      const botUsername = '@PaysHubFeedbackBot';
-      const telegramUrl = `https://t.me/${botUsername}?start=${encodeURIComponent(text)}`;
-      window.open(telegramUrl, '_blank');
+      const serverUrl = 'https://payshub-feedback-bot.glitch.me/send-message';
 
-      showNotification('Вы будете перенаправлены в Telegram для отправки заявки.');
-      closeAgentPopup();
-      document.getElementById('agent-form').reset();
+      try {
+        const response = await fetch(serverUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            telegram: telegram,
+            message: `Новая заявка на участие в партнёрской программе:\n\n${message}`,
+          }),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          showNotification('Заявка успешно отправлена!');
+          closeAgentPopup();
+          document.getElementById('agent-form').reset();
+        } else {
+          showNotification(result.error || 'Ошибка при отправке заявки. Попробуйте снова.');
+        }
+      } catch (error) {
+        console.error('Ошибка:', error);
+        showNotification('Произошла ошибка. Проверьте консоль для деталей.');
+      }
     });
 
     // Закрытие попапов при клике вне формы
