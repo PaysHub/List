@@ -72,7 +72,7 @@
       position: relative;
       width: 100%;
       margin: 30px 15px;
-      overflow: hidden; /* Убедимся, что контейнер не обрезает слайды */
+      overflow: hidden;
     }
     .slider {
       display: flex;
@@ -83,14 +83,14 @@
       -webkit-overflow-scrolling: touch;
       -ms-overflow-style: none;
       scrollbar-width: none;
-      padding-left: 15px; /* Отступ слева для первого слайда */
-      padding-right: 15px; /* Отступ справа для последнего слайда */
+      padding-left: 15px;
+      padding-right: 15px;
     }
     .slider::-webkit-scrollbar {
       display: none;
     }
     .slide {
-      flex: 0 0 calc(100% - 30px); /* Учитываем отступы слева и справа */
+      flex: 0 0 calc(100% - 30px);
       height: 200px;
       background: #333;
       border-radius: 12px;
@@ -161,10 +161,9 @@
     .dot.active {
       background: #007bff;
     }
-    /* Пустой элемент для корректной прокрутки */
     .slider::after {
       content: '';
-      flex: 0 0 15px; /* Отступ в конце слайдера */
+      flex: 0 0 15px;
     }
     /* Новые блоки "С кем мы работаем" */
     .partners-section {
@@ -1021,16 +1020,6 @@
     // Обновляем точки при скролле
     slider.addEventListener('scroll', updateSliderDots);
 
-    // Автоматическая прокрутка каждые 5 секунд
-    setInterval(() => {
-      currentSlide = (currentSlide + 1) % slides.length;
-      const slideWidth = slides[0].offsetWidth + 15; // Ширина слайда + gap
-      slider.scrollTo({
-        left: currentSlide * slideWidth,
-        behavior: 'smooth'
-      });
-    }, 5000);
-
     // Функция для показа уведомления
     function showNotification(message) {
       const notification = document.getElementById('notification');
@@ -1306,155 +1295,73 @@
     });
 
     // Обработка отправки формы подбора PSP
-    document.getElementById('feedback-form').addEventListener('submit', async (e) => {
+    document.getElementById('feedback-form').addEventListener('submit', (e) => {
       e.preventDefault();
 
       const telegram = document.getElementById('feedback-telegram').value;
       const message = document.getElementById('feedback-message').value;
 
-      const botToken = '7276468726:AAGoApTgpFSsNPLFpv5AB1dl69KKhRBZ66E';
-      const chatId = '7846961868';
-      const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
-
+      // Формируем текст сообщения
       const text = `Новая заявка на подбор PSP:\n\nTelegram: ${telegram}\nСообщение: ${message}`;
+      // Перенаправляем пользователя в Telegram-чат с ботом
+      const botUsername = '@PaysHubFeedbackBot';
+      const telegramUrl = `https://t.me/${botUsername}?start=${encodeURIComponent(text)}`;
+      window.open(telegramUrl, '_blank');
 
-      try {
-        const response = await fetch(telegramUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            chat_id: chatId,
-            text: text,
-          }),
-        });
-
-        if (response.ok) {
-          showNotification('Заявка успешно отправлена!');
-          closeFeedbackPopup();
-          document.getElementById('feedback-form').reset();
-        } else {
-          showNotification('Ошибка при отправке заявки. Попробуйте снова.');
-        }
-      } catch (error) {
-        console.error('Ошибка:', error);
-        showNotification('Произошла ошибка. Проверьте консоль для деталей.');
-      }
+      showNotification('Вы будете перенаправлены в Telegram для отправки заявки.');
+      closeFeedbackPopup();
+      document.getElementById('feedback-form').reset();
     });
 
     // Обработка отправки формы добавления PSP
-    document.getElementById('add-psp-form').addEventListener('submit', async (e) => {
+    document.getElementById('add-psp-form').addEventListener('submit', (e) => {
       e.preventDefault();
 
       const telegram = document.getElementById('add-psp-telegram').value;
       const message = document.getElementById('add-psp-message').value;
 
-      const botToken = '7276468726:AAGoApTgpFSsNPLFpv5AB1dl69KKhRBZ66E';
-      const chatId = '7846961868';
-      const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
-
       const text = `Новая заявка на добавление PSP:\n\nTelegram: ${telegram}\nСообщение: ${message}`;
+      const botUsername = '@PaysHubFeedbackBot';
+      const telegramUrl = `https://t.me/${botUsername}?start=${encodeURIComponent(text)}`;
+      window.open(telegramUrl, '_blank');
 
-      try {
-        const response = await fetch(telegramUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            chat_id: chatId,
-            text: text,
-          }),
-        });
-
-        if (response.ok) {
-          showNotification('Заявка успешно отправлена!');
-          closeAddPspPopup();
-          document.getElementById('add-psp-form').reset();
-        } else {
-          showNotification('Ошибка при отправке заявки. Попробуйте снова.');
-        }
-      } catch (error) {
-        console.error('Ошибка:', error);
-        showNotification('Произошла ошибка. Проверьте консоль для деталей.');
-      }
+      showNotification('Вы будете перенаправлены в Telegram для отправки заявки.');
+      closeAddPspPopup();
+      document.getElementById('add-psp-form').reset();
     });
 
     // Обработка отправки формы для инвестиций
-    document.getElementById('invest-form').addEventListener('submit', async (e) => {
+    document.getElementById('invest-form').addEventListener('submit', (e) => {
       e.preventDefault();
 
       const telegram = document.getElementById('invest-telegram').value;
       const message = document.getElementById('invest-message').value;
 
-      const botToken = '7276468726:AAGoApTgpFSsNPLFpv5AB1dl69KKhRBZ66E';
-      const chatId = '7846961868';
-      const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
-
       const text = `Новая заявка на инвестиции:\n\nTelegram: ${telegram}\nСообщение: ${message}`;
+      const botUsername = '@PaysHubFeedbackBot';
+      const telegramUrl = `https://t.me/${botUsername}?start=${encodeURIComponent(text)}`;
+      window.open(telegramUrl, '_blank');
 
-      try {
-        const response = await fetch(telegramUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            chat_id: chatId,
-            text: text,
-          }),
-        });
-
-        if (response.ok) {
-          showNotification('Заявка успешно отправлена!');
-          closeInvestPopup();
-          document.getElementById('invest-form').reset();
-        } else {
-          showNotification('Ошибка при отправке заявки. Попробуйте снова.');
-        }
-      } catch (error) {
-        console.error('Ошибка:', error);
-        showNotification('Произошла ошибка. Проверьте консоль для деталей.');
-      }
+      showNotification('Вы будете перенаправлены в Telegram для отправки заявки.');
+      closeInvestPopup();
+      document.getElementById('invest-form').reset();
     });
 
     // Обработка отправки формы для агентов
-    document.getElementById('agent-form').addEventListener('submit', async (e) => {
+    document.getElementById('agent-form').addEventListener('submit', (e) => {
       e.preventDefault();
 
       const telegram = document.getElementById('agent-telegram').value;
       const message = document.getElementById('agent-message').value;
 
-      const botToken = '7276468726:AAGoApTgpFSsNPLFpv5AB1dl69KKhRBZ66E';
-      const chatId = '7846961868';
-      const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
-
       const text = `Новая заявка на участие в партнёрской программе:\n\nTelegram: ${telegram}\nСообщение: ${message}`;
+      const botUsername = '@PaysHubFeedbackBot';
+      const telegramUrl = `https://t.me/${botUsername}?start=${encodeURIComponent(text)}`;
+      window.open(telegramUrl, '_blank');
 
-      try {
-        const response = await fetch(telegramUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            chat_id: chatId,
-            text: text,
-          }),
-        });
-
-        if (response.ok) {
-          showNotification('Заявка успешно отправлена!');
-          closeAgentPopup();
-          document.getElementById('agent-form').reset();
-        } else {
-          showNotification('Ошибка при отправке заявки. Попробуйте снова.');
-        }
-      } catch (error) {
-        console.error('Ошибка:', error);
-        showNotification('Произошла ошибка. Проверьте консоль для деталей.');
-      }
+      showNotification('Вы будете перенаправлены в Telegram для отправки заявки.');
+      closeAgentPopup();
+      document.getElementById('agent-form').reset();
     });
 
     // Закрытие попапов при клике вне формы
