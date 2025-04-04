@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>Payment Systems</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
@@ -191,7 +192,7 @@
     }
     .partner-block {
       flex: 0 0 250px;
-      background: #444;
+      background: linear-gradient(135deg, #1a2a44, #1a3c34);
       border-radius: 12px;
       padding: 15px;
       display: flex;
@@ -203,14 +204,13 @@
       background: linear-gradient(135deg, #1a3c34, #2a5c44);
     }
     .partner-block.medium-risk {
-      background: linear-gradient(135deg, #f7c948, #d4a017);
+      background: linear-gradient(135deg, #1a2a44, #2a5c44);
     }
     .partner-block.high-risk {
-      background: linear-gradient(135deg, #ff4d4d, #cc0000);
+      background: linear-gradient(135deg, #1a2a44, #1a3c34);
     }
-    .partner-block img {
-      width: 40px;
-      height: 40px;
+    .partner-block .emoji {
+      font-size: 24px;
     }
     .partner-block p {
       font-size: 14px;
@@ -650,6 +650,25 @@
     .popup-button.cancel {
       background: #555;
     }
+    /* Стили для уведомления */
+    .notification {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #2a2a2a;
+      border-radius: 8px;
+      padding: 15px;
+      color: #fff;
+      font-size: 14px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+      z-index: 40;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .notification.active {
+      opacity: 1;
+    }
     @keyframes gradientShift {
       0% { background-position: 0% 0%; }
       100% { background-position: 200% 0%; }
@@ -687,6 +706,7 @@
       .feedback-instruction, .add-psp-instruction, .invest-instruction { font-size: 12px; }
       .partner-block { flex: 0 0 200px; }
       .partner-block p { font-size: 13px; }
+      .notification { font-size: 12px; padding: 10px; }
     }
   </style>
 </head>
@@ -746,19 +766,19 @@
       <div class="section-title">Кто наши клиенты</div>
       <div class="partners-grid">
         <div class="partner-block">
-          <img src="https://placehold.co/40x40?text=🏬" alt="Обычные бизнесы">
+          <span class="emoji">🏬</span>
           <p>Работаем с традиционными бизнесами: e-commerce, ритейл, услуги.</p>
         </div>
         <div class="partner-block low-risk">
-          <img src="https://placehold.co/40x40?text=🛡️" alt="Low Risk">
+          <span class="emoji">🛡️</span>
           <p>Поддерживаем бизнесы с низким риском: SaaS, образование, благотворительность.</p>
         </div>
         <div class="partner-block medium-risk">
-          <img src="https://placehold.co/40x40?text=📈" alt="Medium Risk">
+          <span class="emoji">📈</span>
           <p>Решения для бизнесов среднего риска: финтех, туризм, подписки.</p>
         </div>
         <div class="partner-block high-risk">
-          <img src="https://placehold.co/40x40?text=⚡" alt="High Risk">
+          <span class="emoji">⚡</span>
           <p>Работаем с высокорисковыми бизнесами: гемблинг, крипта, дейтинг.</p>
         </div>
       </div>
@@ -944,7 +964,14 @@
     </form>
   </div>
 
+  <!-- Уведомление об отправке -->
+  <div class="notification" id="notification">Сообщение успешно отправлено!</div>
+
   <script>
+    const tg = window.Telegram.WebApp;
+    tg.ready();
+    tg.expand();
+
     let currentSlide = 0;
     const slides = document.querySelectorAll('.slide');
     const dotsContainer = document.getElementById('slider-dots');
@@ -1013,6 +1040,16 @@
       isDragging = false;
     });
 
+    // Функция для показа уведомления
+    function showNotification(message) {
+      const notification = document.getElementById('notification');
+      notification.textContent = message;
+      notification.classList.add('active');
+      setTimeout(() => {
+        notification.classList.remove('active');
+      }, 3000);
+    }
+
     // Функции для попапов форм
     function openFeedbackPopup() {
       const popup = document.getElementById('feedback-popup');
@@ -1055,7 +1092,8 @@
       e.preventDefault();
 
       const message = document.getElementById('feedback-message').value;
-      const telegramUsername = 'Не указан'; // Telegram Web App API не работает в этом контексте, нужно интегрировать в ваш проект
+      const telegramUser = tg.initDataUnsafe.user;
+      const telegramUsername = telegramUser ? telegramUser.username : 'Не указан';
 
       const botToken = '7276468726:AAGoApTgpFSsNPLFpv5AB1dl69KKhRBZ66E';
       const chatId = '7846961868';
@@ -1076,15 +1114,15 @@
         });
 
         if (response.ok) {
-          alert('Заявка успешно отправлена!');
+          showNotification('Заявка успешно отправлена!');
           closeFeedbackPopup();
           document.getElementById('feedback-form').reset();
         } else {
-          alert('Ошибка при отправке заявки. Попробуйте снова.');
+          showNotification('Ошибка при отправке заявки. Попробуйте снова.');
         }
       } catch (error) {
         console.error('Ошибка:', error);
-        alert('Произошла ошибка. Проверьте консоль для деталей.');
+        showNotification('Произошла ошибка. Проверьте консоль для деталей.');
       }
     });
 
@@ -1093,7 +1131,8 @@
       e.preventDefault();
 
       const message = document.getElementById('add-psp-message').value;
-      const telegramUsername = 'Не указан'; // Telegram Web App API не работает в этом контексте, нужно интегрировать в ваш проект
+      const telegramUser = tg.initDataUnsafe.user;
+      const telegramUsername = telegramUser ? telegramUser.username : 'Не указан';
 
       const botToken = '7276468726:AAGoApTgpFSsNPLFpv5AB1dl69KKhRBZ66E';
       const chatId = '7846961868';
@@ -1114,15 +1153,15 @@
         });
 
         if (response.ok) {
-          alert('Заявка успешно отправлена!');
+          showNotification('Заявка успешно отправлена!');
           closeAddPspPopup();
           document.getElementById('add-psp-form').reset();
         } else {
-          alert('Ошибка при отправке заявки. Попробуйте снова.');
+          showNotification('Ошибка при отправке заявки. Попробуйте снова.');
         }
       } catch (error) {
         console.error('Ошибка:', error);
-        alert('Произошла ошибка. Проверьте консоль для деталей.');
+        showNotification('Произошла ошибка. Проверьте консоль для деталей.');
       }
     });
 
@@ -1131,7 +1170,8 @@
       e.preventDefault();
 
       const message = document.getElementById('invest-message').value;
-      const telegramUsername = 'Не указан'; // Telegram Web App API не работает в этом контексте, нужно интегрировать в ваш проект
+      const telegramUser = tg.initDataUnsafe.user;
+      const telegramUsername = telegramUser ? telegramUser.username : 'Не указан';
 
       const botToken = '7276468726:AAGoApTgpFSsNPLFpv5AB1dl69KKhRBZ66E';
       const chatId = '7846961868';
@@ -1152,15 +1192,15 @@
         });
 
         if (response.ok) {
-          alert('Заявка успешно отправлена!');
+          showNotification('Заявка успешно отправлена!');
           closeInvestPopup();
           document.getElementById('invest-form').reset();
         } else {
-          alert('Ошибка при отправке заявки. Попробуйте снова.');
+          showNotification('Ошибка при отправке заявки. Попробуйте снова.');
         }
       } catch (error) {
         console.error('Ошибка:', error);
-        alert('Произошла ошибка. Проверьте консоль для деталей.');
+        showNotification('Произошла ошибка. Проверьте консоль для деталей.');
       }
     });
 
