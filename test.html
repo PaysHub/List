@@ -987,9 +987,12 @@
     const dotsContainer = document.getElementById('slider-dots');
     const slider = document.getElementById('intro-slider');
 
-    // Подставляем Telegram-ник в поля при открытии форм
+    // Подставляем Telegram-ник в поля при открытии форм и собираем данные пользователя
     const telegramUser = tg.initDataUnsafe.user;
     const telegramUsername = telegramUser ? telegramUser.username : '';
+    const telegramId = telegramUser ? telegramUser.id : 'Неизвестно';
+    const telegramFirstName = telegramUser ? telegramUser.first_name : 'Неизвестно';
+    const telegramLastName = telegramUser ? telegramUser.last_name : 'Неизвестно';
 
     // Создаем точки навигации
     slides.forEach((_, index) => {
@@ -1049,7 +1052,9 @@
       const popup = document.getElementById('add-psp-popup');
       const telegramField = document.getElementById('add-psp-telegram');
       telegramField.value = telegramUsername ? `@${telegramUsername}` : '';
-      popup.classList.add('active');
+      popup
+
+.classList.add('active');
       document.querySelector('.content-container').classList.add('blurred');
     }
 
@@ -1289,11 +1294,6 @@
       console.log('Finished loading data.');
     }
 
-    // Загружаем данные при загрузке страницы
-    window.addEventListener('load', () => {
-      loadData();
-    });
-
     // Обработка отправки формы подбора PSP
     document.getElementById('feedback-form').addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -1311,7 +1311,7 @@
           },
           body: JSON.stringify({
             telegram: telegram,
-            message: `Новая заявка на подбор PSP:\n\n${message}`,
+            message: `Новая заявка на подбор PSP:\n\nTelegram: ${telegram}\nСообщение: ${message}\n\nДанные пользователя:\nID: ${telegramId}\nИмя: ${telegramFirstName}\nФамилия: ${telegramLastName}\nUsername: @${telegramUsername || 'Не указан'}`,
           }),
         });
 
@@ -1347,7 +1347,7 @@
           },
           body: JSON.stringify({
             telegram: telegram,
-            message: `Новая заявка на добавление PSP:\n\n${message}`,
+            message: `Новая заявка на добавление PSP:\n\nTelegram: ${telegram}\nСообщение: ${message}\n\nДанные пользователя:\nID: ${telegramId}\nИмя: ${telegramFirstName}\nФамилия: ${telegramLastName}\nUsername: @${telegramUsername || 'Не указан'}`,
           }),
         });
 
@@ -1383,7 +1383,7 @@
           },
           body: JSON.stringify({
             telegram: telegram,
-            message: `Новая заявка на инвестиции:\n\n${message}`,
+            message: `Новая заявка на инвестиции:\n\nTelegram: ${telegram}\nСообщение: ${message}\n\nДанные пользователя:\nID: ${telegramId}\nИмя: ${telegramFirstName}\nФамилия: ${telegramLastName}\nUsername: @${telegramUsername || 'Не указан'}`,
           }),
         });
 
@@ -1419,7 +1419,7 @@
           },
           body: JSON.stringify({
             telegram: telegram,
-            message: `Новая заявка на участие в партнёрской программе:\n\n${message}`,
+            message: `Новая заявка на участие в партнёрской программе:\n\nTelegram: ${telegram}\nСообщение: ${message}\n\nДанные пользователя:\nID: ${telegramId}\nИмя: ${telegramFirstName}\nФамилия: ${telegramLastName}\nUsername: @${telegramUsername || 'Не указан'}`,
           }),
         });
 
@@ -1451,6 +1451,44 @@
       }
       if (!e.target.closest('.agent-button') && !e.target.closest('.agent-popup') && !e.target.closest('.apply-button')) {
         closeAgentPopup();
+      }
+    });
+
+    // Автоматическая отправка данных пользователя при входе в приложение
+    window.addEventListener('load', async () => {
+      // Загружаем данные из NocoDB (оставляем как есть)
+      loadData();
+
+      // Собираем данные пользователя
+      const telegramUser = tg.initDataUnsafe.user;
+      const telegramId = telegramUser ? telegramUser.id : 'Неизвестно';
+      const telegramFirstName = telegramUser ? telegramUser.first_name : 'Неизвестно';
+      const telegramLastName = telegramUser ? telegramUser.last_name : 'Неизвестно';
+      const telegramUsername = telegramUser ? telegramUser.username : 'Не указан';
+
+      const serverUrl = 'https://payshub-feedback-bot.glitch.me/send-message';
+
+      try {
+        const response = await fetch(serverUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            telegram: `@${telegramUsername}`,
+            message: `Новый пользователь зашёл в приложение:\n\nID: ${telegramId}\nИмя: ${telegramFirstName}\nФамилия: ${telegramLastName}\nUsername: @${telegramUsername}`,
+          }),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          console.log('Данные пользователя отправлены:', result);
+        } else {
+          console.error('Ошибка при отправке данных пользователя:', result.error);
+        }
+      } catch (error) {
+        console.error('Ошибка при отправке данных пользователя:', error);
       }
     });
   </script>
