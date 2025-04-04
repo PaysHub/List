@@ -1058,13 +1058,13 @@
       document.querySelector('.content-container').classList.remove('blurred');
     }
 
-    // Функция для получения данных из NocoDB с фильтром HB=true
+    // Функция для получения данных из NocoDB (без фильтра where=HB=true)
     async function fetchData(tableId) {
       try {
         console.log(`Fetching data for table ${tableId}...`);
         console.log(`Using API_TOKEN: ${API_TOKEN}`);
-        console.log(`Request URL: ${BASE_URL}${tableId}/records?where=HB=true&offset=0&limit=100`);
-        const response = await fetch(`${BASE_URL}${tableId}/records?where=HB=true&offset=0&limit=100`, {
+        console.log(`Request URL: ${BASE_URL}${tableId}/records?offset=0&limit=100`);
+        const response = await fetch(`${BASE_URL}${tableId}/records?offset=0&limit=100`, {
           headers: {
             'xc-token': API_TOKEN
           }
@@ -1148,12 +1148,15 @@
       const container = document.getElementById(containerId);
       container.innerHTML = '';
 
-      if (rows.length === 0) {
-        container.innerHTML = '<p>Нет данных для отображения. Проверьте, есть ли записи с HB=true в таблице mbz9kdbkba6i9t2.</p>';
+      // Фильтруем строки, показывая только те, у которых On = true и HB = true
+      let filteredRows = rows.filter(row => row['On'] === true && row['HB'] === true);
+
+      if (filteredRows.length === 0) {
+        container.innerHTML = '<p>Нет данных для отображения. Проверьте, есть ли записи с On=true и HB=true в таблице mbz9kdbkba6i9t2.</p>';
         return;
       }
 
-      rows.forEach(row => {
+      filteredRows.forEach(row => {
         const card = document.createElement('div');
         card.className = 'rate-card';
 
@@ -1176,13 +1179,16 @@
     async function renderTech(containerId, rows) {
       const container = document.getElementById(containerId);
       container.innerHTML = '';
-      console.log('Tech data received in renderTech:', rows);
-      if (!rows || rows.length === 0) {
-        container.innerHTML = '<p>Данные для "Решения" не загружены. Возможные причины: 1) Таблица mnliw8pc7zmrw35 пуста. 2) Нет записей с HB=true. Откройте консоль (F12 → Console) и проверьте "Raw API response" и "Loaded techData".</p>';
+
+      // Фильтруем строки, показывая только те, у которых On = true и HB = true
+      let filteredRows = rows.filter(row => row['On'] === true && row['HB'] === true);
+
+      if (!filteredRows || filteredRows.length === 0) {
+        container.innerHTML = '<p>Данные для "Решения" не загружены. Возможные причины: 1) Таблица mnliw8pc7zmrw35 пуста. 2) Нет записей с On=true и HB=true. Откройте консоль (F12 → Console) и проверьте "Raw API response" и "Loaded techData".</p>';
         return;
       }
 
-      for (const row of rows) {
+      for (const row of filteredRows) {
         console.log('Rendering tech card:', row);
         const imgUrl = await extractImageUrl(row['Img']);
         console.log('Extracted image URL for card:', imgUrl);
@@ -1205,7 +1211,7 @@
 
     async function loadData() {
       console.log('Starting to load data...');
-      // Загружаем данные для обеих вкладок одновременно с фильтром HB=true
+      // Загружаем данные для обеих вкладок одновременно
       const [rates, tech] = await Promise.all([
         fetchData(RATES_TABLE_ID),
         fetchData(TECH_TABLE_ID)
