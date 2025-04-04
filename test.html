@@ -217,7 +217,7 @@
       color: #fff;
       margin: 0;
     }
-    /* Блок "Последние ставки" */
+    /* Блок "Ставки" */
     .latest-rates {
       margin: 30px 15px;
     }
@@ -316,7 +316,7 @@
       color: #fff;
       background: linear-gradient(90deg, #007bff, #00c4b4);
     }
-    /* Блок "Новые решения" */
+    /* Блок "Решения" */
     .latest-tech {
       margin: 30px 15px;
     }
@@ -617,6 +617,9 @@
       flex-direction: column;
       gap: 10px;
     }
+    .feedback-form input,
+    .add-psp-form input,
+    .invest-form input,
     .feedback-form textarea,
     .add-psp-form textarea,
     .invest-form textarea {
@@ -628,6 +631,10 @@
       font-size: 14px;
       outline: none;
       resize: none;
+    }
+    .feedback-form textarea,
+    .add-psp-form textarea,
+    .invest-form textarea {
       height: 100px;
     }
     .popup-actions {
@@ -701,6 +708,7 @@
       .resources { flex-direction: column; }
       .resource-button { font-size: 13px; }
       .feedback-popup, .add-psp-popup, .invest-popup { width: 90%; }
+      .feedback-form input, .add-psp-form input, .invest-form input,
       .feedback-form textarea, .add-psp-form textarea, .invest-form textarea { font-size: 12px; }
       .popup-button { font-size: 12px; }
       .feedback-instruction, .add-psp-instruction, .invest-instruction { font-size: 12px; }
@@ -784,88 +792,27 @@
       </div>
     </div>
 
-    <!-- Блок "Последние ставки" -->
+    <!-- Блок "Ставки" -->
     <div class="latest-rates">
       <div class="header-row">
-        <div class="section-title">Последние ставки</div>
+        <div class="section-title">Ставки</div>
         <a href="#" class="see-all-button">Все</a>
       </div>
       <div class="section-subtitle">Самые актуальные предложения по ставкам</div>
-      <div class="rates-cards-container">
-        <div class="rate-card">
-          <div class="card-header">
-            <span>Payment Solution A</span>
-            <span>2.5%</span>
-          </div>
-          <div class="card-tags">
-            <span class="tag">Service A</span>
-            <span class="tag">E-commerce</span>
-            <span class="tag">EU</span>
-          </div>
-        </div>
-        <div class="rate-card">
-          <div class="card-header">
-            <span>Payment Solution B</span>
-            <span>3.0%</span>
-          </div>
-          <div class="card-tags">
-            <span class="tag">Service B</span>
-            <span class="tag">Gaming</span>
-            <span class="tag">Asia</span>
-          </div>
-        </div>
-        <div class="rate-card">
-          <div class="card-header">
-            <span>Payment Solution C</span>
-            <span>2.8%</span>
-          </div>
-          <div class="card-tags">
-            <span class="tag">Service C</span>
-            <span class="tag">Retail</span>
-            <span class="tag">US</span>
-          </div>
-        </div>
+      <div class="rates-cards-container" id="rates-content">
+        <p>Загрузка...</p>
       </div>
     </div>
 
-    <!-- Блок "Новые решения" -->
+    <!-- Блок "Решения" -->
     <div class="latest-tech">
       <div class="header-row">
-        <div class="section-title">Новые решения</div>
+        <div class="section-title">Решения</div>
         <a href="#" class="see-all-button">Все</a>
       </div>
       <div class="section-subtitle">Инновационные технологии для вашего бизнеса</div>
-      <div class="tech-cards-container">
-        <div class="tech-card">
-          <img src="https://placehold.co/250x150" alt="Tech Solution">
-          <div class="card-header">
-            <span>White Label Solution</span>
-            <span>$5000</span>
-          </div>
-          <div class="card-tags">
-            <span class="tag">White Label</span>
-          </div>
-        </div>
-        <div class="tech-card">
-          <img src="https://placehold.co/250x150" alt="Tech Solution">
-          <div class="card-header">
-            <span>Payment Gateway</span>
-            <span>$3000</span>
-          </div>
-          <div class="card-tags">
-            <span class="tag">Gateway</span>
-          </div>
-        </div>
-        <div class="tech-card">
-          <img src="https://placehold.co/250x150" alt="Tech Solution">
-          <div class="card-header">
-            <span>API Integration</span>
-            <span>$2000</span>
-          </div>
-          <div class="card-tags">
-            <span class="tag">API</span>
-          </div>
-        </div>
+      <div class="tech-cards-container" id="tech-content">
+        <p>Загрузка...</p>
       </div>
     </div>
 
@@ -909,6 +856,8 @@
       - Есть ли юрлицо (где зарегистрировано)
     </div>
     <form class="feedback-form" id="feedback-form">
+      <input type="text" id="feedback-telegram" placeholder="Ваш Telegram-ник (например, @username)" required>
+      <input type="text" id="feedback-contact" placeholder="Контакт (email/телефон)" required>
       <textarea id="feedback-message" placeholder="Ваше сообщение" required></textarea>
       <div class="popup-actions">
         <button type="submit" class="popup-button submit">Отправить</button>
@@ -932,6 +881,8 @@
       - API-документация (если есть)
     </div>
     <form class="add-psp-form" id="add-psp-form">
+      <input type="text" id="add-psp-telegram" placeholder="Ваш Telegram-ник (например, @username)" required>
+      <input type="text" id="add-psp-contact" placeholder="Контакт (email/телефон)" required>
       <textarea id="add-psp-message" placeholder="Ваше сообщение" required></textarea>
       <div class="popup-actions">
         <button type="submit" class="popup-button submit">Отправить</button>
@@ -956,6 +907,8 @@
       Оставьте заявку, указав информацию о вашем проекте.
     </div>
     <form class="invest-form" id="invest-form">
+      <input type="text" id="invest-telegram" placeholder="Ваш Telegram-ник (например, @username)" required>
+      <input type="text" id="invest-contact" placeholder="Контакт (email/телефон)" required>
       <textarea id="invest-message" placeholder="Ваше сообщение" required></textarea>
       <div class="popup-actions">
         <button type="submit" class="popup-button submit">Отправить</button>
@@ -972,10 +925,22 @@
     tg.ready();
     tg.expand();
 
+    const API_TOKEN = 'ubicp2nFx8L47YOV3MOyn1FhUIPQ4EMESzFnrL3L';
+    const BASE_URL = 'https://app.nocodb.com/api/v2/tables/';
+    const RATES_TABLE_ID = 'mbz9kdbkba6i9t2';
+    const TECH_TABLE_ID = 'mnliw8pc7zmrw35';
+
+    let ratesData = [];
+    let techData = [];
+
     let currentSlide = 0;
     const slides = document.querySelectorAll('.slide');
     const dotsContainer = document.getElementById('slider-dots');
     const slider = document.getElementById('intro-slider');
+
+    // Подставляем Telegram-ник в поля при открытии форм
+    const telegramUser = tg.initDataUnsafe.user;
+    const telegramUsername = telegramUser ? telegramUser.username : '';
 
     // Создаем точки навигации
     slides.forEach((_, index) => {
@@ -1053,6 +1018,8 @@
     // Функции для попапов форм
     function openFeedbackPopup() {
       const popup = document.getElementById('feedback-popup');
+      const telegramField = document.getElementById('feedback-telegram');
+      telegramField.value = telegramUsername ? `@${telegramUsername}` : '';
       popup.classList.add('active');
       document.querySelector('.content-container').classList.add('blurred');
     }
@@ -1065,6 +1032,8 @@
 
     function openAddPspPopup() {
       const popup = document.getElementById('add-psp-popup');
+      const telegramField = document.getElementById('add-psp-telegram');
+      telegramField.value = telegramUsername ? `@${telegramUsername}` : '';
       popup.classList.add('active');
       document.querySelector('.content-container').classList.add('blurred');
     }
@@ -1077,6 +1046,8 @@
 
     function openInvestPopup() {
       const popup = document.getElementById('invest-popup');
+      const telegramField = document.getElementById('invest-telegram');
+      telegramField.value = telegramUsername ? `@${telegramUsername}` : '';
       popup.classList.add('active');
       document.querySelector('.content-container').classList.add('blurred');
     }
@@ -1087,19 +1058,195 @@
       document.querySelector('.content-container').classList.remove('blurred');
     }
 
+    // Функция для получения данных из NocoDB с фильтром HB=true
+    async function fetchData(tableId) {
+      try {
+        console.log(`Fetching data for table ${tableId}...`);
+        console.log(`Using API_TOKEN: ${API_TOKEN}`);
+        console.log(`Request URL: ${BASE_URL}${tableId}/records?where=HB=true&offset=0&limit=100`);
+        const response = await fetch(`${BASE_URL}${tableId}/records?where=HB=true&offset=0&limit=100`, {
+          headers: {
+            'xc-token': API_TOKEN
+          }
+        });
+        console.log(`Response status for table ${tableId}: ${response.status}`);
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error(`HTTP error for table ${tableId}! Status: ${response.status}, Response: ${errorText}`);
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log(`Raw API response for table ${tableId}:`, data);
+        const records = data.list || [];
+        console.log(`Extracted records for table ${tableId}:`, records);
+        return records;
+      } catch (error) {
+        console.error(`Ошибка при получении данных для tableId ${tableId}:`, error);
+        return [];
+      }
+    }
+
+    async function extractImageUrl(imgField) {
+      console.log('Processing Img field:', imgField);
+
+      if (!imgField) {
+        console.log('Img field is empty or undefined');
+        return 'https://placehold.co/400x276';
+      }
+
+      if (typeof imgField === 'string') {
+        if (imgField.startsWith('http://') || imgField.startsWith('https://')) {
+          if (imgField.includes('raw.githubusercontent.com')) {
+            console.log('GitHub raw image URL detected:', imgField);
+          } else {
+            console.log('Direct image URL detected:', imgField);
+          }
+          return imgField;
+        }
+        const match = imgField.match(/\((https:\/\/[^\)]+)\)/);
+        if (match) {
+          const imageUrl = match[1];
+          console.log('Extracted image URL from string (NocoDB format):', imageUrl);
+          const urlWithToken = `${imageUrl}?xc-token=${API_TOKEN}`;
+          console.log('Image URL with token:', urlWithToken);
+          return urlWithToken;
+        }
+      }
+
+      if (Array.isArray(imgField) && imgField.length > 0) {
+        const imageObj = imgField[0];
+        console.log('Image object (NocoDB attachment):', imageObj);
+        const imageUrl = imageObj.url;
+        console.log('Extracted image URL from array:', imageUrl);
+        if (imageUrl) {
+          const urlWithToken = `${imageUrl}?xc-token=${API_TOKEN}`;
+          console.log('Image URL with token:', urlWithToken);
+          return urlWithToken;
+        }
+      }
+
+      console.log('Could not extract image URL, returning placeholder');
+      return 'https://placehold.co/400x276';
+    }
+
+    function getTags(row, field) {
+      return row[field] ? row[field].split(',').map(tag => tag.trim()) : [];
+    }
+
+    // Функция для проверки, является ли значение пустым
+    function isEmptyValue(value) {
+      return !value || value === 'N/A' || value.trim() === '';
+    }
+
+    // Функция для форматирования текста (замена переносов строк на <br>)
+    function formatText(text) {
+      if (!text) return '';
+      return text.replace(/\n/g, '<br>');
+    }
+
+    function renderRates(containerId, rows) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
+
+      if (rows.length === 0) {
+        container.innerHTML = '<p>Нет данных для отображения. Проверьте, есть ли записи с HB=true в таблице mbz9kdbkba6i9t2.</p>';
+        return;
+      }
+
+      rows.forEach(row => {
+        const card = document.createElement('div');
+        card.className = 'rate-card';
+
+        card.innerHTML = `
+          <div class="card-header">
+            <span>${row['ID Name'] || 'Без названия'}</span>
+            <span>${row['Pay in (%)'] || ''}</span>
+          </div>
+          <div class="card-tags">
+            <span class="tag">${row['Service'] || 'N/A'}</span>
+            ${getTags(row, 'Industry').slice(0, 1).map(tag => `<span class="tag">${tag}</span>`).join('')}
+            ${getTags(row, 'Geo').slice(0, 1).map(tag => `<span class="tag">${tag}</span>`).join('')}
+            ${getTags(row, 'Risk').slice(0, 1).map(tag => `<span class="tag">${tag}</span>`).join('')}
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    async function renderTech(containerId, rows) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = '';
+      console.log('Tech data received in renderTech:', rows);
+      if (!rows || rows.length === 0) {
+        container.innerHTML = '<p>Данные для "Решения" не загружены. Возможные причины: 1) Таблица mnliw8pc7zmrw35 пуста. 2) Нет записей с HB=true. Откройте консоль (F12 → Console) и проверьте "Raw API response" и "Loaded techData".</p>';
+        return;
+      }
+
+      for (const row of rows) {
+        console.log('Rendering tech card:', row);
+        const imgUrl = await extractImageUrl(row['Img']);
+        console.log('Extracted image URL for card:', imgUrl);
+        const card = document.createElement('div');
+        card.className = 'tech-card';
+
+        card.innerHTML = `
+          <img src="${imgUrl}" alt="Tech Solution" onerror="this.src='https://placehold.co/400x276'; console.log('Failed to load image: ${imgUrl}');">
+          <div class="card-header">
+            <span>${row['Name'] || 'Без названия'}</span>
+            <span>${row['Price'] || ''}</span>
+          </div>
+          <div class="card-tags">
+            <span class="tag">${row['Type'] || 'White Label'}</span>
+          </div>
+        `;
+        container.appendChild(card);
+      }
+    }
+
+    async function loadData() {
+      console.log('Starting to load data...');
+      // Загружаем данные для обеих вкладок одновременно с фильтром HB=true
+      const [rates, tech] = await Promise.all([
+        fetchData(RATES_TABLE_ID),
+        fetchData(TECH_TABLE_ID)
+      ]);
+
+      ratesData = rates;
+      techData = tech;
+
+      console.log('Loaded ratesData:', ratesData);
+      console.log('Loaded techData:', techData);
+
+      if (!techData || techData.length === 0) {
+        console.log('No tech data loaded. Check TECH_TABLE_ID or table contents.');
+      }
+
+      // Рендерим обе вкладки
+      renderRates('rates-content', ratesData);
+      console.log('Calling renderTech with techData...');
+      await renderTech('tech-content', techData);
+
+      console.log('Finished loading data.');
+    }
+
+    // Загружаем данные при загрузке страницы
+    window.addEventListener('load', () => {
+      loadData();
+    });
+
     // Обработка отправки формы подбора PSP
     document.getElementById('feedback-form').addEventListener('submit', async (e) => {
       e.preventDefault();
 
+      const telegram = document.getElementById('feedback-telegram').value;
+      const contact = document.getElementById('feedback-contact').value;
       const message = document.getElementById('feedback-message').value;
-      const telegramUser = tg.initDataUnsafe.user;
-      const telegramUsername = telegramUser ? telegramUser.username : 'Не указан';
 
       const botToken = '7276468726:AAGoApTgpFSsNPLFpv5AB1dl69KKhRBZ66E';
       const chatId = '7846961868';
       const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
-      const text = `Новая заявка на подбор PSP:\n\nTelegram: @${telegramUsername}\nСообщение: ${message}`;
+      const text = `Новая заявка на подбор PSP:\n\nTelegram: ${telegram}\nКонтакт: ${contact}\nСообщение: ${message}`;
 
       try {
         const response = await fetch(telegramUrl, {
@@ -1130,15 +1277,15 @@
     document.getElementById('add-psp-form').addEventListener('submit', async (e) => {
       e.preventDefault();
 
+      const telegram = document.getElementById('add-psp-telegram').value;
+      const contact = document.getElementById('add-psp-contact').value;
       const message = document.getElementById('add-psp-message').value;
-      const telegramUser = tg.initDataUnsafe.user;
-      const telegramUsername = telegramUser ? telegramUser.username : 'Не указан';
 
       const botToken = '7276468726:AAGoApTgpFSsNPLFpv5AB1dl69KKhRBZ66E';
       const chatId = '7846961868';
       const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
-      const text = `Новая заявка на добавление PSP:\n\nTelegram: @${telegramUsername}\nСообщение: ${message}`;
+      const text = `Новая заявка на добавление PSP:\n\nTelegram: ${telegram}\nКонтакт: ${contact}\nСообщение: ${message}`;
 
       try {
         const response = await fetch(telegramUrl, {
@@ -1169,15 +1316,15 @@
     document.getElementById('invest-form').addEventListener('submit', async (e) => {
       e.preventDefault();
 
+      const telegram = document.getElementById('invest-telegram').value;
+      const contact = document.getElementById('invest-contact').value;
       const message = document.getElementById('invest-message').value;
-      const telegramUser = tg.initDataUnsafe.user;
-      const telegramUsername = telegramUser ? telegramUser.username : 'Не указан';
 
       const botToken = '7276468726:AAGoApTgpFSsNPLFpv5AB1dl69KKhRBZ66E';
       const chatId = '7846961868';
       const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
-      const text = `Новая заявка на инвестиции:\n\nTelegram: @${telegramUsername}\nСообщение: ${message}`;
+      const text = `Новая заявка на инвестиции:\n\nTelegram: ${telegram}\nКонтакт: ${contact}\nСообщение: ${message}`;
 
       try {
         const response = await fetch(telegramUrl, {
