@@ -75,16 +75,17 @@
     }
     .slider {
       display: flex;
-      overflow-x: auto; /* Включаем горизонтальную прокрутку */
-      gap: 15px; /* Расстояние между слайдами */
+      overflow-x: auto;
+      gap: 15px;
       padding-bottom: 10px;
-      scroll-snap-type: x mandatory; /* Плавное перелистывание с привязкой */
-      -webkit-overflow-scrolling: touch; /* Плавная прокрутка на iOS */
-      -ms-overflow-style: none; /* Скрываем скроллбар в IE/Edge */
-      scrollbar-width: none; /* Скрываем скроллбар в Firefox */
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+      padding-right: 15px; /* Добавляем отступ справа, чтобы последний слайд был виден */
     }
     .slider::-webkit-scrollbar {
-      display: none; /* Скрываем скроллбар в Chrome/Safari */
+      display: none;
     }
     .slide {
       flex: 0 0 calc(100% - 30px);
@@ -96,7 +97,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      scroll-snap-align: start; /* Привязка к началу слайда */
+      scroll-snap-align: start;
     }
     .slide .content {
       flex: 1;
@@ -1093,11 +1094,9 @@
     // Предотвращаем исчезновение блюра при фокусе на полях ввода
     document.querySelectorAll('input, textarea').forEach(input => {
       input.addEventListener('focus', () => {
-        // Убедимся, что блюр остаётся активным
         document.querySelector('.content-container').classList.add('blurred');
       });
       input.addEventListener('blur', () => {
-        // Не убираем блюр, если попап всё ещё открыт
         if (!document.querySelector('.feedback-popup.active') &&
             !document.querySelector('.add-psp-popup.active') &&
             !document.querySelector('.invest-popup.active') &&
