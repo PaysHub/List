@@ -314,7 +314,12 @@
       border-radius: 12px;
       font-size: 12px;
       color: #fff;
-      background: linear-gradient(90deg, #007bff, #00c4b4);
+      background: #333; /* Серый фон для остальных тегов */
+    }
+    .rate-card .tag.service {
+      background: linear-gradient(90deg, #007bff, #00c4b4, #007bff); /* Переливающийся градиент для первого тега */
+      background-size: 200% 100%;
+      animation: gradientShift 3s infinite linear;
     }
     /* Блок "Решения" */
     .latest-tech {
@@ -404,11 +409,19 @@
     }
     .tech-card .card-header {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
+      flex-direction: column; /* Меняем на колонку для цены на второй строке */
+      align-items: flex-start;
       font-weight: 600;
       font-size: 16px;
       padding: 10px 15px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .tech-card .card-header .price {
+      font-size: 14px;
+      color: #aaa;
+      margin-top: 4px;
     }
     .tech-card .card-tags {
       margin-top: 5px;
@@ -567,7 +580,8 @@
     /* Стили для попапов форм */
     .feedback-popup,
     .add-psp-popup,
-    .invest-popup {
+    .invest-popup,
+    .agent-popup {
       position: fixed;
       top: 50%;
       left: 50%;
@@ -586,14 +600,16 @@
     }
     .feedback-popup.active,
     .add-psp-popup.active,
-    .invest-popup.active {
+    .invest-popup.active,
+    .agent-popup.active {
       display: block;
       opacity: 1;
       transform: translate(-50%, -50%) scale(1);
     }
     .feedback-popup h4,
     .add-psp-popup h4,
-    .invest-popup h4 {
+    .invest-popup h4,
+    .agent-popup h4 {
       font-size: 16px;
       font-weight: 600;
       margin-bottom: 10px;
@@ -601,7 +617,8 @@
     }
     .feedback-instruction,
     .add-psp-instruction,
-    .invest-instruction {
+    .invest-instruction,
+    .agent-instruction {
       font-size: 13px;
       color: #ddd;
       background: #333;
@@ -612,7 +629,8 @@
     }
     .feedback-form,
     .add-psp-form,
-    .invest-form {
+    .invest-form,
+    .agent-form {
       display: flex;
       flex-direction: column;
       gap: 10px;
@@ -620,9 +638,11 @@
     .feedback-form input,
     .add-psp-form input,
     .invest-form input,
+    .agent-form input,
     .feedback-form textarea,
     .add-psp-form textarea,
-    .invest-form textarea {
+    .invest-form textarea,
+    .agent-form textarea {
       padding: 8px;
       border: 1px solid #555;
       border-radius: 8px;
@@ -634,7 +654,8 @@
     }
     .feedback-form textarea,
     .add-psp-form textarea,
-    .invest-form textarea {
+    .invest-form textarea,
+    .agent-form textarea {
       height: 100px;
     }
     .popup-actions {
@@ -707,11 +728,11 @@
       .info-section h3 { font-size: 16px; }
       .resources { flex-direction: column; }
       .resource-button { font-size: 13px; }
-      .feedback-popup, .add-psp-popup, .invest-popup { width: 90%; }
-      .feedback-form input, .add-psp-form input, .invest-form input,
-      .feedback-form textarea, .add-psp-form textarea, .invest-form textarea { font-size: 12px; }
+      .feedback-popup, .add-psp-popup, .invest-popup, .agent-popup { width: 90%; }
+      .feedback-form input, .add-psp-form input, .invest-form input, .agent-form input,
+      .feedback-form textarea, .add-psp-form textarea, .invest-form textarea, .agent-form textarea { font-size: 12px; }
       .popup-button { font-size: 12px; }
-      .feedback-instruction, .add-psp-instruction, .invest-instruction { font-size: 12px; }
+      .feedback-instruction, .add-psp-instruction, .invest-instruction, .agent-instruction { font-size: 12px; }
       .partner-block { flex: 0 0 200px; }
       .partner-block p { font-size: 13px; }
       .notification { font-size: 12px; padding: 10px; }
@@ -726,7 +747,7 @@
       <div class="stats">
         <div class="stat">
           <h3>PSP</h3>
-          <p>15+</p>
+          <p>20+</p> <!-- Изменено с 15+ на 20+ -->
         </div>
         <div class="stat">
           <h3>Решений</h3>
@@ -833,7 +854,7 @@
       <div class="description">
         Присоединяйтесь к нашей партнёрской программе и получайте доход за привлечение клиентов.
       </div>
-      <a href="#" class="agent-button">Стать агентом →</a>
+      <button class="agent-button" onclick="openAgentPopup()">Стать агентом →</button>
     </div>
 
     <div class="info-section">
@@ -856,9 +877,8 @@
       - Есть ли юрлицо (где зарегистрировано)
     </div>
     <form class="feedback-form" id="feedback-form">
-      <input type="text" id="feedback-telegram" placeholder="Ваш Telegram-ник (например, @username)" required>
-      <input type="text" id="feedback-contact" placeholder="Контакт (email/телефон)" required>
-      <textarea id="feedback-message" placeholder="Ваше сообщение" required></textarea>
+      <input type="text" id="feedback-telegram" placeholder="Ваш Telegram-ник или телефон" required>
+      <textarea id="feedback-message" placeholder="Ответы на вопросы" required></textarea>
       <div class="popup-actions">
         <button type="submit" class="popup-button submit">Отправить</button>
         <button type="button" class="popup-button cancel" onclick="closeFeedbackPopup()">Закрыть</button>
@@ -873,7 +893,7 @@
       Оставьте заявку, чтобы добавить вашу платежную систему в список. Укажите:<br>
       - Название PSP<br>
       - Сайт<br>
-      - Контакт для связи (Telegram, email)<br>
+      - Контакт для связи (Telegram)<br>
       - Тип платежей (Low-risk, High-risk, Криптовалюта, Карты и т.д.)<br>
       - Доступные страны<br>
       - Валюта расчетов<br>
@@ -881,9 +901,8 @@
       - API-документация (если есть)
     </div>
     <form class="add-psp-form" id="add-psp-form">
-      <input type="text" id="add-psp-telegram" placeholder="Ваш Telegram-ник (например, @username)" required>
-      <input type="text" id="add-psp-contact" placeholder="Контакт (email/телефон)" required>
-      <textarea id="add-psp-message" placeholder="Ваше сообщение" required></textarea>
+      <input type="text" id="add-psp-telegram" placeholder="Ваш Telegram-ник или телефон" required>
+      <textarea id="add-psp-message" placeholder="Ответы на вопросы" required></textarea>
       <div class="popup-actions">
         <button type="submit" class="popup-button submit">Отправить</button>
         <button type="button" class="popup-button cancel" onclick="closeAddPspPopup()">Закрыть</button>
@@ -907,12 +926,30 @@
       Оставьте заявку, указав информацию о вашем проекте.
     </div>
     <form class="invest-form" id="invest-form">
-      <input type="text" id="invest-telegram" placeholder="Ваш Telegram-ник (например, @username)" required>
-      <input type="text" id="invest-contact" placeholder="Контакт (email/телефон)" required>
-      <textarea id="invest-message" placeholder="Ваше сообщение" required></textarea>
+      <input type="text" id="invest-telegram" placeholder="Ваш Telegram-ник или телефон" required>
+      <textarea id="invest-message" placeholder="Ответы на вопросы" required></textarea>
       <div class="popup-actions">
         <button type="submit" class="popup-button submit">Отправить</button>
         <button type="button" class="popup-button cancel" onclick="closeInvestPopup()">Закрыть</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Попап формы для агентов -->
+  <div class="agent-popup" id="agent-popup">
+    <h4>Стать агентом</h4>
+    <div class="agent-instruction">
+      Оставьте заявку, чтобы стать агентом и зарабатывать с нами. Укажите:<br>
+      - Ваш опыт в привлечении клиентов<br>
+      - Какие проекты или компании вы представляете<br>
+      - Ожидания от сотрудничества
+    </div>
+    <form class="agent-form" id="agent-form">
+      <input type="text" id="agent-telegram" placeholder="Ваш Telegram-ник или телефон" required>
+      <textarea id="agent-message" placeholder="Ответы на вопросы" required></textarea>
+      <div class="popup-actions">
+        <button type="submit" class="popup-button submit">Отправить</button>
+        <button type="button" class="popup-button cancel" onclick="closeAgentPopup()">Закрыть</button>
       </div>
     </form>
   </div>
@@ -1058,7 +1095,37 @@
       document.querySelector('.content-container').classList.remove('blurred');
     }
 
-    // Функция для получения данных из NocoDB (без фильтра where=HB=true)
+    function openAgentPopup() {
+      const popup = document.getElementById('agent-popup');
+      const telegramField = document.getElementById('agent-telegram');
+      telegramField.value = telegramUsername ? `@${telegramUsername}` : '';
+      popup.classList.add('active');
+      document.querySelector('.content-container').classList.add('blurred');
+    }
+
+    function closeAgentPopup() {
+      const popup = document.getElementById('agent-popup');
+      popup.classList.remove('active');
+      document.querySelector('.content-container').classList.remove('blurred');
+    }
+
+    // Предотвращаем исчезновение блюра при фокусе на полях ввода
+    document.querySelectorAll('input, textarea').forEach(input => {
+      input.addEventListener('focus', () => {
+        document.querySelector('.content-container').classList.add('blurred');
+      });
+      input.addEventListener('blur', () => {
+        // Не убираем блюр, если попап всё ещё открыт
+        if (!document.querySelector('.feedback-popup.active') &&
+            !document.querySelector('.add-psp-popup.active') &&
+            !document.querySelector('.invest-popup.active') &&
+            !document.querySelector('.agent-popup.active')) {
+          document.querySelector('.content-container').classList.remove('blurred');
+        }
+      });
+    });
+
+    // Функция для получения данных из NocoDB
     async function fetchData(tableId) {
       try {
         console.log(`Fetching data for table ${tableId}...`);
@@ -1144,6 +1211,13 @@
       return text.replace(/\n/g, '<br>');
     }
 
+    // Функция для сокращения текста с добавлением троеточия
+    function truncateText(text, maxLength) {
+      if (!text) return '';
+      if (text.length <= maxLength) return text;
+      return text.substring(0, maxLength) + '...';
+    }
+
     function renderRates(containerId, rows) {
       const container = document.getElementById(containerId);
       container.innerHTML = '';
@@ -1166,7 +1240,7 @@
             <span>${row['Pay in (%)'] || ''}</span>
           </div>
           <div class="card-tags">
-            <span class="tag">${row['Service'] || 'N/A'}</span>
+            <span class="tag service">${row['Service'] || 'N/A'}</span>
             ${getTags(row, 'Industry').slice(0, 1).map(tag => `<span class="tag">${tag}</span>`).join('')}
             ${getTags(row, 'Geo').slice(0, 1).map(tag => `<span class="tag">${tag}</span>`).join('')}
             ${getTags(row, 'Risk').slice(0, 1).map(tag => `<span class="tag">${tag}</span>`).join('')}
@@ -1195,11 +1269,14 @@
         const card = document.createElement('div');
         card.className = 'tech-card';
 
+        // Сокращаем заголовок до 20 символов с троеточием
+        const truncatedName = truncateText(row['Name'] || 'Без названия', 20);
+
         card.innerHTML = `
           <img src="${imgUrl}" alt="Tech Solution" onerror="this.src='https://placehold.co/400x276'; console.log('Failed to load image: ${imgUrl}');">
           <div class="card-header">
-            <span>${row['Name'] || 'Без названия'}</span>
-            <span>${row['Price'] || ''}</span>
+            <span>${truncatedName}</span>
+            <span class="price">${row['Price'] || ''}</span>
           </div>
           <div class="card-tags">
             <span class="tag">${row['Type'] || 'White Label'}</span>
@@ -1245,14 +1322,13 @@
       e.preventDefault();
 
       const telegram = document.getElementById('feedback-telegram').value;
-      const contact = document.getElementById('feedback-contact').value;
       const message = document.getElementById('feedback-message').value;
 
       const botToken = '7276468726:AAGoApTgpFSsNPLFpv5AB1dl69KKhRBZ66E';
       const chatId = '7846961868';
       const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
-      const text = `Новая заявка на подбор PSP:\n\nTelegram: ${telegram}\nКонтакт: ${contact}\nСообщение: ${message}`;
+      const text = `Новая заявка на подбор PSP:\n\nTelegram: ${telegram}\nСообщение: ${message}`;
 
       try {
         const response = await fetch(telegramUrl, {
@@ -1284,14 +1360,13 @@
       e.preventDefault();
 
       const telegram = document.getElementById('add-psp-telegram').value;
-      const contact = document.getElementById('add-psp-contact').value;
       const message = document.getElementById('add-psp-message').value;
 
       const botToken = '7276468726:AAGoApTgpFSsNPLFpv5AB1dl69KKhRBZ66E';
       const chatId = '7846961868';
       const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
-      const text = `Новая заявка на добавление PSP:\n\nTelegram: ${telegram}\nКонтакт: ${contact}\nСообщение: ${message}`;
+      const text = `Новая заявка на добавление PSP:\n\nTelegram: ${telegram}\nСообщение: ${message}`;
 
       try {
         const response = await fetch(telegramUrl, {
@@ -1323,14 +1398,13 @@
       e.preventDefault();
 
       const telegram = document.getElementById('invest-telegram').value;
-      const contact = document.getElementById('invest-contact').value;
       const message = document.getElementById('invest-message').value;
 
       const botToken = '7276468726:AAGoApTgpFSsNPLFpv5AB1dl69KKhRBZ66E';
       const chatId = '7846961868';
       const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
-      const text = `Новая заявка на инвестиции:\n\nTelegram: ${telegram}\nКонтакт: ${contact}\nСообщение: ${message}`;
+      const text = `Новая заявка на инвестиции:\n\nTelegram: ${telegram}\nСообщение: ${message}`;
 
       try {
         const response = await fetch(telegramUrl, {
@@ -1357,16 +1431,57 @@
       }
     });
 
+    // Обработка отправки формы для агентов
+    document.getElementById('agent-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const telegram = document.getElementById('agent-telegram').value;
+      const message = document.getElementById('agent-message').value;
+
+      const botToken = '7276468726:AAGoApTgpFSsNPLFpv5AB1dl69KKhRBZ66E';
+      const chatId = '7846961868';
+      const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
+
+      const text = `Новая заявка на участие в партнёрской программе:\n\nTelegram: ${telegram}\nСообщение: ${message}`;
+
+      try {
+        const response = await fetch(telegramUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            chat_id: chatId,
+            text: text,
+          }),
+        });
+
+        if (response.ok) {
+          showNotification('Заявка успешно отправлена!');
+          closeAgentPopup();
+          document.getElementById('agent-form').reset();
+        } else {
+          showNotification('Ошибка при отправке заявки. Попробуйте снова.');
+        }
+      } catch (error) {
+        console.error('Ошибка:', error);
+        showNotification('Произошла ошибка. Проверьте консоль для деталей.');
+      }
+    });
+
     // Закрытие попапов при клике вне формы
     document.addEventListener('click', (e) => {
-      if (!e.target.closest('.apply-button') && !e.target.closest('.feedback-popup')) {
+      if (!e.target.closest('.apply-button') && !e.target.closest('.feedback-popup') && !e.target.closest('.agent-button')) {
         closeFeedbackPopup();
       }
-      if (!e.target.closest('.apply-button') && !e.target.closest('.add-psp-popup')) {
+      if (!e.target.closest('.apply-button') && !e.target.closest('.add-psp-popup') && !e.target.closest('.agent-button')) {
         closeAddPspPopup();
       }
-      if (!e.target.closest('.apply-button') && !e.target.closest('.invest-popup')) {
+      if (!e.target.closest('.apply-button') && !e.target.closest('.invest-popup') && !e.target.closest('.agent-button')) {
         closeInvestPopup();
+      }
+      if (!e.target.closest('.agent-button') && !e.target.closest('.agent-popup') && !e.target.closest('.apply-button')) {
+        closeAgentPopup();
       }
     });
   </script>
