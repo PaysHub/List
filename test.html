@@ -610,19 +610,20 @@
     }
     .resource-button:hover { transform: scale(1.02); }
     .filter-section {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      background: #1a1a1a;
-      padding: 10px 15px;
-      display: flex;
-      gap: 8px;
-      flex-wrap: nowrap;
-      align-items: center;
-      z-index: 10;
-      box-sizing: border-box;
-    }
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: #1a1a1a;
+  padding: 10px 15px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: nowrap;
+  align-items: center;
+  z-index: 10;
+  box-sizing: border-box;
+  min-height: 60px; /* Минимальная высота */
+}
     .filter-section h3 {
       font-size: 12px;
       font-weight: 500;
@@ -1557,12 +1558,12 @@
       window.open('https://t.me/p_fintech?text=I%20need%20help%20with%20the%20PaysHub%20service', '_blank');
     }
 
-    function adjustContentPadding() {
+   function adjustContentPadding() {
   const filterSection = document.querySelector('.filter-section');
   const contentContainer = document.querySelector('.content-container');
   if (filterSection && (document.getElementById('rates').classList.contains('active') || document.getElementById('tech').classList.contains('active'))) {
-    const filterHeight = filterSection.offsetHeight;
-    contentContainer.style.paddingTop = `${filterHeight + 15}px`; // Увеличиваем отступ
+    const filterHeight = filterSection.getBoundingClientRect().height || 60; // Используем getBoundingClientRect
+    contentContainer.style.paddingTop = `${filterHeight + 20}px`; // Увеличиваем отступ
   } else {
     contentContainer.style.paddingTop = '60px';
   }
