@@ -1267,7 +1267,7 @@
     }
 
     function getTags(row, field) {
-      return row[field] ? row[field].split(',').map(tag => tag.trim()) : [];
+      return row[field] ? row[field].split(',').map(tag => tag.trim().toLowerCase()) : [];
     }
 
     function isEmptyValue(value) {
@@ -1305,8 +1305,8 @@
         const tagElement = document.createElement('div');
         tagElement.className = 'filter-tag';
         tagElement.textContent = tag;
-        tagElement.dataset.value = tag;
-        if (activeFilters[filterType].has(tag)) tagElement.classList.add('selected');
+        tagElement.dataset.value = tag.toLowerCase(); // Приводим к нижнему регистру
+        if (activeFilters[filterType].has(tag.toLowerCase())) tagElement.classList.add('selected');
         tagElement.addEventListener('click', () => {
           if (tag === 'Все') {
             container.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('selected'));
@@ -1325,9 +1325,9 @@
       const button = document.getElementById(`${filterType}-button`);
       const selectedTags = popup.querySelectorAll('.filter-tag.selected');
       activeFilters[filterType].clear();
-      const selectedValues = Array.from(selectedTags).map(tag => tag.dataset.value);
+      const selectedValues = Array.from(selectedTags).map(tag => tag.dataset.value.toLowerCase()); // Приводим к нижнему регистру
 
-      if (selectedValues.length === 0 || selectedValues.includes('Все')) {
+      if (selectedValues.length === 0 || selectedValues.includes('все')) {
         activeFilters[filterType].clear();
         button.textContent = 'Все';
         button.classList.remove('active');
@@ -1524,6 +1524,9 @@
       ratesData = rates;
       techData = tech;
 
+      // Отладочный вывод для проверки значений Geo
+      console.log('Geo values in ratesData:', ratesData.map(row => row['Geo']));
+
       renderFilters('industry-options', 'industry-button', 'industry-popup', ratesData, 'Industry', 'industry');
       renderFilters('geo-options', 'geo-button', 'geo-popup', ratesData, 'Geo', 'geo');
       renderFilters('risk-options', 'risk-button', 'risk-popup', ratesData, 'Risk', 'risk');
@@ -1710,6 +1713,6 @@
       item.style.top = '-30px';
     });
   </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'92b9e2a2af0a1d6e',t:'MTc0Mzg2NTY1MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'92ba0a2aaf0a1d6e',t:'MTc0Mzg2NzM1MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
 </body>
 </html>
