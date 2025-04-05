@@ -1621,11 +1621,12 @@
   document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
   document.querySelectorAll('.tab-content').forEach(content => {
     content.classList.remove('active');
-    content.scrollTop = 0; // Сбрасываем прокрутку
+    content.scrollTop = 0;
   });
   document.querySelector(`[onclick="showTab('${tabId}')"]`).classList.add('active');
   document.getElementById(tabId).classList.add('active');
   adjustContentPadding();
+  console.log(`Switched to tab: ${tabId}`); // Для отладки
 }
 
     function openTelegram() {
