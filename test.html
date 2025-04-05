@@ -69,12 +69,6 @@
       justify-content: center;
       align-items: center;
       z-index: 100;
-      transition: opacity 0.3s ease;
-      opacity: 1;
-    }
-    .preloader.hidden {
-      opacity: 0;
-      display: none;
     }
     .wallet-container {
       position: relative;
@@ -1543,7 +1537,7 @@
           });
         }
         container.appendChild(card);
-      }
+      });
     }
 
     async function loadData() {
@@ -1611,13 +1605,14 @@
       e.preventDefault();
       const telegram = document.getElementById('add-psp-telegram').value;
       const message = document.getElementById('add-psp-message').value;
-      const serverUrl = 'https://payshub-feedback-bot.glitch.me/send-message      
-try {
+      const serverUrl = 'https://payshub-feedback-bot.glitch.me/send-message';
+      try {
         const response = await fetch(serverUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             telegram,
+            message: `Новая заявка на добавление PSP:\n\nTelegram: ${            telegram,
             message: `Новая заявка на добавление PSP:\n\nTelegram: ${telegram}\nСообщение: ${message}\n\nДанные пользователя:\nID: ${telegramId}\nИмя: ${telegramFirstName}\nФамилия: ${telegramLastName}\nUsername: @${telegramUsername || 'Не указан'}`
           })
         });
@@ -1724,10 +1719,7 @@ try {
     window.addEventListener('load', () => {
       const preloader = document.getElementById('preloader');
       setTimeout(() => {
-        preloader.style.opacity = '0';
-        setTimeout(() => {
-          preloader.style.display = 'none';
-        }, 300); // Даем время на завершение анимации opacity
+        preloader.style.display = 'none'; // Просто убираем прелоадер без анимации
         showPrivacyNotice();
         loadData();
         if (!localStorage.getItem('hasVisited')) {
