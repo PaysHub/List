@@ -16,97 +16,96 @@
       color: #ffffff;
       overflow: hidden;
     }
-    .content-container {
-      width: 100%;
-      height: calc(100vh - 50px);
-      position: relative;
-      z-index: 1;
-      padding: 0;
-      padding-bottom: 0;
-      margin: 0;
-      box-sizing: border-box;
-      -webkit-mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
-      mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
-      transition: filter 0.3s ease;
-      display: flex;
-      flex-direction: column;
-    }
-    .tab-content {
-      display: none;
-      overflow-y: auto;
-      flex: 1;
-      padding: 0;
-      margin: 0;
-      box-sizing: border-box;
-      min-height: 0;
-    }
-    .tab-content > * {
-      margin-bottom: 0;
-    }
+   .content-container {
+  width: 100%;
+  height: calc(100vh - 50px);
+  position: relative;
+  z-index: 1;
+  padding: 0;
+  padding-bottom: 0;
+  margin: 0;
+  box-sizing: border-box;
+  -webkit-mask-image: linear-gradient(to bottom, black 90%, transparent 100%); /* Затемнение сверху */
+  mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
+  transition: filter 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+.tab-content {
+  display: none;
+  overflow-y: auto;
+  flex: 1;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  min-height: 0; /* Предотвращаем переполнение */
+}
+.tab-content > * {
+  margin-bottom: 0; /* Убираем отступ снизу для всех дочерних элементов */
+}
     .content-container.blurred {
       filter: blur(5px) brightness(0.5);
     }
-    .tab-content.active {
-      display: block;
-    }
+    
+    .tab-content.active { display: block; }
     .tabs {
-      display: flex;
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      background: #212121;
-      padding: 8px 0;
-      box-sizing: border-box;
-      z-index: 10;
-      transition: filter 0.3s ease;
-      height: 56px;
-      border-top: 1px solid #333;
-    }
+  display: flex;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: #212121; /* Цвет фона как в Telegram */
+  padding: 8px 0;
+  box-sizing: border-box;
+  z-index: 10;
+  transition: filter 0.3s ease;
+  height: 56px; /* Фиксированная высота */
+  border-top: 1px solid #333; /* Граница сверху */
+}
     .tabs.blurred {
-      filter: blur(5px) brightness(0.5);
-    }
-    .tab {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 4px 0;
-      text-align: center;
-      cursor: pointer;
-      color: #999;
-      font-size: 12px;
-      position: relative;
-      transition: color 0.3s;
-    }
-    .tab.active {
-      color: #fff;
-      background: transparent;
-    }
-    .tab.active .tab-icon {
-      stroke: #fff;
-    }
-    .tab-icon {
-      width: 24px;
-      height: 24px;
-      margin-bottom: 2px;
-      stroke: currentColor;
-    }
-    .tab-badge {
-      position: absolute;
-      top: 4px;
-      right: 25%;
-      background: #ff3b30;
-      color: #fff;
-      font-size: 10px;
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      line-height: 16px;
-    }
+  filter: blur(5px) brightness(0.5);
+}
+.tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 0;
+  text-align: center;
+  cursor: pointer;
+  color: #999; /* Цвет неактивного текста */
+  font-size: 12px;
+  position: relative;
+  transition: color 0.3s;
+}
+  .tab.active {
+  color: #fff; /* Цвет текста белый */
+  background: transparent;
+}
+.tab.active .tab-icon {
+  stroke: #fff; /* Цвет иконки белый */
+}
+.tab-icon {
+  width: 24px;
+  height: 24px;
+  margin-bottom: 2px;
+  stroke: currentColor; /* Цвет иконки меняется с цветом текста */
+}
+.tab-badge {
+  position: absolute;
+  top: 4px;
+  right: 25%;
+  background: #ff3b30; /* Красный бейдж */
+  color: #fff;
+  font-size: 10px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 16px;
+}
     .preloader {
       position: fixed;
       top: 0;
@@ -659,20 +658,20 @@
     }
     .resource-button:hover { transform: scale(1.02); }
     .filter-section {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      background: #1a1a1a;
-      padding: 10px 15px;
-      display: flex;
-      gap: 8px;
-      flex-wrap: nowrap;
-      align-items: center;
-      z-index: 10;
-      box-sizing: border-box;
-      min-height: 60px;
-    }
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: #1a1a1a;
+  padding: 10px 15px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: nowrap;
+  align-items: center;
+  z-index: 10;
+  box-sizing: border-box;
+  min-height: 60px; /* Минимальная высота */
+}
     .filter-section h3 {
       font-size: 12px;
       font-weight: 500;
@@ -889,11 +888,11 @@
       z-index: 40;
       opacity: 0;
       transition: opacity 0.3s ease;
-      pointer-events: none;
+      pointer-events: none; /* Отключаем клики, когда невидимо */
     }
     .notification.active {
       opacity: 1;
-      pointer-events: auto;
+      pointer-events: auto; /* Включаем клики, когда видно */
     }
     .privacy-notice {
       position: fixed;
@@ -924,7 +923,7 @@
       100% { background-position: 200% 0%; }
     }
     @media (max-width: 600px) {
-      .content-container { height: calc(100vh - 50px); padding: 0 10px 0 10px; }
+      .content-container { height: calc(100vh - 50px); padding: 50px 10px 20px 10px; }
       .tabs { bottom: 10px; padding: 5px; }
       .tab { font-size: 12px; margin: 0 3px; }
       .header-section h1 { font-size: 24px; }
@@ -975,7 +974,6 @@
       <div class="welcome-text">Welcome to <span>PaysHub</span></div>
     </div>
   </div>
-
   <div class="content-container">
     <div id="home" class="tab-content active">
       <div class="header-section">
@@ -1077,34 +1075,34 @@
     </div>
   </div>
   <div class="tabs">
-    <div class="tab active" data-tab="home" onclick="showTab('home')">
-      <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9z"/>
-        <polyline points="9 22 9 12 15 12 15 22"/>
-      </svg>
-      <span>Главная</span>
-    </div>
-    <div class="tab" data-tab="rates" onclick="showTab('rates')">
-      <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-      </svg>
-      <span>Ставки</span>
-    </div>
-    <div class="tab" data-tab="tech" onclick="showTab('tech')">
-      <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M4 6h16M4 12h16M4 18h16"/>
-      </svg>
-      <span>Решения</span>
-    </div>
-    <div class="tab" data-tab="operator" onclick="openTelegram()">
-      <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-        <circle cx="12" cy="7" r="4"/>
-      </svg>
-      <span>Оператор</span>
-      <span class="tab-badge">1</span>
-    </div>
+  <div class="tab active" onclick="showTab('home')">
+    <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9z"/>
+      <polyline points="9 22 9 12 15 12 15 22"/>
+    </svg>
+    <span>Главная</span>
   </div>
+  <div class="tab" onclick="showTab('rates')">
+    <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+    </svg>
+    <span>Ставки</span>
+  </div>
+  <div class="tab" onclick="showTab('tech')">
+    <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M4 6h16M4 12h16M4 18h16"/>
+    </svg>
+    <span>Решения</span>
+  </div>
+  <div class="tab" onclick="openTelegram()">
+    <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+      <circle cx="12" cy="7" r="4"/>
+    </svg>
+    <span>Оператор</span>
+    <span class="tab-badge">1</span>
+  </div>
+</div>
 
   <div class="filter-popup" id="industry-popup">
     <h4>Выберите индустрии</h4>
@@ -1201,7 +1199,7 @@
     </div>
   </div>
 
-    <script>
+  <script>
     const tg = window.Telegram.WebApp;
     tg.ready();
     tg.expand();
@@ -1608,56 +1606,42 @@
       ratesData = rates;
       techData = tech;
 
-      renderFilters('industry-options', 'industry-button', 'industry-popup', ratesData, 'Industry', 'industry');
+           renderFilters('industry-options', 'industry-button', 'industry-popup', ratesData, 'Industry', 'industry');
       renderFilters('geo-options', 'geo-button', 'geo-popup', ratesData, 'Geo', 'geo');
       renderFilters('risk-options', 'risk-button', 'risk-popup', ratesData, 'Risk', 'risk');
       renderFilters('type-options', 'type-button', 'type-popup', techData, 'Type', 'type');
 
       renderRates('home-rates-content', ratesData);
       renderRates('rates-content', ratesData);
-      await renderTech('home-tech-content      , techData);
+      await renderTech('home-tech-content', techData);
       await renderTech('tech-content', techData);
     }
 
     function showTab(tabId) {
-      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(content => {
-        content.classList.remove('active');
-        content.scrollTop = 0;
-      });
-      const tabElement = document.querySelector(`.tab[data-tab="${tabId}"]`);
-      if (tabElement) {
-        tabElement.classList.add('active');
-      } else {
-        console.error(`Tab with data-tab="${tabId}" not found`);
-      }
-      const contentElement = document.getElementById(tabId);
-      if (contentElement) {
-        contentElement.classList.add('active');
-      } else {
-        console.error(`Content with id="${tabId}" not found`);
-      }
-      adjustContentPadding();
-      console.log(`Switched to tab: ${tabId}`);
-    }
+  document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(content => {
+    content.classList.remove('active');
+    content.scrollTop = 0; // Сбрасываем прокрутку
+  });
+  document.querySelector(`[onclick="showTab('${tabId}')"]`).classList.add('active');
+  document.getElementById(tabId).classList.add('active');
+  adjustContentPadding();
+}
 
     function openTelegram() {
-      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-      document.querySelector('.tab[data-tab="operator"]').classList.add('active');
       window.open('https://t.me/p_fintech?text=I%20need%20help%20with%20the%20PaysHub%20service', '_blank');
-      console.log('Opened Telegram link');
     }
 
-    function adjustContentPadding() {
-      const filterSection = document.querySelector('.filter-section');
-      const contentContainer = document.querySelector('.content-container');
-      if (filterSection && (document.getElementById('rates').classList.contains('active') || document.getElementById('tech').classList.contains('active'))) {
-        const filterHeight = filterSection.getBoundingClientRect().height || 60;
-        contentContainer.style.paddingTop = `${filterHeight}px`;
-      } else {
-        contentContainer.style.paddingTop = '0';
-      }
-    }
+  function adjustContentPadding() {
+  const filterSection = document.querySelector('.filter-section');
+  const contentContainer = document.querySelector('.content-container');
+  if (filterSection && (document.getElementById('rates').classList.contains('active') || document.getElementById('tech').classList.contains('active'))) {
+    const filterHeight = filterSection.getBoundingClientRect().height || 60;
+    contentContainer.style.paddingTop = `${filterHeight}px`;
+  } else {
+    contentContainer.style.paddingTop = '0';
+  }
+}
 
     document.getElementById('feedback-form').addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -1811,5 +1795,6 @@
       item.style.top = '-30px';
     });
   </script>
+  <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'92ba42407c4cbfff',t:'MTc0Mzg2ODgzMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
 </body>
 </html>
