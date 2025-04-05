@@ -614,6 +614,10 @@
       transition: transform 0.3s ease;
       position: relative;
       border: 3px solid transparent;
+      background: linear-gradient(#2a2a2a, #2a2a2a) padding-box,
+                  linear-gradient(90deg, #007bff, #00c4b4, #007bff) border-box;
+      background-size: 200% 100%;
+      animation: gradientShift 3s infinite linear;
       width: 100%;
       max-width: 400px;
       box-sizing: border-box;
@@ -706,7 +710,7 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .feedback-popup, .add-psp-popup, .invest-popup, .agent-popup {
+    .feedback-popup, .add-psp-popup, .invest-popup, .agent-popup, .apply-form-popup {
       position: fixed;
       top: 50%;
       left: 50%;
@@ -723,12 +727,12 @@
       opacity: 0;
       transition: opacity 0.3s ease, transform 0.3s ease;
     }
-    .feedback-popup.active, .add-psp-popup.active, .invest-popup.active, .agent-popup.active {
+    .feedback-popup.active, .add-psp-popup.active, .invest-popup.active, .agent-popup.active, .apply-form-popup.active {
       display: block;
       opacity: 1;
       transform: translate(-50%, -50%) scale(1);
     }
-    .feedback-instruction, .add-psp-instruction, .invest-instruction, .agent-instruction {
+    .feedback-instruction, .add-psp-instruction, .invest-instruction, .agent-instruction, .apply-form-instruction {
       font-size: 13px;
       color: #ddd;
       background: #333;
@@ -737,13 +741,13 @@
       margin-bottom: 15px;
       line-height: 1.5;
     }
-    .feedback-form, .add-psp-form, .invest-form, .agent-form {
+    .feedback-form, .add-psp-form, .invest-form, .agent-form, .apply-form {
       display: flex;
       flex-direction: column;
       gap: 10px;
     }
-    .feedback-form input, .add-psp-form input, .invest-form input, .agent-form input,
-    .feedback-form textarea, .add-psp-form textarea, .invest-form textarea, .agent-form textarea {
+    .feedback-form input, .add-psp-form input, .invest-form input, .agent-form input, .apply-form input,
+    .feedback-form textarea, .add-psp-form textarea, .invest-form textarea, .agent-form textarea, .apply-form textarea {
       padding: 8px;
       border: 1px solid #555;
       border-radius: 8px;
@@ -753,7 +757,7 @@
       outline: none;
       resize: none;
     }
-    .feedback-form textarea, .add-psp-form textarea, .invest-form textarea, .agent-form textarea { height: 100px; }
+    .feedback-form textarea, .add-psp-form textarea, .invest-form textarea, .agent-form textarea, .apply-form textarea { height: 100px; }
     .notification {
       position: fixed;
       top: 20px;
@@ -790,6 +794,20 @@
     .privacy-notice.active { opacity: 1; }
     .privacy-content p { margin: 0; }
     .privacy-content a { color: #007bff; text-decoration: underline; }
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(5px);
+      z-index: 29;
+      display: none;
+    }
+    .overlay.active {
+      display: block;
+    }
     @keyframes gradientShift {
       0% { background-position: 0% 0%; }
       100% { background-position: 200% 0%; }
@@ -821,7 +839,7 @@
       .filter-dropdown { min-width: 80px; }
       .filter-button { padding: 3px 8px; font-size: 11px; }
       .filter-section h3 { font-size: 11px; margin-bottom: 4px; }
-      .filter-popup, .feedback-popup, .add-psp-popup, .invest-popup, .agent-popup { width: 90%; }
+      .filter-popup, .feedback-popup, .add-psp-popup, .invest-popup, .agent-popup, .apply-form-popup { width: 90%; }
       .card, .tech-card { width: 100%; max-width: 100%; }
       .card-header { font-size: 14px; padding: 10px; }
       .card-details { font-size: 12px; }
@@ -950,8 +968,9 @@
     <div class="tab active" onclick="showTab('home')">Главная</div>
     <div class="tab" onclick="showTab('rates')">Ставки</div>
     <div class="tab" onclick="showTab('tech')">Решения</div>
-    <div class="tab" onclick="openTelegram()">Оператор</div>
   </div>
+
+  <div class="overlay" id="overlay"></div>
 
   <div class="filter-popup" id="industry-popup">
     <h4>Выберите индустрии</h4>
@@ -1041,6 +1060,21 @@
       </div>
     </form>
   </div>
+  <div class="apply-form-popup" id="apply-form-popup">
+    <h4>Подать заявку</h4>
+    <div class="apply-form-instruction">
+      Оставьте заявку на подключение. Укажите:<br>- Объем платежей в месяц<br>- Адрес сайта<br>- Методы платежей (карты, P2P, крипта и т.д.)<br>- Есть ли юрлицо (где зарегистрировано)
+    </div>
+    <form class="apply-form" id="apply-form">
+      <input type="text" id="apply-telegram" placeholder="Ваш Telegram-ник или телефон" required>
+      <input type="text" id="apply-service" placeholder="Название сервиса" readonly style="display: none;">
+      <textarea id="apply-message" placeholder="Ответы на вопросы" required></textarea>
+      <div class="popup-actions">
+        <button type="submit" class="popup-button submit">Отправить</button>
+        <button type="button" class="popup-button cancel" onclick="closeApplyFormPopup()">Закрыть</button>
+      </div>
+    </form>
+  </div>
   <div class="notification" id="notification">Сообщение успешно отправлено!</div>
   <div class="privacy-notice" id="privacy-notice">
     <div class="privacy-content">
@@ -1070,6 +1104,7 @@
     const telegramId = telegramUser ? telegramUser.id : 'Неизвестно';
     const telegramFirstName = telegramUser ? telegramUser.first_name : 'Неизвестно';
     const telegramLastName = telegramUser ? telegramUser.last_name : 'Неизвестно';
+    let currentService = '';
 
     slides.forEach((_, index) => {
       const dot = document.createElement('div');
@@ -1107,60 +1142,82 @@
       }
     }
 
+    function toggleOverlay(show) {
+      const overlay = document.getElementById('overlay');
+      overlay.classList.toggle('active', enable);
+      if (enable) {
+        document.body.style.overflow = 'hidden';
+      } else {
+        document.body.style.overflow = 'auto';
+      }
+    }
+
     function openFeedbackPopup() {
       const popup = document.getElementById('feedback-popup');
       document.getElementById('feedback-telegram').value = telegramUsername ? `@${telegramUsername}` : '';
       popup.classList.add('active');
-      document.querySelector('.content-container').classList.add('blurred');
-      document.querySelector('.tabs').classList.add('blurred');
+      toggleOverlay(true);
     }
     function closeFeedbackPopup() {
       document.getElementById('feedback-popup').classList.remove('active');
-      document.querySelector('.content-container').classList.remove('blurred');
-      document.querySelector('.tabs').classList.remove('blurred');
+      toggleOverlay(false);
     }
     function openAddPspPopup() {
       const popup = document.getElementById('add-psp-popup');
       document.getElementById('add-psp-telegram').value = telegramUsername ? `@${telegramUsername}` : '';
       popup.classList.add('active');
-      document.querySelector('.content-container').classList.add('blurred');
-      document.querySelector('.tabs').classList.add('blurred');
+      toggleOverlay(true);
     }
     function closeAddPspPopup() {
       document.getElementById('add-psp-popup').classList.remove('active');
-      document.querySelector('.content-container').classList.remove('blurred');
-      document.querySelector('.tabs').classList.remove('blurred');
+      toggleOverlay(false);
     }
     function openInvestPopup() {
       const popup = document.getElementById('invest-popup');
       document.getElementById('invest-telegram').value = telegramUsername ? `@${telegramUsername}` : '';
       popup.classList.add('active');
-      document.querySelector('.content-container').classList.add('blurred');
-      document.querySelector('.tabs').classList.add('blurred');
+      toggleOverlay(true);
     }
     function closeInvestPopup() {
       document.getElementById('invest-popup').classList.remove('active');
-      document.querySelector('.content-container').classList.remove('blurred');
-      document.querySelector('.tabs').classList.remove('blurred');
+      toggleOverlay(false);
     }
     function openAgentPopup() {
       const popup = document.getElementById('agent-popup');
       document.getElementById('agent-telegram').value = telegramUsername ? `@${telegramUsername}` : '';
       popup.classList.add('active');
-      document.querySelector('.content-container').classList.add('blurred');
-      document.querySelector('.tabs').classList.add('blurred');
+      toggleOverlay(true);
     }
     function closeAgentPopup() {
       document.getElementById('agent-popup').classList.remove('active');
-      document.querySelector('.content-container').classList.remove('blurred');
-      document.querySelector('.tabs').classList.remove('blurred');
+      toggleOverlay(false);
+    }
+    function openApplyFormPopup(serviceName) {
+      const popup = document.getElementById('apply-form-popup');
+      document.getElementById('apply-telegram').value = telegramUsername ? `@${telegramUsername}` : '';
+      document.getElementById('apply-service').value = serviceName;
+      currentService = serviceName;
+      popup.classList.add('active');
+      toggleOverlay(true);
+    }
+    function closeApplyFormPopup() {
+      document.getElementById('apply-form-popup').classList.remove('active');
+      toggleOverlay(false);
     }
 
     document.querySelectorAll('input, textarea').forEach(input => {
-      input.addEventListener('focus', () => document.querySelector('.content-container').classList.add('blurred'));
+      input.addEventListener('focus', () => {
+        if (document.querySelector('.feedback-popup.active') || document.querySelector('.add-psp-popup.active') ||
+            document.querySelector('.invest-popup.active') || document.querySelector('.agent-popup.active') ||
+            document.querySelector('.apply-form-popup.active')) {
+          document.querySelector('.content-container').classList.add('blurred');
+          document.querySelector('.tabs').classList.add('blurred');
+        }
+      });
       input.addEventListener('blur', () => {
         if (!document.querySelector('.feedback-popup.active') && !document.querySelector('.add-psp-popup.active') &&
-            !document.querySelector('.invest-popup.active') && !document.querySelector('.agent-popup.active')) {
+            !document.querySelector('.invest-popup.active') && !document.querySelector('.agent-popup.active') &&
+            !document.querySelector('.apply-form-popup.active')) {
           document.querySelector('.content-container').classList.remove('blurred');
           document.querySelector('.tabs').classList.remove('blurred');
         }
@@ -1226,8 +1283,7 @@
         e.stopPropagation();
         document.querySelectorAll('.filter-popup').forEach(p => { if (p !== popup) p.classList.remove('active'); });
         popup.classList.toggle('active');
-        document.querySelector('.content-container').classList.toggle('blurred');
-        document.querySelector('.tabs').classList.toggle('blurred');
+        toggleOverlay(true);
       });
 
       Array.from(tags).sort().forEach(tag => {
@@ -1273,8 +1329,7 @@
 
     function closePopup(popupId) {
       document.getElementById(popupId).classList.remove('active');
-      document.querySelector('.content-container').classList.remove('blurred');
-      document.querySelector('.tabs').classList.remove('blurred');
+      toggleOverlay(false);
     }
 
     function renderRates(containerId, rows) {
@@ -1363,7 +1418,7 @@
             ${additionalBlock ? `<div class="details-block"><h4>Дополнительно</h4>${additionalBlock}</div>` : ''}
             ${commentsBlock ? `<div class="details-block"><h4>Комментарии</h4>${commentsBlock}</div>` : ''}
             <div class="apply-button-container">
-              <button class="apply-button" onclick="window.open('https://t.me/p_fintech?text=Im interested in ${row['ID Name']}', '_blank')">Подать заявку</button>
+              <button class="apply-button" onclick="openApplyFormPopup('${row['ID Name'] || 'Без названия'}')">Подать заявку</button>
             </div>
           </div>
           ` : ''}
@@ -1426,7 +1481,7 @@
             ${mainInfoBlock ? `<div class="details-block"><h4>Основная информация</h4>${mainInfoBlock}</div>` : ''}
             ${descriptionBlock ? `<div class="details-block"><h4>Описание</h4>${descriptionBlock}</div>` : ''}
             <div class="apply-button-container">
-              <button class="apply-button" onclick="window.open('https://t.me/p_fintech?text=Im interested in ${row['ID name']}', '_blank')">Подать заявку</button>
+              <button class="apply-button" onclick="openApplyFormPopup('${row['ID name'] || 'Без названия'}')">Подать заявку</button>
             </div>
           </div>
           ` : ''}
@@ -1465,10 +1520,6 @@
       document.querySelector(`[onclick="showTab('${tabId}')"]`).classList.add('active');
       document.getElementById(tabId).classList.add('active');
       adjustContentPadding();
-    }
-
-    function openTelegram() {
-      window.open('https://t.me/p_fintech?text=I%20need%20help%20with%20the%20PaysHub%20service', '_blank');
     }
 
     function adjustContentPadding() {
@@ -1586,16 +1637,38 @@
       }
     });
 
+    document.getElementById('apply-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const telegram = document.getElementById('apply-telegram').value;
+      const message = document.getElementById('apply-message').value;
+      const service = document.getElementById('apply-service').value;
+      const serverUrl = 'https://payshub-feedback-bot.glitch.me/send-message';
+      try {
+        const response = await fetch(serverUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            telegram,
+            message: `Новая заявка на подключение:\n\nСервис: ${service}\nTelegram: ${telegram}\nСообщение: ${message}\n\nДанные пользователя:\nID: ${telegramId}\nИмя: ${telegramFirstName}\nФамилия: ${telegramLastName}\nUsername: @${telegramUsername || 'Не указан'}`
+          })
+        });
+        const result = await response.json();
+        if (response.ok) {
+          showNotification('Заявка успешно отправлена!');
+          closeApplyFormPopup();
+          document.getElementById('apply-form').reset();
+        } else showNotification(result.error || 'Ошибка при отправке заявки.');
+      } catch (error) {
+        console.error('Ошибка:', error);
+        showNotification('Произошла ошибка.');
+      }
+    });
+
     document.addEventListener('click', (e) => {
-      if (!e.target.closest('.apply-button') && !e.target.closest('.feedback-popup') && !e.target.closest('.agent-button')) closeFeedbackPopup();
-      if (!e.target.closest('.apply-button') && !e.target.closest('.add-psp-popup') && !e.target.closest('.agent-button')) closeAddPspPopup();
-      if (!e.target.closest('.apply-button') && !e.target.closest('.invest-popup') && !e.target.closest('.agent-button')) closeInvestPopup();
-      if (!e.target.closest('.agent-button') && !e.target.closest('.agent-popup') && !e.target.closest('.apply-button')) closeAgentPopup();
       if (!e.target.closest('.filter-dropdown') && !e.target.closest('.filter-popup')) {
         document.querySelectorAll('.filter-popup').forEach(popup => {
           popup.classList.remove('active');
-          document.querySelector('.content-container').classList.remove('blurred');
-          document.querySelector('.tabs').classList.remove('blurred');
+          toggleOverlay(false);
         });
       }
     });
