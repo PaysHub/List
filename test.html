@@ -709,6 +709,47 @@
     .notification.active {
       opacity: 1;
     }
+    /* Стили для уведомления о сборе данных */
+    .privacy-notice {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 50;
+    }
+    .privacy-notice.active {
+      display: flex;
+    }
+    .privacy-content {
+      background: #2a2a2a;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      max-width: 90%;
+    }
+    .privacy-content p {
+      font-size: 14px;
+      color: #ddd;
+      margin-bottom: 15px;
+    }
+    .privacy-content a {
+      color: #007bff;
+      text-decoration: underline;
+    }
+    .privacy-content button {
+      padding: 8px 15px;
+      background: #007bff;
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 14px;
+      cursor: pointer;
+    }
     @keyframes gradientShift {
       0% { background-position: 0% 0%; }
       100% { background-position: 200% 0%; }
@@ -969,6 +1010,14 @@
   <!-- Уведомление об отправке -->
   <div class="notification" id="notification">Сообщение успешно отправлено!</div>
 
+  <!-- Уведомление о сборе данных -->
+  <div class="privacy-notice" id="privacy-notice">
+    <div class="privacy-content">
+      <p>Продолжая использовать приложение, вы соглашаетесь с нашей <a href="https://example.com/privacy-policy" target="_blank">политикой конфиденциальности</a> и сбором данных (ID, имя, username).</p>
+      <button onclick="closePrivacyNotice()">Понятно</button>
+    </div>
+  </div>
+
   <script>
     const tg = window.Telegram.WebApp;
     tg.ready();
@@ -1033,6 +1082,18 @@
       }, 3000);
     }
 
+    // Функции для управления уведомлением о сборе данных
+    function showPrivacyNotice() {
+      if (!localStorage.getItem('privacyNoticeShown')) {
+        document.getElementById('privacy-notice').classList.add('active');
+      }
+    }
+
+    function closePrivacyNotice() {
+      document.getElementById('privacy-notice').classList.remove('active');
+      localStorage.setItem('privacyNoticeShown', 'true');
+    }
+
     // Функции для попапов форм
     function openFeedbackPopup() {
       const popup = document.getElementById('feedback-popup');
@@ -1052,9 +1113,7 @@
       const popup = document.getElementById('add-psp-popup');
       const telegramField = document.getElementById('add-psp-telegram');
       telegramField.value = telegramUsername ? `@${telegramUsername}` : '';
-      popup
-
-.classList.add('active');
+      popup.classList.add('active');
       document.querySelector('.content-container').classList.add('blurred');
     }
 
@@ -1456,17 +1515,24 @@
 
     // Автоматическая отправка данных пользователя при входе в приложение
     window.addEventListener('load', async () => {
-      // Загружаем данные из NocoDB (оставляем как есть)
+      // Показываем уведомление о сборе данных
+      showPrivacyNotice();
+
+      // Загружаем данные из NocoDB
       loadData();
 
-      // Собираем данные пользователя
+      // Проверяем, был ли пользователь уже зафиксирован
+      if (localStorage.getItem('hasVisited')) {
+        return; // Если уже заходил, не отправляем данные
+      }
+
       const telegramUser = tg.initDataUnsafe.user;
       const telegramId = telegramUser ? telegramUser.id : 'Неизвестно';
       const telegramFirstName = telegramUser ? telegramUser.first_name : 'Неизвестно';
       const telegramLastName = telegramUser ? telegramUser.last_name : 'Неизвестно';
       const telegramUsername = telegramUser ? telegramUser.username : 'Не указан';
 
-      const serverUrl = 'https://payshub-feedback-bot.glitch.me/send-message';
+      const serverUrl = 'https://payshub-visits-bot-new.glitch.me/send-visit';
 
       try {
         const response = await fetch(serverUrl, {
@@ -1483,6 +1549,7 @@
         const result = await response.json();
 
         if (response.ok) {
+          localStorage.setItem('hasVisited', 'true'); // Сохраняем флаг
           console.log('Данные пользователя отправлены:', result);
         } else {
           console.error('Ошибка при отправке данных пользователя:', result.error);
