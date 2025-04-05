@@ -1524,24 +1524,24 @@
           });
         }
         container.appendChild(card);
-      });
+      }
     }
 
     async function loadData() {
-      const [rates, tech] = await Promise.all([fetchData(RATES_TABLE_ID), fetchData(TECH_TABLE_ID)]);
-      ratesData = rates;
-      techData = tech;
+  const [rates, tech] = await Promise.all([fetchData(RATES_TABLE_ID), fetchData(TECH_TABLE_ID)]);
+  ratesData = rates;
+  techData = tech;
 
-      renderFilters('industry-options', 'industry-button', 'industry-popup', ratesData, 'Industry', 'industry');
-      renderFilters('geo-options', 'geo-button', 'geo-popup', ratesData, 'Geo', 'geo');
-      renderFilters('risk-options', 'risk-button', 'risk-popup', ratesData, 'Risk', 'risk');
-      renderFilters('type-options', 'type-button', 'type-popup', techData, 'Type', 'type');
+  renderFilters('industry-options', 'industry-button', 'industry-popup', ratesData, 'Industry', 'industry');
+  renderFilters('geo-options', 'geo-button', 'geo-popup', ratesData, 'Geo', 'geo');
+  renderFilters('risk-options', 'risk-button', 'risk-popup', ratesData, 'Risk', 'risk');
+  renderFilters('type-options', 'type-button', 'type-popup', techData, 'Type', 'type');
 
-      renderRates('home-rates-content', ratesData);
-      renderRates('rates-content', ratesData);
-      await renderTech('home-tech-content', techData);
-      await renderTech('tech-content', techData);
-    }
+  renderRates('home-rates-content', ratesData);
+  renderRates('rates-content', ratesData);
+  await renderTech('home-tech-content', techData);
+  await renderTech('tech-content', techData);
+}
 
     function showTab(tabId) {
       document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
@@ -1576,7 +1576,7 @@
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-                        telegram,
+            telegram,
             message: `Новая заявка на подбор PSP:\n\nTelegram: ${telegram}\nСообщение: ${message}\n\nДанные пользователя:\nID: ${telegramId}\nИмя: ${telegramFirstName}\nФамилия: ${telegramLastName}\nUsername: @${telegramUsername || 'Не указан'}`
           })
         });
@@ -1718,5 +1718,6 @@
       item.style.top = '-30px';
     });
   </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'92b97fbe6f19b0a0',t:'MTc0Mzg2MDg2My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'92b994dd3aaa1d6e',t:'MTc0Mzg2MTcyOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+</body>
 </html>
