@@ -475,9 +475,7 @@
       max-width: 400px;
       box-sizing: border-box;
     }
-    .tech
-
--card:hover { transform: translateY(-3px); }
+    .tech-card:hover { transform: translateY(-3px); }
     .tech-card.active {
       border: 3px solid transparent;
       background: linear-gradient(#2a2a2a, #2a2a2a) padding-box,
@@ -859,8 +857,12 @@
       transition: opacity 0.3s ease;
       max-width: 90%;
       text-align: center;
+      pointer-events: none; /* Отключаем клики, когда невидимо */
     }
-    .privacy-notice.active { opacity: 1; }
+    .privacy-notice.active {
+      opacity: 1;
+      pointer-events: auto; /* Включаем клики, когда видно */
+    }
     .privacy-content p { margin: 0; }
     .privacy-content a { color: #007bff; text-decoration: underline; }
     @keyframes gradientShift {
@@ -1355,18 +1357,18 @@
       container.innerHTML = '';
       let filteredRows = rows.filter(row => row['On'] === true);
 
-      // Применяем фильтр для главной страницы, если это home-rates-content
-      if (containerId === 'home-rates-content') filteredRows = filteredRows.filter(row => row['HB'] === true);
-
-      // Фильтрация по всем активным фильтрам
-      if (activeFilters.industry.size > 0) {
-        filteredRows = filteredRows.filter(row => getTags(row, 'Industry').some(tag => activeFilters.industry.has(tag)));
-      }
-      if (activeFilters.geo.size > 0) {
-        filteredRows = filteredRows.filter(row => getTags(row, 'Geo').some(tag => activeFilters.geo.has(tag)));
-      }
-      if (activeFilters.risk.size > 0) {
-        filteredRows = filteredRows.filter(row => getTags(row, 'Risk').some(tag => activeFilters.risk.has(tag)));
+      if (containerId === 'rates-content') {
+        if (activeFilters.industry.size > 0) {
+          filteredRows = filteredRows.filter(row => getTags(row, 'Industry').some(tag => activeFilters.industry.has(tag)));
+        }
+        if (activeFilters.geo.size > 0) {
+          filteredRows = filteredRows.filter(row => getTags(row, 'Geo').some(tag => activeFilters.geo.has(tag)));
+        }
+        if (activeFilters.risk.size > 0) {
+          filteredRows = filteredRows.filter(row => getTags(row, 'Risk').some(tag => activeFilters.risk.has(tag)));
+        }
+      } else if (containerId === 'home-rates-content') {
+        filteredRows = filteredRows.filter(row => row['HB'] === true);
       }
 
       if (filteredRows.length === 0) {
@@ -1599,7 +1601,7 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             telegram,
-            message: `Новая заявка на добавление PSP:\n\nTelegram: ${telegram}\nСообщение: ${message}\n\nДанные пользователя:\nID: ${telegramId}\nИмя: ${telegramFirstName}\nФамилия: ${telegramLastName}\nUsername: @${telegramUsername || 'Не указан'}`
+                        message: `Новая заявка на добавление PSP:\n\nTelegram: ${telegram}\nСообщение: ${message}\n\nДанные пользователя:\nID: ${telegramId}\nИмя: ${telegramFirstName}\nФамилия: ${telegramLastName}\nUsername: @${telegramUsername || 'Не указан'}`
           })
         });
         const result = await response.json();
@@ -1714,6 +1716,6 @@
       item.style.top = '-30px';
     });
   </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'92b9e2a2af0a1d6e',t:'MTc0Mzg2NTY1MC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+  <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'92ba42407c4cbfff',t:'MTc0Mzg2ODgzMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
 </body>
 </html>
