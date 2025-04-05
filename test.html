@@ -378,15 +378,15 @@
       scrollbar-width: none;
     }
     .rates-cards-container::-webkit-scrollbar, .tech-cards-container::-webkit-scrollbar { display: none; }
-    .rate-card, .tech-card {
+    .rate-card {
       flex: 0 0 250px;
       background: #2a2a2a;
       border-radius: 12px;
       scroll-snap-align: start;
       transition: transform 0.3s ease;
     }
-    .rate-card:hover, .tech-card:hover { transform: scale(1.02); }
-    .rate-card .card-header, .tech-card .card-header {
+    .rate-card:hover { transform: scale(1.02); }
+    .rate-card .card-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -394,7 +394,7 @@
       font-size: 16px;
       padding: 10px 15px;
     }
-    .rate-card .card-tags, .tech-card .card-tags {
+    .rate-card .card-tags {
       margin-top: 5px;
       display: flex;
       gap: 6px;
@@ -402,23 +402,122 @@
       padding: 0 15px;
       margin-bottom: 10px;
     }
-    .rate-card .tag, .tech-card .tag {
+    .rate-card .tag {
       padding: 4px 8px;
       border-radius: 12px;
       font-size: 12px;
       color: #fff;
       background: #333;
     }
-    .rate-card .tag.service, .tech-card .tag.tech-type {
+    .rate-card .tag.service {
+      background: linear-gradient(90deg, #007bff, #00c4b4);
+    }
+    .card {
+      background: #2a2a2a;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      position: relative;
+      width: 100%;
+      max-width: 400px;
+      box-sizing: border-box;
+    }
+    .card:hover { transform: translateY(-3px); }
+    .card.active { background: #2a2a2a; }
+    .card .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+      font-size: 16px;
+      padding: 10px 15px;
+    }
+    .card .card-tags {
+      margin-top: 5px;
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      padding: 0 15px;
+      margin-bottom: 10px;
+    }
+    .card .tag {
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      color: #fff;
+      background: #333;
+    }
+    .card .tag.service {
+      background: linear-gradient(90deg, #007bff, #00c4b4);
+    }
+    .tech-card {
+      background: #2a2a2a;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      position: relative;
+      border: 3px solid transparent;
+      background: linear-gradient(#2a2a2a, #2a2a2a) padding-box,
+                  linear-gradient(90deg, #007bff, #00c4b4, #007bff) border-box;
+      background-size: 200% 100%;
+      animation: gradientShift 3s infinite linear;
+      width: 100%;
+      max-width: 400px;
+      box-sizing: border-box;
+    }
+    .tech-card:hover { transform: translateY(-3px); }
+    .tech-card.active {
+      border: 3px solid transparent;
+      background: linear-gradient(#2a2a2a, #2a2a2a) padding-box,
+                  linear-gradient(90deg, #007bff, #00c4b4, #007bff) border-box;
+      background-size: 200% 100%;
+      animation: gradientShift 3s infinite linear;
+    }
+    .tech-card .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+      font-size: 16px;
+      padding: 10px 15px;
+    }
+    .tech-card .card-tags {
+      margin-top: 5px;
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      padding: 0 15px;
+      margin-bottom: 10px;
+    }
+    .tech-card .tag {
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      color: #fff;
+      background: #333;
+    }
+    .tech-card .tag.tech-type {
       background: linear-gradient(90deg, #007bff, #00c4b4, #007bff);
       background-size: 200% 100%;
       animation: gradientShift 3s infinite linear;
     }
     .tech-card img {
       width: 100%;
-      height: 150px;
-      object-fit: cover;
+      height: 276px;
       border-radius: 12px 12px 0 0;
+      display: block;
+    }
+    .tech-card .short-description {
+      padding: 0 15px 15px 15px;
+      font-size: 14px;
+      color: #ccc;
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .ai-assistant, .for-agents {
       background: #2a2a2a;
@@ -606,30 +705,6 @@
     .popup-button.apply { background: #007bff; }
     .popup-button.cancel { background: #555; }
     .popup-button.submit { background: #007bff; }
-    .card, .tech-card {
-      background: #2a2a2a;
-      border-radius: 12px;
-      margin-bottom: 15px;
-      cursor: pointer;
-      transition: transform 0.3s ease;
-      position: relative;
-      border: 3px solid transparent;
-      background: linear-gradient(#2a2a2a, #2a2a2a) padding-box,
-                  linear-gradient(90deg, #007bff, #00c4b4, #007bff) border-box;
-      background-size: 200% 100%;
-      animation: gradientShift 3s infinite linear;
-      width: 100%;
-      max-width: 400px;
-      box-sizing: border-box;
-    }
-    .card:hover, .tech-card:hover { transform: translateY(-3px); }
-    .card.active, .tech-card.active {
-      border: 3px solid transparent;
-      background: linear-gradient(#2a2a2a, #2a2a2a) padding-box,
-                  linear-gradient(90deg, #007bff, #00c4b4, #007bff) border-box;
-      background-size: 200% 100%;
-      animation: gradientShift 3s infinite linear;
-    }
     .card-details {
       max-height: 0;
       overflow: hidden;
@@ -693,22 +768,6 @@
     .apply-button-container {
       padding: 10px 0;
       border-top: 1px solid #333;
-    }
-    .tech-card img {
-      width: 100%;
-      height: 276px;
-      border-radius: 12px 12px 0 0;
-      display: block;
-    }
-    .tech-card .short-description {
-      padding: 0 15px 15px 15px;
-      font-size: 14px;
-      color: #ccc;
-      display: -webkit-box;
-      -webkit-line-clamp: 4;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
     .feedback-popup, .add-psp-popup, .invest-popup, .agent-popup, .apply-form-popup {
       position: fixed;
@@ -1142,7 +1201,7 @@
       }
     }
 
-    function toggleOverlay(show) {
+    function toggleOverlay(enable) {
       const overlay = document.getElementById('overlay');
       overlay.classList.toggle('active', enable);
       if (enable) {
@@ -1544,7 +1603,8 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             telegram,
-            message: `Новая заявка на подбор PSP:\n\nTelegram: ${telegram}\nСообщение: ${message}\n\nДанные пользователя:\nID: ${telegramId}\nИмя: ${telegramFirstName}\nФамилия: ${telegramLastName}\nUsername: @${telegramUsername || 'Не указан'}`
+            message: `Новая заявка на подбор PSP:\n\nTelegram: ${telegram}\nСообщение: ${message}\n\nДанные пользователя:\nID: ${telegramId}\nИмя: ${telegramFirstName}\nФамилия: ${telegramLastName}\nUsername: @${telegramUsername || 'Не указан
+                                                                                                                                                                                                                                \nUsername: @${telegramUsername || 'Не указан'}`
           })
         });
         const result = await response.json();
