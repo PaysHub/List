@@ -20,7 +20,6 @@
       width: 100%;
       height: calc(100% - 50px);
       position: relative;
-      overflow-y: auto;
       z-index: 1;
       padding: 60px 15px 70px 15px;
       box-sizing: border-box;
@@ -31,7 +30,7 @@
     .content-container.blurred {
       filter: blur(5px) brightness(0.5);
     }
-    .tab-content { display: none; }
+    .tab-content { display: none; overflow-y: auto; height: 100%;}
     .tab-content.active { display: block; }
     .tabs {
       display: flex;
@@ -1547,12 +1546,15 @@
     }
 
     function showTab(tabId) {
-      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-      document.querySelector(`[onclick="showTab('${tabId}')"]`).classList.add('active');
-      document.getElementById(tabId).classList.add('active');
-      adjustContentPadding();
-    }
+  document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(content => {
+    content.classList.remove('active');
+    content.scrollTop = 0; // Сбрасываем прокрутку
+  });
+  document.querySelector(`[onclick="showTab('${tabId}')"]`).classList.add('active');
+  document.getElementById(tabId).classList.add('active');
+  adjustContentPadding();
+}
 
     function openTelegram() {
       window.open('https://t.me/p_fintech?text=I%20need%20help%20with%20the%20PaysHub%20service', '_blank');
