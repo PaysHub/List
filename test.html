@@ -839,8 +839,12 @@
       z-index: 40;
       opacity: 0;
       transition: opacity 0.3s ease;
+      pointer-events: none; /* Отключаем клики, когда невидимо */
     }
-    .notification.active { opacity: 1; }
+    .notification.active {
+      opacity: 1;
+      pointer-events: auto; /* Включаем клики, когда видно */
+    }
     .privacy-notice {
       position: fixed;
       top: 20px;
@@ -857,11 +861,11 @@
       transition: opacity 0.3s ease;
       max-width: 90%;
       text-align: center;
-      pointer-events: none; /* Отключаем клики, когда невидимо */
+      pointer-events: none;
     }
     .privacy-notice.active {
       opacity: 1;
-      pointer-events: auto; /* Включаем клики, когда видно */
+      pointer-events: auto;
     }
     .privacy-content p { margin: 0; }
     .privacy-content a { color: #007bff; text-decoration: underline; }
@@ -1530,7 +1534,7 @@
       ratesData = rates;
       techData = tech;
 
-      renderFilters('industry-options', 'industry-button', 'industry-popup', ratesData, 'Industry', 'industry');
+           renderFilters('industry-options', 'industry-button', 'industry-popup', ratesData, 'Industry', 'industry');
       renderFilters('geo-options', 'geo-button', 'geo-popup', ratesData, 'Geo', 'geo');
       renderFilters('risk-options', 'risk-button', 'risk-popup', ratesData, 'Risk', 'risk');
       renderFilters('type-options', 'type-button', 'type-popup', techData, 'Type', 'type');
@@ -1601,7 +1605,7 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             telegram,
-                        message: `Новая заявка на добавление PSP:\n\nTelegram: ${telegram}\nСообщение: ${message}\n\nДанные пользователя:\nID: ${telegramId}\nИмя: ${telegramFirstName}\nФамилия: ${telegramLastName}\nUsername: @${telegramUsername || 'Не указан'}`
+            message: `Новая заявка на добавление PSP:\n\nTelegram: ${telegram}\nСообщение: ${message}\n\nДанные пользователя:\nID: ${telegramId}\nИмя: ${telegramFirstName}\nФамилия: ${telegramLastName}\nUsername: @${telegramUsername || 'Не указан'}`
           })
         });
         const result = await response.json();
