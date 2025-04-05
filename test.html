@@ -378,15 +378,20 @@
       scrollbar-width: none;
     }
     .rates-cards-container::-webkit-scrollbar, .tech-cards-container::-webkit-scrollbar { display: none; }
-    .rate-card, .tech-card {
+    .rate-card {
       flex: 0 0 250px;
       background: #2a2a2a;
       border-radius: 12px;
       scroll-snap-align: start;
       transition: transform 0.3s ease;
+      border: 3px solid transparent;
+      background: linear-gradient(#2a2a2a, #2a2a2a) padding-box,
+                  linear-gradient(90deg, #007bff, #00c4b4, #007bff) border-box;
+      background-size: 200% 100%;
+      animation: gradientShift 3s infinite linear;
     }
-    .rate-card:hover, .tech-card:hover { transform: scale(1.02); }
-    .rate-card .card-header, .tech-card .card-header {
+    .rate-card:hover { transform: scale(1.02); }
+    .rate-card .card-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -394,7 +399,7 @@
       font-size: 16px;
       padding: 10px 15px;
     }
-    .rate-card .card-tags, .tech-card .card-tags {
+    .rate-card .card-tags {
       margin-top: 5px;
       display: flex;
       gap: 6px;
@@ -402,23 +407,137 @@
       padding: 0 15px;
       margin-bottom: 10px;
     }
-    .rate-card .tag, .tech-card .tag {
+    .rate-card .tag {
       padding: 4px 8px;
       border-radius: 12px;
       font-size: 12px;
       color: #fff;
       background: #333;
     }
-    .rate-card .tag.service, .tech-card .tag.tech-type {
+    .rate-card .tag.service {
+      background: linear-gradient(90deg, #007bff, #00c4b4, #007bff);
+      background-size: 200% 100%;
+      animation: gradientShift 3s infinite linear;
+    }
+    .card {
+      background: #2a2a2a;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      position: relative;
+      border: 3px solid transparent;
+      width: 100%;
+      max-width: 400px;
+      box-sizing: border-box;
+      background: linear-gradient(#2a2a2a, #2a2a2a) padding-box,
+                  linear-gradient(90deg, #007bff, #00c4b4, #007bff) border-box;
+      background-size: 200% 100%;
+      animation: gradientShift 3s infinite linear;
+    }
+    .card:hover { transform: translateY(-3px); }
+    .card.active {
+      border: 3px solid transparent;
+      background: linear-gradient(#2a2a2a, #2a2a2a) padding-box,
+                  linear-gradient(90deg, #007bff, #00c4b4, #007bff) border-box;
+      background-size: 200% 100%;
+      animation: gradientShift 3s infinite linear;
+    }
+    .card .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+      font-size: 16px;
+      padding: 10px 15px;
+    }
+    .card .card-tags {
+      margin-top: 5px;
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      padding: 0 15px;
+      margin-bottom: 10px;
+    }
+    .card .tag {
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      color: #fff;
+      background: #333;
+    }
+    .card .tag.service {
+      background: linear-gradient(90deg, #007bff, #00c4b4, #007bff);
+      background-size: 200% 100%;
+      animation: gradientShift 3s infinite linear;
+    }
+    .tech-card {
+      background: #2a2a2a;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      position: relative;
+      border: 3px solid transparent;
+      width: 100%;
+      max-width: 400px;
+      box-sizing: border-box;
+      background: linear-gradient(#2a2a2a, #2a2a2a) padding-box,
+                  linear-gradient(90deg, #007bff, #00c4b4, #007bff) border-box;
+      background-size: 200% 100%;
+      animation: gradientShift 3s infinite linear;
+    }
+    .tech-card:hover { transform: translateY(-3px); }
+    .tech-card.active {
+      border: 3px solid transparent;
+      background: linear-gradient(#2a2a2a, #2a2a2a) padding-box,
+                  linear-gradient(90deg, #007bff, #00c4b4, #007bff) border-box;
+      background-size: 200% 100%;
+      animation: gradientShift 3s infinite linear;
+    }
+    .tech-card .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+      font-size: 16px;
+      padding: 10px 15px;
+    }
+    .tech-card .card-tags {
+      margin-top: 5px;
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      padding: 0 15px;
+      margin-bottom: 10px;
+    }
+    .tech-card .tag {
+      padding: 4px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      color: #fff;
+      background: #333;
+    }
+    .tech-card .tag.tech-type {
       background: linear-gradient(90deg, #007bff, #00c4b4, #007bff);
       background-size: 200% 100%;
       animation: gradientShift 3s infinite linear;
     }
     .tech-card img {
       width: 100%;
-      height: 150px;
-      object-fit: cover;
+      height: 276px;
       border-radius: 12px 12px 0 0;
+      display: block;
+    }
+    .tech-card .short-description {
+      padding: 0 15px 15px 15px;
+      font-size: 14px;
+      color: #ccc;
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .ai-assistant, .for-agents {
       background: #2a2a2a;
@@ -606,26 +725,6 @@
     .popup-button.apply { background: #007bff; }
     .popup-button.cancel { background: #555; }
     .popup-button.submit { background: #007bff; }
-    .card, .tech-card {
-      background: #2a2a2a;
-      border-radius: 12px;
-      margin-bottom: 15px;
-      cursor: pointer;
-      transition: transform 0.3s ease;
-      position: relative;
-      border: 3px solid transparent;
-      width: 100%;
-      max-width: 400px;
-      box-sizing: border-box;
-    }
-    .card:hover, .tech-card:hover { transform: translateY(-3px); }
-    .card.active, .tech-card.active {
-      border: 3px solid transparent;
-      background: linear-gradient(#2a2a2a, #2a2a2a) padding-box,
-                  linear-gradient(90deg, #007bff, #00c4b4, #007bff) border-box;
-      background-size: 200% 100%;
-      animation: gradientShift 3s infinite linear;
-    }
     .card-details {
       max-height: 0;
       overflow: hidden;
@@ -689,22 +788,6 @@
     .apply-button-container {
       padding: 10px 0;
       border-top: 1px solid #333;
-    }
-    .tech-card img {
-      width: 100%;
-      height: 276px;
-      border-radius: 12px 12px 0 0;
-      display: block;
-    }
-    .tech-card .short-description {
-      padding: 0 15px 15px 15px;
-      font-size: 14px;
-      color: #ccc;
-      display: -webkit-box;
-      -webkit-line-clamp: 4;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-      text-overflow: ellipsis;
     }
     .feedback-popup, .add-psp-popup, .invest-popup, .agent-popup {
       position: fixed;
@@ -1351,9 +1434,10 @@
           </div>
           <div class="card-tags">
             <span class="tag service">${row['Service'] || 'N/A'}</span>
-            ${getTags(row, 'Industry').slice(0, 1).map(tag => `<span class="tag">${tag}</span>`).join('')}
-            ${getTags(row, 'Geo').slice(0, 1).map(tag => `<span class="tag">${tag}</span>`).join('')}
-            ${getTags(row, 'Risk').slice(0, 1).map(tag => `<span class="tag">${tag}</span>`).join('')}
+            ${getTags(row, 'Method').map(tag => `<span class="tag">${tag}</span>`).join('')}
+            ${getTags(row, 'Industry').map(tag => `<span class="tag">${tag}</span>`).join('')}
+            ${getTags(row, 'Geo').map(tag => `<span class="tag">${tag}</span>`).join('')}
+            ${getTags(row, 'Risk').map(tag => `<span class="tag">${tag}</span>`).join('')}
           </div>
           ${containerId === 'rates-content' ? `
           <div class="card-details">
@@ -1440,7 +1524,7 @@
           });
         }
         container.appendChild(card);
-      }
+      });
     }
 
     async function loadData() {
@@ -1492,7 +1576,7 @@
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            telegram,
+                        telegram,
             message: `Новая заявка на подбор PSP:\n\nTelegram: ${telegram}\nСообщение: ${message}\n\nДанные пользователя:\nID: ${telegramId}\nИмя: ${telegramFirstName}\nФамилия: ${telegramLastName}\nUsername: @${telegramUsername || 'Не указан'}`
           })
         });
@@ -1634,5 +1718,5 @@
       item.style.top = '-30px';
     });
   </script>
-</body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'92b97fbe6f19b0a0',t:'MTc0Mzg2MDg2My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
