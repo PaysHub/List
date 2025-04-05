@@ -58,95 +58,6 @@
       transition: background 0.3s;
     }
     .tab.active { background: #007bff; }
-    .preloader {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: #1a1a1a;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 100;
-      transition: opacity 0.3s ease;
-      opacity: 1;
-    }
-    .preloader.hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
-    .wallet-container {
-      position: relative;
-      width: 150px;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      z-index: 1;
-      padding-top: 90px;
-    }
-    .wallet {
-      width: 150px;
-      height: 105px;
-      background: #d2b48c;
-      border-radius: 15px 15px 0 0;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 3px 7px rgba(0, 0, 0, 0.2);
-      z-index: 2;
-    }
-    .wallet::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 30px;
-      background: #b89778;
-      border-radius: 15px 15px 0 0;
-    }
-    .wallet::after {
-      content: '';
-      position: absolute;
-      top: 15px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 15px;
-      height: 15px;
-      background: #000000;
-      border-radius: 50%;
-      box-shadow: 0 1.5px 3px rgba(0, 0, 0, 0.3);
-    }
-    .coin {
-      position: absolute;
-      animation: fall 2s infinite linear;
-      box-shadow: 0 3px 4px rgba(0, 0, 0, 0.1);
-      width: 30px;
-      height: 30px;
-      background: #FFD700;
-      border-radius: 50%;
-      z-index: 1;
-    }
-    @keyframes fall {
-      0% { opacity: 1; transform: rotate(0deg); top: -30px; }
-      60% { opacity: 1; }
-      100% { opacity: 0; top: calc(50% + 30px); transform: rotate(360deg); }
-    }
-    .welcome-text {
-      margin-top: 20px;
-      font-size: 20px;
-      font-weight: 300;
-      text-align: center;
-      background: linear-gradient(90deg, #007bff, #00c4b4, #007bff);
-      background-size: 200% 100%;
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      animation: gradientShift 3s infinite linear;
-    }
-    .welcome-text span { font-size: 28px; font-weight: 500; }
     .header-section {
       background: linear-gradient(135deg, #1a2a44, #1a3c34);
       border-radius: 12px;
@@ -458,23 +369,12 @@
       cursor: pointer;
       transition: transform 0.3s ease;
       position: relative;
-      border: 3px solid transparent;
-      background: linear-gradient(#2a2a2a, #2a2a2a) padding-box,
-                  linear-gradient(90deg, #007bff, #00c4b4, #007bff) border-box;
-      background-size: 200% 100%;
-      animation: gradientShift 3s infinite linear;
       width: 100%;
       max-width: 400px;
       box-sizing: border-box;
     }
     .tech-card:hover { transform: translateY(-3px); }
-    .tech-card.active {
-      border: 3px solid transparent;
-      background: linear-gradient(#2a2a2a, #2a2a2a) padding-box,
-                  linear-gradient(90deg, #007bff, #00c4b4, #007bff) border-box;
-      background-size: 200% 100%;
-      animation: gradientShift 3s infinite linear;
-    }
+    .tech-card.active { background: #2a2a2a; }
     .tech-card .card-header {
       display: flex;
       justify-content: space-between;
@@ -505,9 +405,9 @@
     }
     .tech-card img {
       width: 100%;
-      height: 276px;
+      height: 150px;
+      object-fit: cover;
       border-radius: 12px 12px 0 0;
-      display: block;
     }
     .tech-card .short-description {
       padding: 0 15px 15px 15px;
@@ -907,22 +807,6 @@
   </style>
 </head>
 <body>
-  <div class="preloader" id="preloader">
-    <div class="wallet-container">
-      <div class="wallet"></div>
-      <div class="coin" style="left: 30px; animation-delay: 0s;"></div>
-      <div class="coin" style="left: 60px; animation-delay: 0.2s;"></div>
-      <div class="coin" style="left: 90px; animation-delay: 0.4s;"></div>
-      <div class="coin" style="left: 45px; animation-delay: 0.6s;"></div>
-      <div class="coin" style="left: 75px; animation-delay: 0.8s;"></div>
-      <div class="coin" style="left: 37.5px; animation-delay: 1s;"></div>
-      <div class="coin" style="left: 82.5px; animation-delay: 1.2s;"></div>
-      <div class="coin" style="left: 52.5px; animation-delay: 1.4s;"></div>
-      <div class="coin" style="left: 67.5px; animation-delay: 1.6s;"></div>
-      <div class="coin" style="left: 97.5px; animation-delay: 1.8s;"></div>
-      <div class="welcome-text">Welcome to <span>PaysHub</span></div>
-    </div>
-  </div>
   <div class="content-container">
     <div id="home" class="tab-content active">
       <div class="header-section">
@@ -1554,7 +1438,7 @@
           });
         }
         container.appendChild(card);
-      }
+      });
     }
 
     async function loadData() {
@@ -1603,8 +1487,7 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             telegram,
-            message: `Новая заявка на подбор PSP:\n\nTelegram: ${telegram}\nСообщение: ${message}\n\nДанные пользователя:\nID: ${telegramId}\nИмя: ${telegramFirstName}\nФамилия: ${telegramLastName}\nUsername: @${telegramUsername || 'Не указан
-                                                                                                                                                                                                                                \nUsername: @${telegramUsername || 'Не указан'}`
+            message: `Новая заявка на подбор PSP:\n\nTelegram: ${telegram}\nСообщение: ${message}\n\nДанные пользователя:\nID: ${telegramId}\nИмя: ${telegramFirstName}\nФамилия: ${telegramLastName}\nUsername: @${telegramUsername || 'Не указан'}`
           })
         });
         const result = await response.json();
@@ -1714,7 +1597,7 @@
         });
         const result = await response.json();
         if (response.ok) {
-          showNotification('Заявка успешно отправлена!');
+          showNotification('showNotification('Заявка успешно отправлена!');
           closeApplyFormPopup();
           document.getElementById('apply-form').reset();
         } else showNotification(result.error || 'Ошибка при отправке заявки.');
@@ -1734,11 +1617,6 @@
     });
 
     window.addEventListener('load', () => {
-      const preloader = document.getElementById('preloader');
-      setTimeout(() => {
-        preloader.classList.add('hidden');
-        preloader.addEventListener('transitionend', () => preloader.style.display = 'none', { once: true });
-      }, 2000);
       showPrivacyNotice();
       loadData();
       if (!localStorage.getItem('hasVisited')) {
@@ -1760,12 +1638,6 @@
     });
 
     window.addEventListener('resize', adjustContentPadding);
-
-    document.querySelectorAll('.coin').forEach(item => {
-      const randomLeft = Math.random() * 90 + 30;
-      item.style.left = `${randomLeft}px`;
-      item.style.top = '-30px';
-    });
   </script>
 </body>
 </html>
