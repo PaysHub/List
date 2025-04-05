@@ -1543,10 +1543,10 @@
             'xc-token': API_TOKEN
           }
         });
-        console.log(`Response status for table ${tableId}: ${response.status}`);
+        console.log(`Response status: ${response.status}`);
         if (!response.ok) {
           const errorText = await response.text();
-          console.error(`HTTP error for table ${tableId}! Status: ${response.status}, Response: ${errorText}`);
+          console.error(`HTTP error! Status: ${response.status}, Response: ${errorText}`);
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
@@ -1703,7 +1703,7 @@
       document.querySelector('.tabs').classList.remove('blurred');
     }
 
-    function renderRates(containerId, rows, expandId = null) {
+    function renderRates(containerId, rows) {
       const container = document.getElementById(containerId);
       container.innerHTML = '';
       let filteredRows = rows;
@@ -1736,7 +1736,6 @@
       filteredRows.forEach(row => {
         const card = document.createElement('div');
         card.className = 'card';
-        card.dataset.id = row['Id'];
 
         // Формируем блоки с проверкой на пустые значения
         const tariffsBlock = [
@@ -1829,47 +1828,17 @@
             </div>
           </div>
         `;
-
-        if (containerId === 'rates-content') {
-          card.addEventListener('click', (e) => {
-            if (e.target.classList.contains('apply-button') || e.target.classList.contains('operator-button')) return;
-            const details = card.querySelector('.card-details');
-            details.classList.toggle('active');
-            card.classList.toggle('active');
-          });
-        } else {
-          card.addEventListener('click', (e) => {
-            if (e.target.classList.contains('apply-button') || e.target.classList.contains('operator-button')) return;
-            showTab('rates');
-            setTimeout(() => {
-              const targetCard = document.querySelector(`#rates-content .card[data-id="${row['Id']}"]`);
-              if (targetCard) {
-                const details = targetCard.querySelector('.card-details');
-                details.classList.add('active');
-                targetCard.classList.add('active');
-                targetCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
-              }
-            }, 100);
-          });
-        }
-
+        card.addEventListener('click', (e) => {
+          if (e.target.classList.contains('apply-button') || e.target.classList.contains('operator-button')) return;
+          const details = card.querySelector('.card-details');
+          details.classList.toggle('active');
+          card.classList.toggle('active');
+        });
         container.appendChild(card);
       });
-
-      if (expandId) {
-        setTimeout(() => {
-          const cardToExpand = container.querySelector(`.card[data-id="${expandId}"]`);
-          if (cardToExpand) {
-            const details = cardToExpand.querySelector('.card-details');
-            details.classList.add('active');
-            cardToExpand.classList.add('active');
-            cardToExpand.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
-        }, 100);
-      }
     }
 
-    async function renderTech(containerId, rows, expandId = null) {
+    async function renderTech(containerId, rows) {
       const container = document.getElementById(containerId);
       container.innerHTML = '';
       console.log('Tech data received in renderTech:', rows);
@@ -1881,7 +1850,7 @@
       let filteredRows = rows;
 
       // Фильтруем строки, показывая только те, у которых On = true
-    filteredRows.filter(row => row['On'] === true);
+      filteredRows = filteredRows.filter(row => row['On'] === true);
 
       // Применяем остальные фильтры
       if (activeFilters.type.size > 0) {
@@ -1901,7 +1870,6 @@
         console.log('Extracted image URL for card:', imgUrl);
         const card = document.createElement('div');
         card.className = 'tech-card';
-        card.dataset.id = row['Id'];
 
         // Формируем блоки с проверкой на пустые значения
         const mainInfoBlock = [
@@ -1918,7 +1886,7 @@
           <img src="${imgUrl}" alt="Tech Solution" onerror="this.src='https://placehold.co/400x276'; console.log('Failed to load image: ${imgUrl}');">
           <div class="card-header">
             <span>${row['Name'] || 'Без названия'}</span>
-            <span class="price">${row['Price'] || ''}</span>
+            <span>${row['Price'] || ''}</span>
           </div>
           <div class="card-tags">
             <span class="tag tech-type">${row['Type'] || 'White Label'}</span>
@@ -1943,105 +1911,54 @@
             </div>
           </div>
         `;
-
-        if (containerId === 'tech-content') {
-          card.addEventListener('click', (e) => {
-            if (e.target.classList.contains('apply-button') || e.target.classList.contains('operator-button')) return;
-            const details = card.querySelector('.card-details');
-            details.classList.toggle('active');
-            card.classList.toggle('active');
-          });
-        } else {
-          card.addEventListener('click', (e) => {
-            if (e.target.classList.contains('apply-button') || e.target.classList.contains('operator-button')) return;
-            showTab('tech');
-            setTimeout(() => {
-              const targetCard = document.querySelector(`#tech-content .tech-card[data-id="${row['Id']}"]`);
-              if (targetCard) {
-                const details = targetCard.querySelector('.card-details');
-                details.classList.add('active');
-                targetCard.classList.add('active');
-                targetCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
-              }
-            }, 100);
-          });
-        }
-
+        card.addEventListener('click', (e) => {
+          if (e.target.classList.contains('apply-button') || e.target.classList.contains('operator-button')) return;
+          const details = card.querySelector('.card-details');
+          details.classList.toggle('active');
+          card.classList.toggle('active');
+        });
         container.appendChild(card);
       });
-
-      if (expandId) {
-        setTimeout(() => {
-          const cardToExpand = container.querySelector(`.tech-card[data-id="${expandId}"]`);
-          if (cardToExpand) {
-            const details = cardToExpand.querySelector('.card-details');
-            details.classList.add('active');
-            cardToExpand.classList.add('active');
-            cardToExpand.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
-        }, 100);
-      }
     }
 
     async function loadTabs() {
       console.log('Starting to load tabs...');
-      try {
-        const [rates, tech] = await Promise.all([
-          fetchData(RATES_TABLE_ID),
-          fetchData(TECH_TABLE_ID)
-        ]);
-
-        ratesData = rates;
-        techData = tech;
-
-        console.log('Loaded ratesData:', ratesData);
-        console.log('Loaded techData:', techData);
-
-        if (!ratesData || ratesData.length === 0) {
-          console.log('No rates data loaded. Check RATES_TABLE_ID or table contents.');
-          document.getElementById('rates-content').innerHTML = '<p>Данные для "Ставки" не загружены. Проверьте консоль для деталей.</p>';
-        }
-
-        if (!techData || techData.length === 0) {
-          console.log('No tech data loaded. Check TECH_TABLE_ID or table contents.');
-          document.getElementById('tech-content').innerHTML = '<p>Данные для "Решения" не загружены. Проверьте консоль для деталей.</p>';
-        }
-
-        // Рендерим фильтры
-        renderFilters('industry-options', 'industry-button', 'industry-popup', ratesData, 'Industry', 'industry');
-        renderFilters('geo-options', 'geo-button', 'geo-popup', ratesData, 'Geo', 'geo');
-        renderFilters('risk-options', 'risk-button', 'risk-popup', ratesData, 'Risk', 'risk');
-        renderFilters('type-options', 'type-button', 'type-popup', techData, 'Type', 'type');
-
-        // Рендерим обе вкладки
-        renderRates('rates-content', ratesData);
-        renderRates('rates-content', ratesData.slice(0, 3));
-        renderTech('tech-content', techData);
-        renderTech('tech-content', techData.slice(0, 3));
-
-        adjustContentPadding();
-        console.log('Finished loading tabs.');
-      } catch (error) {
-        console.error('Error in loadTabs:', error);
-        document.getElementById('rates-content').innerHTML = '<p>Ошибка загрузки данных для "Ставки". Проверьте консоль для деталей.</p>';
-        document.getElementById('tech-content').innerHTML = '<p>Ошибка загрузки данных для "Решения". Проверьте консоль для деталей.</p>';
+      // Загружаем данные для обеих вкладок одновременно
+      const [rates, tech] = await Promise.all([
+        fetchData(RATES_TABLE_ID),
+        fetchData(TECH_TABLE_ID)
+      ]);
+      
+      ratesData = rates;
+      techData = tech;
+      
+      console.log('Loaded ratesData:', ratesData);
+      console.log('Loaded techData:', techData);
+      
+      if (!techData || techData.length === 0) {
+        console.log('No tech data loaded. Check TECH_TABLE_ID or table contents.');
       }
+      
+      // Рендерим фильтры
+      renderFilters('industry-options', 'industry-button', 'industry-popup', ratesData, 'Industry', 'industry');
+      renderFilters('geo-options', 'geo-button', 'geo-popup', ratesData, 'Geo', 'geo');
+      renderFilters('risk-options', 'risk-button', 'risk-popup', ratesData, 'Risk', 'risk');
+      renderFilters('type-options', 'type-button', 'type-popup', techData, 'Type', 'type');
+      
+      // Рендерим обе вкладки
+      renderRates('rates-content', ratesData);
+      await renderTech('tech-content', techData);
+      
+      adjustContentPadding();
+      console.log('Finished loading tabs.');
     }
 
-    function showTab(tabId, expandId = null) {
+    function showTab(tabId) {
       document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
       document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
       document.querySelector(`[onclick="showTab('${tabId}')"]`).classList.add('active');
       document.getElementById(tabId).classList.add('active');
       console.log(`Switched to tab: ${tabId}`);
-
-      if (tabId === 'rates' && expandId) {
-        renderRates('rates-content', ratesData, expandId);
-      } else if (tabId === 'tech' && expandId) {
-        renderTech('tech-content', techData, expandId);
-      }
-
-      adjustContentPadding();
     }
 
     // Обработка отправки формы подбора PSP
@@ -2240,7 +2157,7 @@
       }
 
       // Загружаем данные
-      await loadTabs();
+      loadTabs();
     });
 
     window.addEventListener('resize', adjustContentPadding);
