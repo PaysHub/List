@@ -1890,7 +1890,7 @@
           { label: 'License', value: row['Лицензия'] },
           { label: 'Integration', value: row['Интеграция'] },
           { label: 'Compliance', value: row['Compliance'] },
-          { label: 'Support 24/7', value:row['Support 24/7'] },
+          { label: 'Support 24/7', value: row['Support 24/7'] },
           { label: 'Recurrent', value: row['Рекуррент'] },
           { label: 'Chargeback level', value: row['Уровень чарджбэков'] },
           { label: '3DS', value: row['3DS-авторизация'] },
@@ -2105,35 +2105,42 @@
 
     async function loadTabs() {
       console.log('Starting to load tabs...');
-      const [rates, tech] = await Promise.all([
-        fetchData(RATES_TABLE_ID),
-        fetchData(TECH_TABLE_ID)
-      ]);
+      try {
+        const [rates, tech] = await Promise.all([
+          fetchData(RATES_TABLE_ID),
+          fetchData(TECH_TABLE_ID)
+        ]);
 
-      ratesData = rates;
-      techData = tech;
+        ratesData = rates;
+        techData = tech;
 
-      console.log('Loaded ratesData:', ratesData);
-      console.log('Loaded techData:', techData);
+        console.log('Loaded ratesData:', ratesData);
+        console.log('Loaded techData:', techData);
 
-      if (!techData || techData.length === 0) {
-        console.log('No tech data loaded. Check TECH_TABLE_ID or table contents.');
+        if (!techData || techData.length === 0) {
+          console.log('No tech data loaded. Check TECH_TABLE_ID or table contents.');
+        }
+
+        // Рендерим фильтры
+        renderFilters('industry-options', 'industry-button', 'industry-popup', ratesData, 'Industry', 'industry');
+        renderFilters('geo-options', 'geo-button', 'geo-popup', ratesData, 'Geo', 'geo');
+        renderFilters('risk-options', 'risk-button', 'risk-popup', ratesData, 'Risk', 'risk');
+        renderFilters('type-options', 'type-button', 'type-popup', techData, 'Type', 'type');
+
+        // Рендерим обе вкладки
+        renderRates('rates-content', ratesData);
+        renderRates('rates-content', ratesData.slice(0, 3));
+        renderTech('tech-content', techData);
+        renderTech('tech-content', techData.slice(0, 3));
+
+        adjustContentPadding();
+        console.log('Finished loading tabs.');
+      } catch (error) {
+        console.error('Error in loadTabs:', error);
+        // Даже если произошла ошибка, предлоадер уже скрыт
+        document.getElementById('rates-content').innerHTML = '<p>Ошибка загрузки данных для "Ставки". Проверьте консоль для деталей.</p>';
+        document.getElementById('tech-content').innerHTML = '<p>Ошибка загрузки данных для "Решения". Проверьте консоль для деталей.</p>';
       }
-
-      // Рендерим фильтры
-      renderFilters('industry-options', 'industry-button', 'industry-popup', ratesData, 'Industry', 'industry');
-      renderFilters('geo-options', 'geo-button', 'geo-popup', ratesData, 'Geo', 'geo');
-      renderFilters('risk-options', 'risk-button', 'risk-popup', ratesData, 'Risk', 'risk');
-      renderFilters('type-options', 'type-button', 'type-popup', techData, 'Type', 'type');
-
-      // Рендерим обе вкладки
-      renderRates('rates-content', ratesData);
-      renderRates('rates-content', ratesData.slice(0, 3));
-      renderTech('tech-content', techData);
-      renderTech('tech-content', techData.slice(0, 3));
-
-      adjustContentPadding();
-      console.log('Finished loading tabs.');
     }
 
     function showTab(tabId, expandId = null) {
@@ -2310,23 +2317,21 @@
     // Автоматическая отправка данных пользователя при входе в приложение
     window.addEventListener('load', async () => {
       const preloader = document.getElementById('preloader');
+      
+      // Гарантируем, что предлоадер исчезнет через 5 секунд, даже если данные не загрузятся
       setTimeout(() => {
         preloader.classList.add('hidden');
         preloader.addEventListener('transitionend', () => {
           preloader.style.display = 'none';
+          console.log('Preloader hidden after timeout.');
         }, { once: true });
+      }, 5000);
 
-        // Показываем уведомление о сборе данных
-        showPrivacyNotice();
+      // Показываем уведомление о сборе данных
+      showPrivacyNotice();
 
-        // Загружаем данные
-        loadTabs();
-
-        // Проверяем, был ли пользователь уже зафиксирован
-        if (localStorage.getItem('hasVisited')) {
-          return; // Если уже заходил, не отправляем данные
-        }
-
+      // Проверяем, был ли пользователь уже зафиксирован
+      if (!localStorage.getItem('hasVisited')) {
         const telegramUser = tg.initDataUnsafe.user;
         const telegramId = telegramUser ? telegramUser.id : 'Неизвестно';
         const telegramFirstName = telegramUser ? telegramUser.first_name : 'Неизвестно';
@@ -2358,7 +2363,10 @@
         } catch (error) {
           console.error('Ошибка при отправке данных пользователя:', error);
         }
-      }, 2000);
+      }
+
+      // Загружаем данные
+      await loadTabs();
     });
 
     window.addEventListener('resize', adjustContentPadding);
