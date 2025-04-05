@@ -838,108 +838,6 @@
     .tab.active {
       background: #007bff;
     }
-    .preloader {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: #1a1a1a;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 100;
-      transition: opacity 0.3s ease;
-      opacity: 1;
-    }
-    .preloader.hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
-    .wallet-container {
-      position: relative;
-      width: 150px;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      z-index: 1;
-      padding-top: 90px;
-    }
-    .wallet {
-      width: 150px;
-      height: 105px;
-      background: #d2b48c;
-      border-radius: 15px 15px 0 0;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 3px 7px rgba(0, 0, 0, 0.2);
-      z-index: 2;
-    }
-    .wallet::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 30px;
-      background: #b89778;
-      border-radius: 15px 15px 0 0;
-    }
-    .wallet::after {
-      content: '';
-      position: absolute;
-      top: 15px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 15px;
-      height: 15px;
-      background: #000000;
-      border-radius: 50%;
-      box-shadow: 0 1.5px 3px rgba(0, 0, 0, 0.3);
-    }
-    .coin {
-      position: absolute;
-      animation: fall 2s infinite linear;
-      box-shadow: 0 3px 4px rgba(0, 0, 0, 0.1);
-      width: 30px;
-      height: 30px;
-      background: #FFD700;
-      border-radius: 50%;
-      z-index: 1;
-    }
-    @keyframes fall {
-      0% {
-        opacity: 1;
-        transform: rotate(0deg);
-        top: -30px;
-      }
-      60% {
-        opacity: 1;
-      }
-      100% {
-        opacity: 0;
-        top: calc(50% + 30px);
-        transform: rotate(360deg);
-      }
-    }
-    .welcome-text {
-      margin-top: 20px;
-      font-size: 20px;
-      font-weight: 300;
-      text-align: center;
-      background: linear-gradient(90deg, #007bff, #00c4b4, #007bff);
-      background-size: 200% 100%;
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      animation: gradientShift 3s infinite linear;
-    }
-    .welcome-text span {
-      font-size: 28px;
-      font-weight: 500;
-    }
     /* Стили для попапов форм */
     .feedback-popup,
     .add-psp-popup,
@@ -1096,8 +994,6 @@
       .content-container { height: calc(100vh - 50px); }
       .tabs { bottom: 20px; padding: 10px; }
       .tab { font-size: 12px; }
-      .welcome-text { font-size: 18px; }
-      .welcome-text span { font-size: 24px; }
       .card, .tech-card {
         width: 100%;
         max-width: 400px;
@@ -1150,22 +1046,6 @@
   </style>
 </head>
 <body>
-  <div class="preloader" id="preloader">
-    <div class="wallet-container">
-      <div class="wallet"></div>
-      <div class="coin" style="left: 30px; animation-delay: 0s;"></div>
-      <div class="coin" style="left: 60px; animation-delay: 0.2s;"></div>
-      <div class="coin" style="left: 90px; animation-delay: 0.4s;"></div>
-      <div class="coin" style="left: 45px; animation-delay: 0.6s;"></div>
-      <div class="coin" style="left: 75px; animation-delay: 0.8s;"></div>
-      <div class="coin" style="left: 37.5px; animation-delay: 1s;"></div>
-      <div class="coin" style="left: 82.5px; animation-delay: 1.2s;"></div>
-      <div class="coin" style="left: 52.5px; animation-delay: 1.4s;"></div>
-      <div class="coin" style="left: 67.5px; animation-delay: 1.6s;"></div>
-      <div class="coin" style="left: 97.5px; animation-delay: 1.8s;"></div>
-      <div class="welcome-text">Welcome to <span>PaysHub</span></div>
-    </div>
-  </div>
   <div class="content-container">
     <!-- Главная -->
     <div id="home" class="tab-content active">
@@ -2001,7 +1881,7 @@
       let filteredRows = rows;
 
       // Фильтруем строки, показывая только те, у которых On = true
-      filteredRows = filteredRows.filter(row => row['On'] === true);
+    filteredRows.filter(row => row['On'] === true);
 
       // Применяем остальные фильтры
       if (activeFilters.type.size > 0) {
@@ -2117,8 +1997,14 @@
         console.log('Loaded ratesData:', ratesData);
         console.log('Loaded techData:', techData);
 
+        if (!ratesData || ratesData.length === 0) {
+          console.log('No rates data loaded. Check RATES_TABLE_ID or table contents.');
+          document.getElementById('rates-content').innerHTML = '<p>Данные для "Ставки" не загружены. Проверьте консоль для деталей.</p>';
+        }
+
         if (!techData || techData.length === 0) {
           console.log('No tech data loaded. Check TECH_TABLE_ID or table contents.');
+          document.getElementById('tech-content').innerHTML = '<p>Данные для "Решения" не загружены. Проверьте консоль для деталей.</p>';
         }
 
         // Рендерим фильтры
@@ -2137,7 +2023,6 @@
         console.log('Finished loading tabs.');
       } catch (error) {
         console.error('Error in loadTabs:', error);
-        // Даже если произошла ошибка, предлоадер уже скрыт
         document.getElementById('rates-content').innerHTML = '<p>Ошибка загрузки данных для "Ставки". Проверьте консоль для деталей.</p>';
         document.getElementById('tech-content').innerHTML = '<p>Ошибка загрузки данных для "Решения". Проверьте консоль для деталей.</p>';
       }
@@ -2316,17 +2201,6 @@
 
     // Автоматическая отправка данных пользователя при входе в приложение
     window.addEventListener('load', async () => {
-      const preloader = document.getElementById('preloader');
-      
-      // Гарантируем, что предлоадер исчезнет через 5 секунд, даже если данные не загрузятся
-      setTimeout(() => {
-        preloader.classList.add('hidden');
-        preloader.addEventListener('transitionend', () => {
-          preloader.style.display = 'none';
-          console.log('Preloader hidden after timeout.');
-        }, { once: true });
-      }, 5000);
-
       // Показываем уведомление о сборе данных
       showPrivacyNotice();
 
@@ -2370,12 +2244,6 @@
     });
 
     window.addEventListener('resize', adjustContentPadding);
-
-    document.querySelectorAll('.coin').forEach(item => {
-      const randomLeft = Math.random() * 90 + 30;
-      item.style.left = `${randomLeft}px`;
-      item.style.top = '-30px';
-    });
   </script>
 
   <!-- Яндекс.Метрика -->
