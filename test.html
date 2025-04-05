@@ -17,20 +17,26 @@
       overflow: hidden;
     }
     .content-container {
-      width: 100%;
-      height: calc(100% - 50px);
-      position: relative;
-      z-index: 1;
-      padding: 60px 15px 70px 15px;
-      box-sizing: border-box;
-      -webkit-mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
-      mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
-      transition: filter 0.3s ease;
+    width: 100%;
+    height: 100%; /* Устанавливаем полную высоту */
+    position: relative;
+    z-index: 1;
+    padding: 0; /* Убираем лишние отступы */
+    box-sizing: border-box;
+    -webkit-mask-image: none; /* Убираем маску */
+    mask-image: none;
+    transition: filter 0.3s ease;
     }
     .content-container.blurred {
       filter: blur(5px) brightness(0.5);
     }
-    .tab-content { display: none; overflow-y: auto; height: 100%;}
+    .tab-content {
+  display: none;
+  overflow-y: auto;
+  height: 100%;
+  padding: 0; /* Убираем отступы */
+  box-sizing: border-box;
+}
     .tab-content.active { display: block; }
     .tabs {
       display: flex;
@@ -1560,14 +1566,14 @@
       window.open('https://t.me/p_fintech?text=I%20need%20help%20with%20the%20PaysHub%20service', '_blank');
     }
 
-   function adjustContentPadding() {
+  function adjustContentPadding() {
   const filterSection = document.querySelector('.filter-section');
   const contentContainer = document.querySelector('.content-container');
   if (filterSection && (document.getElementById('rates').classList.contains('active') || document.getElementById('tech').classList.contains('active'))) {
-    const filterHeight = filterSection.getBoundingClientRect().height || 60; // Используем getBoundingClientRect
-    contentContainer.style.paddingTop = `${filterHeight + 20}px`; // Увеличиваем отступ
+    const filterHeight = filterSection.getBoundingClientRect().height || 60;
+    contentContainer.style.paddingTop = `${filterHeight}px`;
   } else {
-    contentContainer.style.paddingTop = '60px';
+    contentContainer.style.paddingTop = '0';
   }
 }
 
