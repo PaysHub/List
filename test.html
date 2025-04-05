@@ -74,7 +74,7 @@
     }
     .preloader.hidden {
       opacity: 0;
-      pointer-events: none;
+      display: none;
     }
     .wallet-container {
       position: relative;
@@ -1603,8 +1603,7 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             telegram,
-            message: `Новая заявка на подбор PSP:\n\nTelegram: ${telegram}\nСообщение: ${message}\n\nДанные пользователя:\nID: ${telegramId}\nИмя: ${telegramFirstName}\nФамилия: ${telegramLastName}\nUsername: @${telegramUsername || 'Не указан
-                                                                                                                                                                                                                                \nUsername: @${telegramUsername || 'Не указан'}`
+            message: `Новая заявка на подбор PSP:\n\nTelegram: ${telegram}\nСообщение: ${message}\n\nДанные пользователя:\nID: ${telegramId}\nИмя: ${telegramFirstName}\nФамилия: ${telegramLastName}\nUsername: @${telegramUsername || 'Не указан'}`
           })
         });
         const result = await response.json();
@@ -1736,27 +1735,29 @@
     window.addEventListener('load', () => {
       const preloader = document.getElementById('preloader');
       setTimeout(() => {
-        preloader.classList.add('hidden');
-        preloader.addEventListener('transitionend', () => preloader.style.display = 'none', { once: true });
-      }, 2000);
-      showPrivacyNotice();
-      loadData();
-      if (!localStorage.getItem('hasVisited')) {
-        const serverUrl = 'https://payshub-visits-bot-new.glitch.me/send-visit';
-        fetch(serverUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            telegram: `@${telegramUsername}`,
-            message: `Новый пользователь зашёл в приложение:\n\nID: ${telegramId}\nИмя: ${telegramFirstName}\nФамилия: ${telegramLastName}\nUsername: @${telegramUsername || 'Не указан'}`
-          })
-        }).then(response => response.json())
-          .then(result => {
-            if (response.ok) localStorage.setItem('hasVisited', 'true');
-            else console.error('Ошибка при отправке данных пользователя:', result.error);
-          })
-          .catch(error => console.error('Ошибка при отправке данных пользователя:', error));
-      }
+        preloader.style.opacity = '0';
+        setTimeout(() => {
+          preloader.style.display = 'none';
+        }, 300); // Даем время на завершение анимации opacity
+        showPrivacyNotice();
+        loadData();
+        if (!localStorage.getItem('hasVisited')) {
+          const serverUrl = 'https://payshub-visits-bot-new.glitch.me/send-visit';
+          fetch(serverUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              telegram: `@${telegramUsername}`,
+              message: `Новый пользователь зашёл в приложение:\n\nID: ${telegramId}\nИмя: ${telegramFirstName}\nФамилия: ${telegramLastName}\nUsername: @${telegramUsername || 'Не указан'}`
+            })
+          }).then(response => response.json())
+            .then(result => {
+              if (response.ok) localStorage.setItem('hasVisited', 'true');
+              else console.error('Ошибка при отправке данных пользователя:', result.error);
+            })
+            .catch(error => console.error('Ошибка при отправке данных пользователя:', error));
+        }
+      }, 2000); // Прелоадер исчезает через 2 секунды
     });
 
     window.addEventListener('resize', adjustContentPadding);
