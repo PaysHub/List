@@ -1558,15 +1558,15 @@
     }
 
     function adjustContentPadding() {
-      const filterSection = document.querySelector('.filter-section');
-      const contentContainer = document.querySelector('.content-container');
-      if (filterSection && (document.getElementById('rates').classList.contains('active') || document.getElementById('tech').classList.contains('active'))) {
-        const filterHeight = filterSection.offsetHeight;
-        contentContainer.style.paddingTop = `${filterHeight + 10}px`;
-      } else {
-        contentContainer.style.paddingTop = '60px';
-      }
-    }
+  const filterSection = document.querySelector('.filter-section');
+  const contentContainer = document.querySelector('.content-container');
+  if (filterSection && (document.getElementById('rates').classList.contains('active') || document.getElementById('tech').classList.contains('active'))) {
+    const filterHeight = filterSection.offsetHeight;
+    contentContainer.style.paddingTop = `${filterHeight + 15}px`; // Увеличиваем отступ
+  } else {
+    contentContainer.style.paddingTop = '60px';
+  }
+}
 
     document.getElementById('feedback-form').addEventListener('submit', async (e) => {
       e.preventDefault();
