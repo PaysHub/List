@@ -18,7 +18,7 @@
     }
     .content-container {
   width: 100%;
-  height: calc(100% - 50px); /* Учитываем высоту .tabs */
+  height: calc(100vh - 50px); /* Используем 100vh и вычитаем высоту .tabs */
   position: relative;
   z-index: 1;
   padding: 0;
@@ -26,7 +26,7 @@
   -webkit-mask-image: none;
   mask-image: none;
   transition: filter 0.3s ease;
-  }
+}
     .content-container.blurred {
       filter: blur(5px) brightness(0.5);
     }
