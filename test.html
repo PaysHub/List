@@ -458,23 +458,12 @@
       cursor: pointer;
       transition: transform 0.3s ease;
       position: relative;
-      border: 3px solid transparent;
-      background: linear-gradient(#2a2a2a, #2a2a2a) padding-box,
-                  linear-gradient(90deg, #007bff, #00c4b4, #007bff) border-box;
-      background-size: 200% 100%;
-      animation: gradientShift 3s infinite linear;
       width: 100%;
       max-width: 400px;
       box-sizing: border-box;
     }
     .tech-card:hover { transform: translateY(-3px); }
-    .tech-card.active {
-      border: 3px solid transparent;
-      background: linear-gradient(#2a2a2a, #2a2a2a) padding-box,
-                  linear-gradient(90deg, #007bff, #00c4b4, #007bff) border-box;
-      background-size: 200% 100%;
-      animation: gradientShift 3s infinite linear;
-    }
+    .tech-card.active { background: #2a2a2a; }
     .tech-card .card-header {
       display: flex;
       justify-content: space-between;
@@ -505,9 +494,9 @@
     }
     .tech-card img {
       width: 100%;
-      height: 276px;
+      height: 150px;
+      object-fit: cover;
       border-radius: 12px 12px 0 0;
-      display: block;
     }
     .tech-card .short-description {
       padding: 0 15px 15px 15px;
@@ -1622,8 +1611,8 @@
       e.preventDefault();
       const telegram = document.getElementById('add-psp-telegram').value;
       const message = document.getElementById('add-psp-message').value;
-      const serverUrl = 'https://payshub-feedback-bot.glitch.me/send-message';
-      try {
+      const serverUrl = 'https://payshub-feedback-bot.glitch.me/send-message      
+try {
         const response = await fetch(serverUrl, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
