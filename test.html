@@ -196,16 +196,13 @@
     }
     .welcome-text span { font-size: 28px; font-weight: 500; }
     .header-section {
-      background: linear-gradient(135deg, #1a2a44, #1a3c34);
-      border-radius: 12px;
-      padding: 20px;
-      text-align: center;
-      margin: 0 0 30px 0;
-    }
-    #home .header-section {
-      margin-top: 20px; /* Отступ сверху для первого блока на главной вкладке */
-      padding: 0 10px; /* Отступы только по бокам */
-    }
+  background: linear-gradient(135deg, #1a2a44, #1a3c34);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  margin: 0 0 30px 0;
+}
+    
     .header-section h1 {
       font-size: 28px;
       font-weight: 600;
@@ -927,38 +924,38 @@
       100% { background-position: 200% 0%; }
     }
     @media (max-width: 600px) {
-      .content-container { height: calc(100vh - 50px); padding: 50px 10px 20px 10px; }
-      .tabs { bottom: 10px; padding: 5px; }
-      .tab { font-size: 12px; margin: 0 3px; }
-      .header-section h1 { font-size: 24px; }
-      .header-section .subtitle { font-size: 18px; }
-      .header-section .stat h3 { font-size: 12px; }
-      .header-section .stat p { font-size: 20px; }
-      .slide h3 { font-size: 16px; }
-      .slide p { font-size: 13px; }
-      .slide .apply-button { max-width: none; }
-      .slide .image { flex: 0 0 100px; height: 100px; }
-      .partner-block { flex: 0 0 200px; }
-      .partner-block p { font-size: 13px; }
-      .rate-card, .tech-card { flex: 0 0 200px; }
-      .rate-card .card-header, .tech-card .card-header { font-size: 14px; }
-      .tech-card img { height: 120px; }
-      .ai-assistant .section-title, .for-agents .section-title { font-size: 18px; }
-      .ai-assistant .section-subtitle, .for-agents .section-subtitle { font-size: 13px; }
-      .ai-assistant .description, .for-agents .description { font-size: 13px; }
-      .info-section h3 { font-size: 16px; }
-      .resources { flex-direction: column; }
-      .resource-button { font-size: 13px; }
-      .filter-section { flex-wrap: wrap; gap: 6px; padding: 8px 10px; }
-      .filter-dropdown { min-width: 80px; }
-      .filter-button { padding: 3px 8px; font-size: 11px; }
-      .filter-section h3 { font-size: 11px; margin-bottom: 4px; }
-      .filter-popup, .feedback-popup, .add-psp-popup, .invest-popup, .agent-popup { width: 90%; }
-      .card, .tech-card { width: 100%; max-width: 100%; }
-      .card-header { font-size: 14px; padding: 10px; }
-      .card-details { font-size: 12px; }
-      .tech-card img { height: auto; max-height: 276px; }
-    }
+  .content-container { height: calc(100vh - 50px); padding: 0 10px 20px 10px; }
+  .tabs { bottom: 10px; padding: 5px; }
+  .tab { font-size: 12px; margin: 0 3px; }
+  .header-section h1 { font-size: 24px; }
+  .header-section .subtitle { font-size: 18px; }
+  .header-section .stat h3 { font-size: 12px; }
+  .header-section .stat p { font-size: 20px; }
+  .slide h3 { font-size: 16px; }
+  .slide p { font-size: 13px; }
+  .slide .apply-button { max-width: none; }
+  .slide .image { flex: 0 0 100px; height: 100px; }
+  .partner-block { flex: 0 0 200px; }
+  .partner-block p { font-size: 13px; }
+  .rate-card, .tech-card { flex: 0 0 200px; }
+  .rate-card .card-header, .tech-card .card-header { font-size: 14px; }
+  .tech-card img { height: 120px; }
+  .ai-assistant .section-title, .for-agents .section-title { font-size: 18px; }
+  .ai-assistant .section-subtitle, .for-agents .section-subtitle { font-size: 13px; }
+  .ai-assistant .description, .for-agents .description { font-size: 13px; }
+  .info-section h3 { font-size: 16px; }
+  .resources { flex-direction: column; }
+  .resource-button { font-size: 13px; }
+  .filter-section { flex-wrap: wrap; gap: 6px; padding: 8px 10px; }
+  .filter-dropdown { min-width: 80px; }
+  .filter-button { padding: 3px 8px; font-size: 11px; }
+  .filter-section h3 { font-size: 11px; margin-bottom: 4px; }
+  .filter-popup, .feedback-popup, .add-psp-popup, .invest-popup, .agent-popup { width: 90%; }
+  .card, .tech-card { width: 100%; max-width: 100%; }
+  .card-header { font-size: 14px; padding: 10px; }
+  .card-details { font-size: 12px; }
+  .tech-card img { height: auto; max-height: 276px; }
+}
   </style>
 </head>
 <body>
@@ -1631,15 +1628,15 @@
     }
 
     function adjustContentPadding() {
-      const filterSection = document.querySelector('.filter-section');
-      const contentContainer = document.querySelector('.content-container');
-      if (filterSection && (document.getElementById('rates').classList.contains('active') || document.getElementById('tech').classList.contains('active'))) {
-        const filterHeight = filterSection.getBoundingClientRect().height || 60;
-        contentContainer.style.paddingTop = `${filterHeight}px`;
-      } else {
-        contentContainer.style.paddingTop = '10px'; // Минимальный отступ для главной вкладки
-      }
-    }
+  const filterSection = document.querySelector('.filter-section');
+  const contentContainer = document.querySelector('.content-container');
+  if (filterSection && (document.getElementById('rates').classList.contains('active') || document.getElementById('tech').classList.contains('active'))) {
+    const filterHeight = filterSection.getBoundingClientRect().height || 60;
+    contentContainer.style.paddingTop = `${filterHeight}px`;
+  } else {
+    contentContainer.style.paddingTop = '0px'; // Убираем отступ для главной вкладки
+  }
+}
 
     document.getElementById('feedback-form').addEventListener('submit', async (e) => {
       e.preventDefault();
