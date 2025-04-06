@@ -17,20 +17,34 @@
       overflow: hidden;
     }
     .content-container {
-      width: 100%;
-      height: calc(100vh - 56px - env(safe-area-inset-bottom));
-      position: relative;
-      z-index: 1;
-      padding: 0;
-      padding-bottom: 0;
-      margin: 0;
-      box-sizing: border-box;
-      -webkit-mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
-      mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
-      transition: filter 0.3s ease;
-      display: flex;
-      flex-direction: column;
-    }
+  width: 100%;
+  height: calc(100vh - 76px); /* Увеличиваем отступ на 20px (56px + 20px) */
+  position: relative;
+  z-index: 1;
+  padding: 0;
+  padding-bottom: 0;
+  margin: 0;
+  box-sizing: border-box;
+  -webkit-mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
+  transition: filter 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.tabs {
+  display: flex;
+  position: fixed;
+  bottom: 20px; /* Добавляем фиксированный отступ снизу */
+  width: 100%;
+  background: #212121;
+  padding: 8px 0;
+  box-sizing: border-box;
+  z-index: 100;
+  transition: filter 0.3s ease;
+  height: 56px;
+  border-top: 1px solid #333;
+}
     .tab-content {
       display: none;
       overflow-y: auto;
@@ -49,20 +63,7 @@
       filter: blur(5px) brightness(0.5);
     }
     .tab-content.active { display: block; }
-    .tabs {
-      display: flex;
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      background: #212121;
-      padding: 8px 0;
-      padding-bottom: calc(8px + env(safe-area-inset-bottom));
-      box-sizing: border-box;
-      z-index: 100;
-      transition: filter 0.3s ease;
-      height: 56px;
-      border-top: 1px solid #333;
-    }
+    
     .tabs.blurred {
       filter: blur(5px) brightness(0.5);
     }
@@ -934,51 +935,50 @@
       margin-top: 20px;
     }
     @media (max-width: 600px) {
-      .content-container { 
-        height: calc(100vh - 56px - env(safe-area-inset-bottom)); 
-        padding: 0 10px 0 10px; 
-      }
-      .tabs { 
-        bottom: 0; 
-        padding: 5px 0; 
-        padding-bottom: calc(5px + env(safe-area-inset-bottom)); 
-      }
-      .tab { font-size: 12px; margin: 0 3px; }
-      .header-section h1 { font-size: 24px; }
-      .header-section .subtitle { font-size: 18px; }
-      .header-section .stat h3 { font-size: 12px; }
-      .header-section .stat p { font-size: 20px; }
-      .slide h3 { font-size: 16px; }
-      .slide p { font-size: 13px; }
-      .slide .apply-button { max-width: none; }
-      .slide .image { flex: 0 0 100px; height: 100px; }
-      .partner-block { flex: 0 0 200px; }
-      .partner-block p { font-size: 13px; }
-      .rate-card, .tech-card { flex: 0 0 200px; }
-      .rate-card .card-header, .tech-card .card-header { font-size: 14px; }
-      .tech-card img { height: 120px; }
-      .ai-assistant .section-title, .for-agents .section-title { font-size: 18px; }
-      .ai-assistant .section-subtitle, .for-agents .section-subtitle { font-size: 13px; }
-      .ai-assistant .description, .for-agents .description { font-size: 13px; }
-      .info-section h3 { font-size: 16px; }
-      .resources { flex-direction: column; }
-      .resource-button { font-size: 13px; }
-      .filter-section { flex-wrap: wrap; gap: 6px; padding: 8px 10px; }
-      .filter-dropdown { min-width: 80px; }
-      .filter-button { 
-        padding: 3px 8px; 
-        font-size: 11px; 
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-      .filter-section h3 { font-size: 11px; margin-bottom: 4px; }
-      .filter-popup, .feedback-popup, .add-psp-popup, .invest-popup, .agent-popup { width: 90%; max-height: 50vh; }
-      .card, .tech-card { width: 100%; max-width: 100%; }
-      .card-header { font-size: 14px; padding: 10px; }
-      .card-details { font-size: 12px; }
-      .tech-card img { height: auto; max-height: 276px; }
-    }
+  .content-container { 
+    height: calc(100vh - 76px); /* Учитываем отступ 20px */
+    padding: 0 10px 0 10px; 
+  }
+  .tabs { 
+    bottom: 20px; /* Фиксированный отступ */
+    padding: 5px 0; 
+  }
+  .tab { font-size: 12px; margin: 0 3px; }
+  .header-section h1 { font-size: 24px; }
+  .header-section .subtitle { font-size: 18px; }
+  .header-section .stat h3 { font-size: 12px; }
+  .header-section .stat p { font-size: 20px; }
+  .slide h3 { font-size: 16px; }
+  .slide p { font-size: 13px; }
+  .slide .apply-button { max-width: none; }
+  .slide .image { flex: 0 0 100px; height: 100px; }
+  .partner-block { flex: 0 0 200px; }
+  .partner-block p { font-size: 13px; }
+  .rate-card, .tech-card { flex: 0 0 200px; }
+  .rate-card .card-header, .tech-card .card-header { font-size: 14px; }
+  .tech-card img { height: 120px; }
+  .ai-assistant .section-title, .for-agents .section-title { font-size: 18px; }
+  .ai-assistant .section-subtitle, .for-agents .section-subtitle { font-size: 13px; }
+  .ai-assistant .description, .for-agents .description { font-size: 13px; }
+  .info-section h3 { font-size: 16px; }
+  .resources { flex-direction: column; }
+  .resource-button { font-size: 13px; }
+  .filter-section { flex-wrap: wrap; gap: 6px; padding: 8px 10px; }
+  .filter-dropdown { min-width: 80px; }
+  .filter-button { 
+    padding: 3px 8px; 
+    font-size: 11px; 
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .filter-section h3 { font-size: 11px; margin-bottom: 4px; }
+  .filter-popup, .feedback-popup, .add-psp-popup, .invest-popup, .agent-popup { width: 90%; max-height: 50vh; }
+  .card, .tech-card { width: 100%; max-width: 100%; }
+  .card-header { font-size: 14px; padding: 10px; }
+  .card-details { font-size: 12px; }
+  .tech-card img { height: auto; max-height: 276px; }
+}
   </style>
 </head>
 <body>
