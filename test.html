@@ -31,37 +31,32 @@
       display: flex;
       flex-direction: column;
     }
-
-.filter-reset {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 40px;
-  margin-top: 16px; /* Учитываем высоту заголовков фильтров */
-}
-
-.reset-button {
-  background: #555;
-  border: none;
-  border-radius: 6px;
-  padding: 4px 8px;
-  cursor: pointer;
-  font-size: 14px;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.3s;
-}
-
-.reset-button:hover {
-  background: #777;
-}
-
-.reset-button span {
-  line-height: 1;
-}
-
+    .filter-reset {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 40px;
+      margin-top: 16px;
+    }
+    .reset-button {
+      background: #555;
+      border: none;
+      border-radius: 6px;
+      padding: 4px 8px;
+      cursor: pointer;
+      font-size: 14px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s;
+    }
+    .reset-button:hover {
+      background: #777;
+    }
+    .reset-button span {
+      line-height: 1;
+    }
     .tabs {
       display: flex;
       position: fixed;
@@ -158,16 +153,16 @@
       pointer-events: none;
     }
     .wallet-container {
-  position: relative;
-  width: 150px;
-  height: 100%;
-  display: flex; /* Исправлено */
-  flex-direction: column; /* Отдельное свойство */
-  justify-content: center;
-  align-items: center;
-  z-index: 1;
-  padding-top: 90px;
-}
+      position: relative;
+      width: 150px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 1;
+      padding-top: 90px;
+    }
     .wallet {
       width: 150px;
       height: 105px;
@@ -743,14 +738,12 @@
       left: 50%;
       transform: translate(-50%, -50%) scale(0.95);
       width: 80%;
-      max-height: 50vh;
       background: #2a2a2a;
       border-radius: 12px;
       padding: 15px;
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
       display: none;
       z-index: 30;
-      overflow-y: auto;
       opacity: 0;
       transition: opacity 0.3s ease, transform 0.3s ease;
     }
@@ -770,8 +763,6 @@
       flex-wrap: wrap;
       gap: 8px;
       margin-bottom: 15px;
-      max-height: 35vh;
-      overflow: hidden;
     }
     .filter-tag {
       padding: 6px 12px;
@@ -791,16 +782,16 @@
     .popup-button {
       flex: 1;
       padding: 8px;
-      border:none;
+      border: none;
       border-radius: 8px;
       text-align: center;
       cursor: pointer;
       font-size: 14px;
       color: #fff;
     }
-.popup-button:focus {
-  outline: none; /* Убираем обводку при фокусе */
-}
+    .popup-button:focus {
+      outline: none;
+    }
     .popup-button.apply { background: #007bff; }
     .popup-button.cancel { background: #555; }
     .popup-button.submit { background: #007bff; }
@@ -1042,7 +1033,8 @@
         text-overflow: ellipsis;
       }
       .filter-section h3 { font-size: 11px; margin-bottom: 4px; }
-      .filter-popup, .feedback-popup, .add-psp-popup, .invest-popup, .agent-popup { width: 90%; }
+      .filter-popup, .feedback-popup, .add-psp-popup, .invest-popup, .agent-popup { width: 90%; padding: 10px; }
+      .filter-tag { font-size: 12px; padding: 5px 10px; }
       .card, .tech-card { width: 100%; max-width: 100%; }
       .card-header { font-size: 14px; padding: 10px; }
       .card-details { font-size: 12px; }
@@ -1153,16 +1145,16 @@
       </div>
     </div>
     <div id="rates" class="tab-content">
-  <div class="filter-section">
-    <div class="filter-dropdown"><h3>Индустрия</h3><div class="filter-button" id="industry-button" data-label="Индустрия">Все</div></div>
-    <div class="filter-dropdown"><h3>Гео</h3><div class="filter-button" id="geo-button" data-label="Гео">Все</div></div>
-    <div class="filter-dropdown"><h3>Метод</h3><div class="filter-button" id="risk-button" data-label="Метод">Все</div></div>
-    <div class="filter-reset">
-      <button class="reset-button" onclick="resetFilters()"><span>✖</span></button>
+      <div class="filter-section">
+        <div class="filter-dropdown"><h3>Индустрия</h3><div class="filter-button" id="industry-button" data-label="Индустрия">Все</div></div>
+        <div class="filter-dropdown"><h3>Гео</h3><div class="filter-button" id="geo-button" data-label="Гео">Все</div></div>
+        <div class="filter-dropdown"><h3>Метод</h3><div class="filter-button" id="method-button" data-label="Метод">Все</div></div>
+        <div class="filter-reset">
+          <button class="reset-button" onclick="resetFilters()"><span>✖</span></button>
+        </div>
+      </div>
+      <div id="rates-content"></div>
     </div>
-  </div>
-  <div id="rates-content"></div>
-</div>
     <div id="tech" class="tab-content">
       <div class="filter-section">
         <div class="filter-dropdown"><h3>Тип</h3><div class="filter-button" id="type-button" data-label="Тип">Все</div></div>
@@ -1215,12 +1207,12 @@
       <div class="popup-button cancel" onclick="closePopup('geo-popup')">Закрыть</div>
     </div>
   </div>
-  <div class="filter-popup" id="risk-popup">
-    <h4>Выберите уровни риска</h4>
-    <div class="filter-tags" id="risk-options"></div>
+  <div class="filter-popup" id="method-popup">
+    <h4>Выберите методы</h4>
+    <div class="filter-tags" id="method-options"></div>
     <div class="popup-actions">
-      <div class="popup-button apply" onclick="applyFilter('risk')">Применить</div>
-      <div class="popup-button cancel" onclick="closePopup('risk-popup')">Закрыть</div>
+      <div class="popup-button apply" onclick="applyFilter('method')">Применить</div>
+      <div class="popup-button cancel" onclick="closePopup('method-popup')">Закрыть</div>
     </div>
   </div>
   <div class="filter-popup" id="type-popup">
@@ -1466,7 +1458,7 @@
       const container = document.getElementById(containerId);
       const button = document.getElementById(buttonId);
       const popup = document.getElementById(popupId);
-      const tags = new Set(['Все']);
+      const tags = new Set();
       rows.forEach(row => {
         if (filterType === 'type') tags.add(row[field] || 'N/A');
         else getTags(row, field).forEach(tag => tags.add(tag));
@@ -1487,23 +1479,42 @@
         }
       });
 
-      Array.from(tags).sort().forEach(tag => {
-        const tagElement = document.createElement('div');
-        tagElement.className = 'filter-tag';
-        tagElement.textContent = tag;
-        tagElement.dataset.value = tag;
-        if (activeFilters[filterType].has(tag)) tagElement.classList.add('selected');
-        tagElement.addEventListener('click', () => {
-          if (tag === 'Все') {
-            container.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('selected'));
-            tagElement.classList.add('selected');
-          } else {
-            container.querySelector('.filter-tag[data-value="Все"]').classList.remove('selected');
-            tagElement.classList.toggle('selected');
-          }
-        });
-        container.appendChild(tagElement);
+      const sortedTags = Array.from(tags).sort();
+      sortedTags.forEach(tag => {
+        if (tag !== 'Все') {
+          const tagElement = document.createElement('div');
+          tagElement.className = 'filter-tag';
+          tagElement.textContent = tag;
+          tagElement.dataset.value = tag;
+          if (activeFilters[filterType].has(tag)) tagElement.classList.add('selected');
+          tagElement.addEventListener('click', () => {
+            if (tag === 'Все') {
+              container.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('selected'));
+              tagElement.classList.add('selected');
+            } else {
+              container.querySelector('.filter-tag[data-value="Все"]').classList.remove('selected');
+              tagElement.classList.toggle('selected');
+            }
+          });
+          container.appendChild(tagElement);
+        }
       });
+
+      const separator = document.createElement('div');
+      separator.style.width = '100%';
+      separator.style.height = '8px';
+      container.appendChild(separator);
+
+      const allTagElement = document.createElement('div');
+      allTagElement.className = 'filter-tag';
+      allTagElement.textContent = 'Все';
+      allTagElement.dataset.value = 'Все';
+      if (activeFilters[filterType].size === 0) allTagElement.classList.add('selected');
+      allTagElement.addEventListener('click', () => {
+        container.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('selected'));
+        allTagElement.classList.add('selected');
+           });
+      container.appendChild(allTagElement);
     }
 
     function applyFilter(filterType) {
@@ -1547,8 +1558,8 @@
           filteredRows = filteredRows.filter(row => getTags(row, 'Geo').some(tag => activeFilters.geo.has(tag)));
         }
         if (activeFilters.method.size > 0) {
-  filteredRows = filteredRows.filter(row => getTags(row, 'Method').some(tag => activeFilters.method.has(tag)));
-}
+          filteredRows = filteredRows.filter(row => getTags(row, 'Method').some(tag => activeFilters.method.has(tag)));
+        }
       } else if (containerId === 'home-rates-content') {
         filteredRows = filteredRows.filter(row => row['HB'] === true);
       }
@@ -1585,7 +1596,7 @@
         const mainInfoBlock = [
           { label: 'Индустрия', value: row['Industry'] },
           { label: 'Гео', value: row['Geo'] },
-          { label: 'Риск', value: row['Risk'] }
+          { label: 'Метод', value: row['Method'] }
         ].filter(item => !isEmptyValue(item.value)).map(item => `<span class="info-tag">${item.label}: ${item.value}</span>`).join('');
 
         const additionalBlock = [
@@ -1608,7 +1619,7 @@
 
         const industryTag = getTags(row, 'Industry')[0] || 'N/A';
         const geoTag = getTags(row, 'Geo')[0] || 'N/A';
-        const riskTag = getTags(row, 'Risk')[0] || 'N/A';
+        const methodTag = getTags(row, 'Method')[0] || 'N/A';
 
         card.innerHTML = `
           <div class="card-header">
@@ -1619,7 +1630,7 @@
             <span class="tag service">${row['Service'] || 'N/A'}</span>
             <span class="tag">${industryTag}</span>
             <span class="tag">${geoTag}</span>
-            <span class="tag">${riskTag}</span>
+            <span class="tag">${methodTag}</span>
           </div>
           ${containerId === 'rates-content' ? `
           <div class="card-details">
@@ -1769,21 +1780,21 @@
       }
     }
 
-   async function loadData() {
-  const [rates, tech] = await Promise.all([fetchData(RATES_TABLE_ID), fetchData(TECH_TABLE_ID)]);
-  ratesData = rates;
-  techData = tech;
+    async function loadData() {
+      const [rates, tech] = await Promise.all([fetchData(RATES_TABLE_ID), fetchData(TECH_TABLE_ID)]);
+      ratesData = rates;
+      techData = tech;
 
-  renderFilters('industry-options', 'industry-button', 'industry-popup', ratesData, 'Industry', 'industry');
-  renderFilters('geo-options', 'geo-button', 'geo-popup', ratesData, 'Geo', 'geo');
-  renderFilters('risk-options', 'risk-button', 'risk-popup', ratesData, 'Method', 'method');
-  renderFilters('type-options', 'type-button', 'type-popup', techData, 'Type', 'type'); // Исправлено: правильное форматирование
+      renderFilters('industry-options', 'industry-button', 'industry-popup', ratesData, 'Industry', 'industry');
+      renderFilters('geo-options', 'geo-button', 'geo-popup', ratesData, 'Geo', 'geo');
+      renderFilters('method-options', 'method-button', 'method-popup', ratesData, 'Method', 'method');
+      renderFilters('type-options', 'type-button', 'type-popup', techData, 'Type', 'type');
 
-  renderRates('home-rates-content', ratesData);
-  renderRates('rates-content', ratesData);
-  await renderTech('home-tech-content', techData);
-  await renderTech('tech-content', techData);
-}
+      renderRates('home-rates-content', ratesData);
+      renderRates('rates-content', ratesData);
+      await renderTech('home-tech-content', techData);
+      await renderTech('tech-content', techData);
+    }
 
     function showTab(tabId) {
       document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
@@ -1817,6 +1828,29 @@
       } else {
         contentContainer.style.paddingTop = '0px';
       }
+    }
+
+    function resetFilters() {
+      activeFilters.industry.clear();
+      activeFilters.geo.clear();
+      activeFilters.method.clear();
+      activeFilters.type.clear();
+
+      document.getElementById('industry-button').textContent = 'Все';
+      document.getElementById('geo-button').textContent = 'Все';
+      document.getElementById('method-button').textContent = 'Все';
+      document.getElementById('type-button').textContent = 'Все';
+
+      document.getElementById('industry-button').classList.remove('active');
+      document.getElementById('geo-button').classList.remove('active');
+      document.getElementById('method-button').classList.remove('active');
+      document.getElementById('type-button').classList.remove('active');
+
+      document.querySelectorAll('.filter-tag.selected').forEach(tag => tag.classList.remove('selected'));
+      document.querySelectorAll('.filter-tag[data-value="Все"]').forEach(tag => tag.classList.add('selected'));
+
+      renderRates('rates-content', ratesData);
+      renderTech('tech-content', techData);
     }
 
     document.getElementById('feedback-form').addEventListener('submit', async (e) => {
@@ -1901,32 +1935,6 @@
       }
     });
 
-    
-    function resetFilters() {
-  activeFilters.industry.clear();
-  activeFilters.geo.clear();
-  activeFilters.method.clear();
-  activeFilters.type.clear();
-
-  document.getElementById('industry-button').textContent = 'Все';
-  document.getElementById('geo-button').textContent = 'Все';
-  document.getElementById('risk-button').textContent = 'Все';
-  document.getElementById('type-button').textContent = 'Все';
-
-  document.getElementById('industry-button').classList.remove('active');
-  document.getElementById('geo-button').classList.remove('active');
-  document.getElementById('risk-button').classList.remove('active');
-  document.getElementById('type-button').classList.remove('active');
-
-  document.querySelectorAll('.filter-tag.selected').forEach(tag => tag.classList.remove('selected'));
-  document.querySelectorAll('.filter-tag[data-value="Все"]').forEach(tag => tag.classList.add('selected'));
-
-  renderRates('rates-content', ratesData);
-  renderTech('tech-content', techData);
-}
-
-
-    
     document.getElementById('invest-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const overlay = document.getElementById('invest-overlay');
