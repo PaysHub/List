@@ -9,7 +9,7 @@
     * { box-sizing: border-box; }
     html, body {
       margin: 0;
-      padding: 0;
+      padding: 0;ч
       height: 100%;
       font-family: 'Inter', sans-serif;
       background-color: #1a1a1a;
@@ -203,9 +203,8 @@
       margin: 0 0 30px 0;
     }
     #home .header-section {
-      margin-top: 20px; /* Отступ сверху для первого блока на главной вкладке */
-      padding: 0 10px; /* Отступы только по бокам */
-    }
+  margin-top: 20px; /* Отступ сверху для первого блока на главной вкладке */
+}
     .header-section h1 {
       font-size: 28px;
       font-weight: 600;
@@ -927,7 +926,11 @@
       100% { background-position: 200% 0%; }
     }
     @media (max-width: 600px) {
-      .content-container { height: calc(100vh - 50px); padding: 50px 10px 20px 10px; }
+      .content-container {
+    height: calc(100vh - 50px);
+    padding: 0px 10px; /* Устанавливаем минимальный отступ для мобильных */
+  }
+      
       .tabs { bottom: 10px; padding: 5px; }
       .tab { font-size: 12px; margin: 0 3px; }
       .header-section h1 { font-size: 24px; }
@@ -1263,17 +1266,17 @@
     }
 
     function openFeedbackPopup() {
-      const popup = document.getElementById('feedback-popup');
-      document.getElementById('feedback-telegram').value = telegramUsername ? `@${telegramUsername}` : '';
-      popup.classList.add('active');
-      document.querySelector('.content-container').classList.add('blurred');
-      document.querySelector('.tabs').classList.add('blurred');
-    }
+  const popup = document.getElementById('feedback-popup');
+  document.getElementById('feedback-telegram').value = telegramUsername ? `@${telegramUsername}` : '';
+  popup.classList.add('active');
+  document.querySelector('.content-container').classList.add('blurred');
+  document.querySelector('.tabs').classList.add('blurred');
+}
     function closeFeedbackPopup() {
-      document.getElementById('feedback-popup').classList.remove('active');
-      document.querySelector('.content-container').classList.remove('blurred');
-      document.querySelector('.tabs').classList.remove('blurred');
-    }
+  document.getElementById('feedback-popup').classList.remove('active');
+  document.querySelector('.content-container').classList.remove('blurred');
+  document.querySelector('.tabs').classList.remove('blurred');
+}
     function openAddPspPopup() {
       const popup = document.getElementById('add-psp-popup');
       document.getElementById('add-psp-telegram').value = telegramUsername ? `@${telegramUsername}` : '';
@@ -1310,6 +1313,8 @@
       document.querySelector('.content-container').classList.remove('blurred');
       document.querySelector('.tabs').classList.remove('blurred');
     }
+
+   
 
     async function fetchData(tableId) {
       try {
@@ -1370,13 +1375,8 @@
         e.stopPropagation();
         document.querySelectorAll('.filter-popup').forEach(p => { if (p !== popup) p.classList.remove('active'); });
         popup.classList.toggle('active');
-        if (popup.classList.contains('active')) {
-          document.querySelector('.content-container').classList.add('blurred');
-          document.querySelector('.tabs').classList.add('blurred');
-        } else {
-          document.querySelector('.content-container').classList.remove('blurred');
-          document.querySelector('.tabs').classList.remove('blurred');
-        }
+        document.querySelector('.content-container').classList.toggle('blurred');
+        document.querySelector('.tabs').classList.toggle('blurred');
       });
 
       Array.from(tags).sort().forEach(tag => {
@@ -1604,7 +1604,7 @@
       ratesData = rates;
       techData = tech;
 
-      renderFilters('industry-options', 'industry-button', 'industry-popup', ratesData, 'Industry', 'industry');
+           renderFilters('industry-options', 'industry-button', 'industry-popup', ratesData, 'Industry', 'industry');
       renderFilters('geo-options', 'geo-button', 'geo-popup', ratesData, 'Geo', 'geo');
       renderFilters('risk-options', 'risk-button', 'risk-popup', ratesData, 'Risk', 'risk');
       renderFilters('type-options', 'type-button', 'type-popup', techData, 'Type', 'type');
@@ -1616,30 +1616,31 @@
     }
 
     function showTab(tabId) {
-      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(content => {
-        content.classList.remove('active');
-        content.scrollTop = 0; // Сбрасываем прокрутку
-      });
-      document.querySelector(`[onclick="showTab('${tabId}')"]`).classList.add('active');
-      document.getElementById(tabId).classList.add('active');
-      adjustContentPadding();
-    }
+  document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(content => {
+    content.classList.remove('active');
+    content.scrollTop = 0; // Сбрасываем прокрутку
+  });
+  document.querySelector(`[onclick="showTab('${tabId}')"]`).classList.add('active');
+  document.getElementById(tabId).classList.add('active');
+  adjustContentPadding();
+}
 
     function openTelegram() {
       window.open('https://t.me/p_fintech?text=I%20need%20help%20with%20the%20PaysHub%20service', '_blank');
     }
 
-    function adjustContentPadding() {
-      const filterSection = document.querySelector('.filter-section');
-      const contentContainer = document.querySelector('.content-container');
-      if (filterSection && (document.getElementById('rates').classList.contains('active') || document.getElementById('tech').classList.contains('active'))) {
-        const filterHeight = filterSection.getBoundingClientRect().height || 60;
-        contentContainer.style.paddingTop = `${filterHeight}px`;
-      } else {
-        contentContainer.style.paddingTop = '10px'; // Минимальный отступ для главной вкладки
-      }
-    }
+  function adjustContentPadding() {
+  const filterSection = document.querySelector('.filter-section');
+  const contentContainer = document.querySelector('.content-container');
+  if (filterSection && (document.getElementById('rates').classList.contains('active') || document.getElementById('tech').classList.contains('active'))) {
+    const filterHeight = filterSection.getBoundingClientRect().height || 60;
+    contentContainer.style.paddingTop = `${filterHeight}px`;
+  } else {
+    // Устанавливаем минимальный отступ для вкладки "Главная"
+    contentContainer.style.paddingTop = '0px'; // Можно настроить значение
+  }
+}
 
     document.getElementById('feedback-form').addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -1746,22 +1747,18 @@
     });
 
     document.addEventListener('click', (e) => {
-      // Закрытие попапов форм обратной связи
-      if (!e.target.closest('.apply-button') && !e.target.closest('.feedback-popup') && !e.target.closest('.agent-button')) closeFeedbackPopup();
-      if (!e.target.closest('.apply-button') && !e.target.closest('.add-psp-popup') && !e.target.closest('.agent-button')) closeAddPspPopup();
-      if (!e.target.closest('.apply-button') && !e.target.closest('.invest-popup') && !e.target.closest('.agent-button')) closeInvestPopup();
-      if (!e.target.closest('.agent-button') && !e.target.closest('.agent-popup') && !e.target.closest('.apply-button')) closeAgentPopup();
-
-      // Закрытие попапов фильтров
-      const filterPopup = document.querySelector('.filter-popup.active');
-      if (filterPopup && !e.target.closest('.filter-dropdown') && !e.target.closest('.filter-popup') && !e.target.closest('.filter-tag')) {
-        document.querySelectorAll('.filter-popup').forEach(popup => {
-          popup.classList.remove('active');
-          document.querySelector('.content-container').classList.remove('blurred');
-          document.querySelector('.tabs').classList.remove('blurred');
-        });
-      }
+  if (!e.target.closest('.apply-button') && !e.target.closest('.feedback-popup') && !e.target.closest('.agent-button')) closeFeedbackPopup();
+  if (!e.target.closest('.apply-button') && !e.target.closest('.add-psp-popup') && !e.target.closest('.agent-button')) closeAddPspPopup();
+  if (!e.target.closest('.apply-button') && !e.target.closest('.invest-popup') && !e.target.closest('.agent-button')) closeInvestPopup();
+  if (!e.target.closest('.agent-button') && !e.target.closest('.agent-popup') && !e.target.closest('.apply-button')) closeAgentPopup();
+  if (!e.target.closest('.filter-dropdown') && !e.target.closest('.filter-popup')) {
+    document.querySelectorAll('.filter-popup').forEach(popup => {
+      popup.classList.remove('active');
+      document.querySelector('.content-container').classList.remove('blurred');
+      document.querySelector('.tabs').classList.remove('blurred');
     });
+  }
+});
 
     window.addEventListener('load', () => {
       const preloader = document.getElementById('preloader');
@@ -1798,5 +1795,5 @@
     });
   </script>
   <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'92ba42407c4cbfff',t:'MTc0Mzg2ODgzMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
-  </body>
+</body>
 </html>
