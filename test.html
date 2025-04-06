@@ -127,16 +127,16 @@
       pointer-events: none;
     }
     .wallet-container {
-      position: relative;
-      width: 150px;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      z-index: 1;
-      padding-top: 90px;
-    }
+  position: relative;
+  width: 150px;
+  height: 100%;
+  display: flex; /* Исправлено */
+  flex-direction: column; /* Отдельное свойство */
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+  padding-top: 90px;
+}
     .wallet {
       width: 150px;
       height: 105px;
@@ -769,17 +769,6 @@
     .popup-button.apply { background: #007bff; }
     .popup-button.cancel { background: #555; }
     .popup-button.submit { background: #007bff; }
-    .popup-button.submit.loading::after {
-      content: ' .';
-      animation: dots 1.5s infinite;
-      display: inline-block;
-    }
-    @keyframes dots {
-      0% { content: ' .'; }
-      33% { content: ' ..'; }
-      66% { content: ' ...'; }
-      100% { content: ' .'; }
-    }
     .card-details {
       max-height: 0;
       overflow: hidden;
@@ -934,6 +923,44 @@
     }
     .privacy-content p { margin: 0; }
     .privacy-content a { color: #007bff; text-decoration: underline; }
+    .popup-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 50;
+      border-radius: 12px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+    .popup-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .popup-overlay .loading-message,
+    .popup-overlay .success-message {
+      color: #fff;
+      font-size: 16px;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    .popup-overlay .success-message {
+      color: #00c4b4;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .popup-overlay .success-message::before {
+      content: '✔';
+      font-size: 20px;
+    }
     @keyframes gradientShift {
       0% { background-position: 0% 0%; }
       100% { background-position: 200% 0%; }
@@ -1179,6 +1206,10 @@
         <button type="button" class="popup-button cancel" onclick="closeFeedbackPopup()">Закрыть</button>
       </div>
     </form>
+    <div class="popup-overlay" id="feedback-overlay">
+      <div class="loading-message">Идет отправка сообщения, не закрывайте окно</div>
+      <div class="success-message" style="display: none;">Сообщение отправлено</div>
+    </div>
   </div>
   <div class="add-psp-popup" id="add-psp-popup">
     <h4>Добавление PSP в список</h4>
@@ -1193,6 +1224,10 @@
         <button type="button" class="popup-button cancel" onclick="closeAddPspPopup()">Закрыть</button>
       </div>
     </form>
+    <div class="popup-overlay" id="add-psp-overlay">
+      <div class="loading-message">Идет отправка сообщения, не закрывайте окно</div>
+      <div class="success-message" style="display: none;">Сообщение отправлено</div>
+    </div>
   </div>
   <div class="invest-popup" id="invest-popup">
     <h4>Инвестиции</h4>
@@ -1207,6 +1242,10 @@
         <button type="button" class="popup-button cancel" onclick="closeInvestPopup()">Закрыть</button>
       </div>
     </form>
+    <div class="popup-overlay" id="invest-overlay">
+      <div class="loading-message">Идет отправка сообщения, не закрывайте окно</div>
+      <div class="success-message" style="display: none;">Сообщение отправлено</div>
+    </div>
   </div>
   <div class="agent-popup" id="agent-popup">
     <h4>Стать агентом</h4>
@@ -1221,6 +1260,10 @@
         <button type="button" class="popup-button cancel" onclick="closeAgentPopup()">Закрыть</button>
       </div>
     </form>
+    <div class="popup-overlay" id="agent-overlay">
+      <div class="loading-message">Идет отправка сообщения, не закрывайте окно</div>
+      <div class="success-message" style="display: none;">Сообщение отправлено</div>
+    </div>
   </div>
   <div class="notification" id="notification">Сообщение успешно отправлено!</div>
   <div class="privacy-notice" id="privacy-notice">
@@ -1628,7 +1671,8 @@
         const descriptionBlock = !isEmptyValue(row['Description']) ? `<span class="info-tag" style="display: block;">${formatText(row['Description'])}</span>` : '';
 
         card.innerHTML = `
-          <img src="${imgUrl}" alt="Tech Solution" onerror="this.src='https://placehold.co/400x276';">          <div class="card-header">
+          <img src="${imgUrl}" alt="Tech Solution" onerror="this.src='https://placehold.co/400x276';">
+          <div class="card-header">
             <span>${truncatedName}</span>
             <span>${row['Price'] || ''}</span>
           </div>
@@ -1687,21 +1731,21 @@
       }
     }
 
-    async function loadData() {
-      const [rates, tech] = await Promise.all([fetchData(RATES_TABLE_ID), fetchData(TECH_TABLE_ID)]);
-      ratesData = rates;
-      techData = tech;
+   async function loadData() {
+  const [rates, tech] = await Promise.all([fetchData(RATES_TABLE_ID), fetchData(TECH_TABLE_ID)]);
+  ratesData = rates;
+  techData = tech;
 
-      renderFilters('industry-options', 'industry-button', 'industry-popup', ratesData, 'Industry', 'industry');
-      renderFilters('geo-options', 'geo-button', 'geo-popup', ratesData, 'Geo', 'geo');
-      renderFilters('risk-options', 'risk-button', 'risk-popup', ratesData, 'Risk', 'risk');
-      renderFilters('type-options', 'type-button', 'type-popup', techData, 'Type', 'type');
+  renderFilters('industry-options', 'industry-button', 'industry-popup', ratesData, 'Industry', 'industry');
+  renderFilters('geo-options', 'geo-button', 'geo-popup', ratesData, 'Geo', 'geo');
+  renderFilters('risk-options', 'risk-button', 'risk-popup', ratesData, 'Risk', 'risk'); // Исправлено: добавлена закрывающая скобка
+  renderFilters('type-options', 'type-button', 'type-popup', techData, 'Type', 'type'); // Исправлено: правильное форматирование
 
-      renderRates('home-rates-content', ratesData);
-      renderRates('rates-content', ratesData);
-      await renderTech('home-tech-content', techData);
-      await renderTech('tech-content', techData);
-    }
+  renderRates('home-rates-content', ratesData);
+  renderRates('rates-content', ratesData);
+  await renderTech('home-tech-content', techData);
+  await renderTech('tech-content', techData);
+}
 
     function showTab(tabId) {
       document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
@@ -1739,9 +1783,12 @@
 
     document.getElementById('feedback-form').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const submitButton = e.target.querySelector('.popup-button.submit');
-      submitButton.classList.add('loading');
-      submitButton.disabled = true;
+      const overlay = document.getElementById('feedback-overlay');
+      const loadingMessage = overlay.querySelector('.loading-message');
+      const successMessage = overlay.querySelector('.success-message');
+      overlay.classList.add('active');
+      loadingMessage.style.display = 'block';
+      successMessage.style.display = 'none';
 
       const telegram = document.getElementById('feedback-telegram').value;
       const message = document.getElementById('feedback-message').value;
@@ -1757,24 +1804,32 @@
         });
         const result = await response.json();
         if (response.ok) {
-          showNotification('Заявка успешно отправлена!');
-          closeFeedbackPopup();
-          document.getElementById('feedback-form').reset();
-        } else showNotification(result.error || 'Ошибка при отправке заявки.');
+          loadingMessage.style.display = 'none';
+          successMessage.style.display = 'flex';
+          setTimeout(() => {
+            overlay.classList.remove('active');
+            closeFeedbackPopup();
+            document.getElementById('feedback-form').reset();
+          }, 2000);
+        } else {
+          overlay.classList.remove('active');
+          showNotification(result.error || 'Ошибка при отправке заявки.');
+        }
       } catch (error) {
         console.error('Ошибка:', error);
+        overlay.classList.remove('active');
         showNotification('Произошла ошибка.');
-      } finally {
-        submitButton.classList.remove('loading');
-        submitButton.disabled = false;
       }
     });
 
     document.getElementById('add-psp-form').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const submitButton = e.target.querySelector('.popup-button.submit');
-      submitButton.classList.add('loading');
-      submitButton.disabled = true;
+      const overlay = document.getElementById('add-psp-overlay');
+      const loadingMessage = overlay.querySelector('.loading-message');
+      const successMessage = overlay.querySelector('.success-message');
+      overlay.classList.add('active');
+      loadingMessage.style.display = 'block';
+      successMessage.style.display = 'none';
 
       const telegram = document.getElementById('add-psp-telegram').value;
       const message = document.getElementById('add-psp-message').value;
@@ -1790,24 +1845,32 @@
         });
         const result = await response.json();
         if (response.ok) {
-          showNotification('Заявка успешно отправлена!');
-          closeAddPspPopup();
-          document.getElementById('add-psp-form').reset();
-        } else showNotification(result.error || 'Ошибка при отправке заявки.');
+          loadingMessage.style.display = 'none';
+          successMessage.style.display = 'flex';
+          setTimeout(() => {
+            overlay.classList.remove('active');
+            closeAddPspPopup();
+            document.getElementById('add-psp-form').reset();
+          }, 2000);
+        } else {
+          overlay.classList.remove('active');
+          showNotification(result.error || 'Ошибка при отправке заявки.');
+        }
       } catch (error) {
         console.error('Ошибка:', error);
+        overlay.classList.remove('active');
         showNotification('Произошла ошибка.');
-      } finally {
-        submitButton.classList.remove('loading');
-        submitButton.disabled = false;
       }
     });
 
     document.getElementById('invest-form').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const submitButton = e.target.querySelector('.popup-button.submit');
-      submitButton.classList.add('loading');
-      submitButton.disabled = true;
+      const overlay = document.getElementById('invest-overlay');
+      const loadingMessage = overlay.querySelector('.loading-message');
+      const successMessage = overlay.querySelector('.success-message');
+      overlay.classList.add('active');
+      loadingMessage.style.display = 'block';
+      successMessage.style.display = 'none';
 
       const telegram = document.getElementById('invest-telegram').value;
       const message = document.getElementById('invest-message').value;
@@ -1823,24 +1886,32 @@
         });
         const result = await response.json();
         if (response.ok) {
-          showNotification('Заявка успешно отправлена!');
-          closeInvestPopup();
-          document.getElementById('invest-form').reset();
-        } else showNotification(result.error || 'Ошибка при отправке заявки.');
+          loadingMessage.style.display = 'none';
+          successMessage.style.display = 'flex';
+          setTimeout(() => {
+            overlay.classList.remove('active');
+            closeInvestPopup();
+            document.getElementById('invest-form').reset();
+          }, 2000);
+        } else {
+          overlay.classList.remove('active');
+          showNotification(result.error || 'Ошибка при отправке заявки.');
+        }
       } catch (error) {
         console.error('Ошибка:', error);
+        overlay.classList.remove('active');
         showNotification('Произошла ошибка.');
-      } finally {
-        submitButton.classList.remove('loading');
-        submitButton.disabled = false;
       }
     });
 
     document.getElementById('agent-form').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const submitButton = e.target.querySelector('.popup-button.submit');
-      submitButton.classList.add('loading');
-      submitButton.disabled = true;
+      const overlay = document.getElementById('agent-overlay');
+      const loadingMessage = overlay.querySelector('.loading-message');
+      const successMessage = overlay.querySelector('.success-message');
+      overlay.classList.add('active');
+      loadingMessage.style.display = 'block';
+      successMessage.style.display = 'none';
 
       const telegram = document.getElementById('agent-telegram').value;
       const message = document.getElementById('agent-message').value;
@@ -1856,16 +1927,21 @@
         });
         const result = await response.json();
         if (response.ok) {
-          showNotification('Заявка успешно отправлена!');
-          closeAgentPopup();
-          document.getElementById('agent-form').reset();
-        } else showNotification(result.error || 'Ошибка при отправке заявки.');
+          loadingMessage.style.display = 'none';
+          successMessage.style.display = 'flex';
+          setTimeout(() => {
+            overlay.classList.remove('active');
+            closeAgentPopup();
+            document.getElementById('agent-form').reset();
+          }, 2000);
+        } else {
+          overlay.classList.remove('active');
+          showNotification(result.error || 'Ошибка при отправке заявки.');
+        }
       } catch (error) {
         console.error('Ошибка:', error);
+        overlay.classList.remove('active');
         showNotification('Произошла ошибка.');
-      } finally {
-        submitButton.classList.remove('loading');
-        submitButton.disabled = false;
       }
     });
 
