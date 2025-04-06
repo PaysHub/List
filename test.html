@@ -1149,6 +1149,7 @@
         <div class="filter-dropdown"><h3>Индустрия</h3><div class="filter-button" id="industry-button" data-label="Индустрия">Все</div></div>
         <div class="filter-dropdown"><h3>Гео</h3><div class="filter-button" id="geo-button" data-label="Гео">Все</div></div>
         <div class="filter-dropdown"><h3>Метод</h3><div class="filter-button" id="method-button" data-label="Метод">Все</div></div>
+        <div class="filter-dropdown"><h3>Риск</h3><div class="filter-button" id="risk-button" data-label="Риск">Все</div></div>
         <div class="filter-reset">
           <button class="reset-button" onclick="resetFilters()"><span>✖</span></button>
         </div>
@@ -1213,6 +1214,14 @@
     <div class="popup-actions">
       <div class="popup-button apply" onclick="applyFilter('method')">Применить</div>
       <div class="popup-button cancel" onclick="closePopup('method-popup')">Закрыть</div>
+    </div>
+  </div>
+  <div class="filter-popup" id="risk-popup">
+    <h4>Выберите уровни риска</h4>
+    <div class="filter-tags" id="risk-options"></div>
+    <div class="popup-actions">
+      <div class="popup-button apply" onclick="applyFilter('risk')">Применить</div>
+      <div class="popup-button cancel" onclick="closePopup('risk-popup')">Закрыть</div>
     </div>
   </div>
   <div class="filter-popup" id="type-popup">
@@ -1313,7 +1322,7 @@
 
     let ratesData = [];
     let techData = [];
-    let activeFilters = { industry: new Set(), geo: new Set(), method: new Set(), type: new Set() };
+    let activeFilters = { industry: new Set(), geo: new Set(), method: new Set(), risk: new Set(), type: new Set() };
     let currentSlide = 0;
     const slides = document.querySelectorAll('.slide');
     const dotsContainer = document.getElementById('slider-dots');
@@ -1513,7 +1522,7 @@
       allTagElement.addEventListener('click', () => {
         container.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('selected'));
         allTagElement.classList.add('selected');
-           });
+      });
       container.appendChild(allTagElement);
     }
 
@@ -1545,7 +1554,7 @@
       document.querySelector('.tabs').classList.remove('blurred');
     }
 
-    function renderRates(containerId, rows) {
+    function renderRates(containerId, rows)    {
       const container = document.getElementById(containerId);
       container.innerHTML = '';
       let filteredRows = rows.filter(row => row['On'] === true);
@@ -1559,6 +1568,9 @@
         }
         if (activeFilters.method.size > 0) {
           filteredRows = filteredRows.filter(row => getTags(row, 'Method').some(tag => activeFilters.method.has(tag)));
+        }
+        if (activeFilters.risk.size > 0) {
+          filteredRows = filteredRows.filter(row => getTags(row, 'Risk').some(tag => activeFilters.risk.has(tag)));
         }
       } else if (containerId === 'home-rates-content') {
         filteredRows = filteredRows.filter(row => row['HB'] === true);
@@ -1596,7 +1608,8 @@
         const mainInfoBlock = [
           { label: 'Индустрия', value: row['Industry'] },
           { label: 'Гео', value: row['Geo'] },
-          { label: 'Метод', value: row['Method'] }
+          { label: 'Метод', value: row['Method'] },
+          { label: 'Риск', value: row['Risk'] }
         ].filter(item => !isEmptyValue(item.value)).map(item => `<span class="info-tag">${item.label}: ${item.value}</span>`).join('');
 
         const additionalBlock = [
@@ -1620,6 +1633,7 @@
         const industryTag = getTags(row, 'Industry')[0] || 'N/A';
         const geoTag = getTags(row, 'Geo')[0] || 'N/A';
         const methodTag = getTags(row, 'Method')[0] || 'N/A';
+        const riskTag = getTags(row, 'Risk')[0] || 'N/A';
 
         card.innerHTML = `
           <div class="card-header">
@@ -1631,6 +1645,7 @@
             <span class="tag">${industryTag}</span>
             <span class="tag">${geoTag}</span>
             <span class="tag">${methodTag}</span>
+            <span class="tag">${riskTag}</span>
           </div>
           ${containerId === 'rates-content' ? `
           <div class="card-details">
@@ -1788,6 +1803,7 @@
       renderFilters('industry-options', 'industry-button', 'industry-popup', ratesData, 'Industry', 'industry');
       renderFilters('geo-options', 'geo-button', 'geo-popup', ratesData, 'Geo', 'geo');
       renderFilters('method-options', 'method-button', 'method-popup', ratesData, 'Method', 'method');
+      renderFilters('risk-options', 'risk-button', 'risk-popup', ratesData, 'Risk', 'risk');
       renderFilters('type-options', 'type-button', 'type-popup', techData, 'Type', 'type');
 
       renderRates('home-rates-content', ratesData);
@@ -1834,16 +1850,19 @@
       activeFilters.industry.clear();
       activeFilters.geo.clear();
       activeFilters.method.clear();
+      activeFilters.risk.clear();
       activeFilters.type.clear();
 
       document.getElementById('industry-button').textContent = 'Все';
       document.getElementById('geo-button').textContent = 'Все';
       document.getElementById('method-button').textContent = 'Все';
+      document.getElementById('risk-button').textContent = 'Все';
       document.getElementById('type-button').textContent = 'Все';
 
       document.getElementById('industry-button').classList.remove('active');
       document.getElementById('geo-button').classList.remove('active');
       document.getElementById('method-button').classList.remove('active');
+      document.getElementById('risk-button').classList.remove('active');
       document.getElementById('type-button').classList.remove('active');
 
       document.querySelectorAll('.filter-tag.selected').forEach(tag => tag.classList.remove('selected'));
