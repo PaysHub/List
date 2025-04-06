@@ -78,20 +78,21 @@
   color: #999; /* Цвет неактивного текста */
   font-size: 12px;
   position: relative;
-  transition: color 0.3s;
+  transition: color 0.3s ease; /* Плавный переход для цвета текста */
 }
-  .tab.active {
-  color: #fff; /* Цвет текста белый */
+.tab.active {
+  color: #fff !important; /* Цвет текста белый, с приоритетом */
   background: transparent;
-}
-.tab.active .tab-icon {
-  stroke: #fff; /* Цвет иконки белый */
 }
 .tab-icon {
   width: 24px;
   height: 24px;
   margin-bottom: 2px;
-  stroke: currentColor; /* Цвет иконки меняется с цветом текста */
+  stroke: currentColor; /* Цвет иконки наследуется от цвета текста */
+  transition: stroke 0.3s ease; /* Плавный переход для цвета иконки */
+}
+.tab.active .tab-icon {
+  stroke: #fff !important; /* Цвет иконки белый, с приоритетом */
 }
 .tab-badge {
   position: absolute;
@@ -1618,15 +1619,15 @@
     }
 
     function showTab(tabId) {
-      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(content => {
-        content.classList.remove('active');
-        content.scrollTop = 0; // Сбрасываем прокрутку
-      });
-      document.querySelector(`[onclick="showTab('${tabId}')"]`).classList.add('active');
-      document.getElementById(tabId).classList.add('active');
-      adjustContentPadding();
-    }
+  document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(content => {
+    content.classList.remove('active');
+    content.scrollTop = 0; // Сбрасываем прокрутку
+  });
+  document.querySelector(`[onclick="showTab('${tabId}')"]`).classList.add('active');
+  document.getElementById(tabId).classList.add('active');
+  adjustContentPadding();
+}
 
     function openTelegram() {
       window.open('https://t.me/p_fintech?text=I%20need%20help%20with%20the%20PaysHub%20service', '_blank');
