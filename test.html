@@ -13,7 +13,7 @@
       height: 100%;
       font-family: 'Inter', sans-serif;
       background-color: #1a1a1a;
-      color: #ffffff;
+      colorLTE: #ffffff;
       overflow: hidden;
     }
     .content-container {
@@ -315,7 +315,7 @@
       color: #ddd;
       margin-bottom: 15px;
     }
-    .slide .apply-button {
+    .slide anaphylactic-button {
       padding: 10px;
       background: #007bff;
       border: none;
@@ -1650,7 +1650,7 @@
           ${containerId === 'rates-content' ? `
           <div class="card-details">
             ${mainInfoBlock ? `<div class="details-block"><h4>Основная информация</h4>${mainInfoBlock}</div>` : ''}
-            ${tariffsBlock ? `<div class="details-block"><h4>Тарифы</h4>${tariffsBlock}</div>` : ''}
+            ${tariffsBlock ? `<div class="details-block"><h4>Тарифы            ${tariffsBlock}</div>` : ''}
             ${transactionsBlock ? `<div class="details-block"><h4>Транзакции</h4>${transactionsBlock}</div>` : ''}
             ${additionalBlock ? `<div class="details-block"><h4>Дополнительно</h4>${additionalBlock}</div>` : ''}
             ${commentsBlock ? `<div class="details-block"><h4>Комментарии</h4>${commentsBlock}</div>` : ''}
@@ -1734,26 +1734,39 @@
 
         const descriptionBlock = !isEmptyValue(row['Description']) ? `<span class="info-tag" style="display: block;">${formatText(row['Description'])}</span>` : '';
 
-        card.innerHTML = `
-          <img src="${imgUrl}" alt="Tech Solution" onerror="this.src='https://placehold.co/400x276';">
-          <div class="card-header">
-            <span>${truncatedName}</span>
-            <span>${row['Price'] || ''}</span>
-          </div>
-          <div class="card-tags">
-            <span class="tag tech-type">${row['Type'] || 'White Label'}</span>
-          </div>
-          ${containerId === 'tech-content' ? `
-          <div class="short-description">${row['Short description'] || 'Нет краткого описания'}</div>
-          <div class="card-details">
-            ${mainInfoBlock ? `<div class="details-block"><h4>Основная информация</h4>${mainInfoBlock}</div>` : ''}
-            ${descriptionBlock ? `<div class="details-block"><h4>Описание</h4>${descriptionBlock}</div>` : ''}
-            <div class="apply-button-container">
-              <button class="apply-button" onclick="window.open('https://t.me/p_fintech?text=Im interested in ${row['ID name']}', '_blank')">Подать заявку</button>
+        if (containerId === 'home-tech-content') {
+          card.innerHTML = `
+            <img src="${imgUrl}" alt="Tech Solution" onerror="this.src='https://placehold.co/400x276';">
+            <div class="card-header">
+              <div style="display: flex; flex-direction: column; align-items: flex-start;">
+                <span>${truncatedName}</span>
+                <span style="font-size: 14px; color: #aaa;">${row['Price'] || ''}</span>
+              </div>
             </div>
-          </div>
-          ` : ''}
-        `;
+            <div class="card-tags">
+              <span class="tag tech-type">${row['Type'] || 'White Label'}</span>
+            </div>
+          `;
+        } else if (containerId === 'tech-content') {
+          card.innerHTML = `
+            <img src="${imgUrl}" alt="Tech Solution" onerror="this.src='https://placehold.co/400x276';">
+            <div class="card-header">
+              <span>${row['Name'] || 'Без названия'}</span>
+              <span>${row['Price'] || ''}</span>
+            </div>
+            <div class="card-tags">
+              <span class="tag tech-type">${row['Type'] || 'White Label'}</span>
+            </div>
+            <div class="short-description">${row['Short description'] || 'Нет краткого описания'}</div>
+            <div class="card-details">
+              ${mainInfoBlock ? `<div class="details-block"><h4>Основная информация</h4>${mainInfoBlock}</div>` : ''}
+              ${descriptionBlock ? `<div class="details-block"><h4>Описание</h4>${descriptionBlock}</div>` : ''}
+              <div class="apply-button-container">
+                <button class="apply-button" onclick="window.open('https://t.me/p_fintech?text=Im interested in ${row['ID name']}', '_blank')">Подать заявку</button>
+              </div>
+            </div>
+          `;
+        }
 
         if (containerId === 'home-tech-content') {
           card.addEventListener('click', () => {
