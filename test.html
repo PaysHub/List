@@ -81,8 +81,11 @@
   transition: color 0.3s ease; /* Плавный переход для цвета текста */
 }
 .tab.active {
-  color: #fff !important; /* Цвет текста белый, с приоритетом */
+  color: #fff !important;
   background: transparent;
+}
+.tab.active .tab-icon {
+  stroke: #fff !important;
 }
 .tab-icon {
   width: 24px;
@@ -91,9 +94,7 @@
   stroke: currentColor; /* Цвет иконки наследуется от цвета текста */
   transition: stroke 0.3s ease; /* Плавный переход для цвета иконки */
 }
-.tab.active .tab-icon {
-  stroke: #fff !important; /* Цвет иконки белый, с приоритетом */
-}
+
 .tab-badge {
   position: absolute;
   top: 4px;
@@ -1081,27 +1082,28 @@
       <div id="tech-content"><p>Загрузка...</p></div>
     </div>
   </div>
+
   <div class="tabs">
-  <div class="tab active" onclick="showTab('home')">
+  <div class="tab active" data-tab="home" onclick="showTab('home')">
     <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9z"/>
       <polyline points="9 22 9 12 15 12 15 22"/>
     </svg>
     <span>Главная</span>
   </div>
-  <div class="tab" onclick="showTab('rates')">
+  <div class="tab" data-tab="rates" onclick="showTab('rates')">
     <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
     </svg>
     <span>Ставки</span>
   </div>
-  <div class="tab" onclick="showTab('tech')">
+  <div class="tab" data-tab="tech" onclick="showTab('tech')">
     <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <path d="M4 6h16M4 12h16M4 18h16"/>
     </svg>
     <span>Решения</span>
   </div>
-  <div class="tab" onclick="openTelegram()">
+  <div class="tab" data-tab="operator" onclick="openTelegram()">
     <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
       <circle cx="12" cy="7" r="4"/>
@@ -1622,16 +1624,24 @@
   document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
   document.querySelectorAll('.tab-content').forEach(content => {
     content.classList.remove('active');
-    content.scrollTop = 0; // Сбрасываем прокрутку
+    content.scrollTop = 0;
   });
-  document.querySelector(`[onclick="showTab('${tabId}')"]`).classList.add('active');
+  const activeTab = document.querySelector(`.tab[data-tab="${tabId}"]`);
+  if (activeTab) activeTab.classList.add('active');
   document.getElementById(tabId).classList.add('active');
   adjustContentPadding();
 }
 
     function openTelegram() {
-      window.open('https://t.me/p_fintech?text=I%20need%20help%20with%20the%20PaysHub%20service', '_blank');
-    }
+  document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(content => {
+    content.classList.remove('active');
+    content.scrollTop = 0;
+  });
+  const operatorTab = document.querySelector('.tab[data-tab="operator"]');
+  if (operatorTab) operatorTab.classList.add('active');
+  window.open('https://t.me/p_fintech?text=I%20need%20help%20with%20the%20PaysHub%20service', '_blank');
+}
 
     function adjustContentPadding() {
   const filterSection = document.querySelector('.filter-section');
