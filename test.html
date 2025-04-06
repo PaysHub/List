@@ -18,7 +18,7 @@
     }
     .content-container {
       width: 100%;
-      height: calc(100vh - 50px);
+      height: calc(100vh - 56px - env(safe-area-inset-bottom));
       position: relative;
       z-index: 1;
       padding: 0;
@@ -56,6 +56,7 @@
       width: 100%;
       background: #212121;
       padding: 8px 0;
+      padding-bottom: calc(8px + env(safe-area-inset-bottom));
       box-sizing: border-box;
       z-index: 100;
       transition: filter 0.3s ease;
@@ -686,21 +687,21 @@
       min-width: 90px;
     }
     .filter-button {
-  padding: 4px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 12px;
-  color: #fff;
-  background: #333;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  box-sizing: border-box;
-  white-space: nowrap; /* Запрещаем перенос текста */
-  overflow: hidden; /* Скрываем лишний текст */
-  text-overflow: ellipsis; /* Добавляем многоточие, если текст обрезается */
-}
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      color: #fff;
+      background: #333;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      box-sizing: border-box;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
     .filter-button.active {
       background: linear-gradient(90deg, #007bff, #00c4b4, #007bff);
       background-size: 200% 100%;
@@ -933,44 +934,51 @@
       margin-top: 20px;
     }
     @media (max-width: 600px) {
-  .content-container { height: calc(100vh - 56px); padding: 0 10px 0 10px; }
-  .tabs { bottom: 0; padding: 5px; }
-  .tab { font-size: 12px; margin: 0 3px; }
-  .header-section h1 { font-size: 24px; }
-  .header-section .subtitle { font-size: 18px; }
-  .header-section .stat h3 { font-size: 12px; }
-  .header-section .stat p { font-size: 20px; }
-  .slide h3 { font-size: 16px; }
-  .slide p { font-size: 13px; }
-  .slide .apply-button { max-width: none; }
-  .slide .image { flex: 0 0 100px; height: 100px; }
-  .partner-block { flex: 0 0 200px; }
-  .partner-block p { font-size: 13px; }
-  .rate-card, .tech-card { flex: 0 0 200px; }
-  .rate-card .card-header, .tech-card .card-header { font-size: 14px; }
-  .tech-card img { height: 120px; }
-  .ai-assistant .section-title, .for-agents .section-title { font-size: 18px; }
-  .ai-assistant .section-subtitle, .for-agents .section-subtitle { font-size: 13px; }
-  .ai-assistant .description, .for-agents .description { font-size: 13px; }
-  .info-section h3 { font-size: 16px; }
-  .resources { flex-direction: column; }
-  .resource-button { font-size: 13px; }
-  .filter-section { flex-wrap: wrap; gap: 6px; padding: 8px 10px; }
-  .filter-dropdown { min-width: 80px; }
-  .filter-button { 
-    padding: 3px 8px; 
-    font-size: 11px; 
-    white-space: nowrap; /* Запрещаем перенос текста */
-    overflow: hidden; /* Скрываем лишний текст */
-    text-overflow: ellipsis; /* Добавляем многоточие */
-  }
-  .filter-section h3 { font-size: 11px; margin-bottom: 4px; }
-  .filter-popup, .feedback-popup, .add-psp-popup, .invest-popup, .agent-popup { width: 90%; max-height: 50vh; }
-  .card, .tech-card { width: 100%; max-width: 100%; }
-  .card-header { font-size: 14px; padding: 10px; }
-  .card-details { font-size: 12px; }
-  .tech-card img { height: auto; max-height: 276px; }
-}
+      .content-container { 
+        height: calc(100vh - 56px - env(safe-area-inset-bottom)); 
+        padding: 0 10px 0 10px; 
+      }
+      .tabs { 
+        bottom: 0; 
+        padding: 5px 0; 
+        padding-bottom: calc(5px + env(safe-area-inset-bottom)); 
+      }
+      .tab { font-size: 12px; margin: 0 3px; }
+      .header-section h1 { font-size: 24px; }
+      .header-section .subtitle { font-size: 18px; }
+      .header-section .stat h3 { font-size: 12px; }
+      .header-section .stat p { font-size: 20px; }
+      .slide h3 { font-size: 16px; }
+      .slide p { font-size: 13px; }
+      .slide .apply-button { max-width: none; }
+      .slide .image { flex: 0 0 100px; height: 100px; }
+      .partner-block { flex: 0 0 200px; }
+      .partner-block p { font-size: 13px; }
+      .rate-card, .tech-card { flex: 0 0 200px; }
+      .rate-card .card-header, .tech-card .card-header { font-size: 14px; }
+      .tech-card img { height: 120px; }
+      .ai-assistant .section-title, .for-agents .section-title { font-size: 18px; }
+      .ai-assistant .section-subtitle, .for-agents .section-subtitle { font-size: 13px; }
+      .ai-assistant .description, .for-agents .description { font-size: 13px; }
+      .info-section h3 { font-size: 16px; }
+      .resources { flex-direction: column; }
+      .resource-button { font-size: 13px; }
+      .filter-section { flex-wrap: wrap; gap: 6px; padding: 8px 10px; }
+      .filter-dropdown { min-width: 80px; }
+      .filter-button { 
+        padding: 3px 8px; 
+        font-size: 11px; 
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .filter-section h3 { font-size: 11px; margin-bottom: 4px; }
+      .filter-popup, .feedback-popup, .add-psp-popup, .invest-popup, .agent-popup { width: 90%; max-height: 50vh; }
+      .card, .tech-card { width: 100%; max-width: 100%; }
+      .card-header { font-size: 14px; padding: 10px; }
+      .card-details { font-size: 12px; }
+      .tech-card img { height: auto; max-height: 276px; }
+    }
   </style>
 </head>
 <body>
@@ -1411,27 +1419,26 @@
     }
 
     function applyFilter(filterType) {
-  const popup = document.getElementById(`${filterType}-popup`);
-  const button = document.getElementById(`${filterType}-button`);
-  const selectedTags = popup.querySelectorAll('.filter-tag.selected');
-  activeFilters[filterType].clear();
-  const selectedValues = Array.from(selectedTags).map(tag => tag.dataset.value);
+      const popup = document.getElementById(`${filterType}-popup`);
+      const button = document.getElementById(`${filterType}-button`);
+      const selectedTags = popup.querySelectorAll('.filter-tag.selected');
+      activeFilters[filterType].clear();
+      const selectedValues = Array.from(selectedTags).map(tag => tag.dataset.value);
 
-  if (selectedValues.length === 0 || selectedValues.includes('Все')) {
-    activeFilters[filterType].clear();
-    button.textContent = 'Все'; // Показываем "Все", если ничего не выбрано
-    button.classList.remove('active');
-  } else {
-    selectedValues.forEach(tag => activeFilters[filterType].add(tag));
-    // Показываем количество и значения в строку
-    button.textContent = `${selectedValues.length}: ${selectedValues.join(', ')}`;
-    button.classList.add('active');
-  }
+      if (selectedValues.length === 0 || selectedValues.includes('Все')) {
+        activeFilters[filterType].clear();
+        button.textContent = 'Все';
+        button.classList.remove('active');
+      } else {
+        selectedValues.forEach(tag => activeFilters[filterType].add(tag));
+        button.textContent = `${selectedValues.length}: ${selectedValues.join(', ')}`;
+        button.classList.add('active');
+      }
 
-  if (filterType === 'type') renderTech('tech-content', techData);
-  else renderRates('rates-content', ratesData);
-  closePopup(`${filterType}-popup`);
-}
+      if (filterType === 'type') renderTech('tech-content', techData);
+      else renderRates('rates-content', ratesData);
+      closePopup(`${filterType}-popup`);
+    }
 
     function closePopup(popupId) {
       document.getElementById(popupId).classList.remove('active');
@@ -1618,7 +1625,7 @@
       techData = tech;
 
       renderFilters('industry-options', 'industry-button', 'industry-popup', ratesData, 'Industry', 'industry');
-      renderFilters('geo-options', 'geo-button', 'geo-popup', ratesData, 'Geo', 'geo');
+           renderFilters('geo-options', 'geo-button', 'geo-popup', ratesData, 'Geo', 'geo');
       renderFilters('risk-options', 'risk-button', 'risk-popup', ratesData, 'Risk', 'risk');
       renderFilters('type-options', 'type-button', 'type-popup', techData, 'Type', 'type');
 
@@ -1832,6 +1839,5 @@
     });
   </script>
   <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'92ba42407c4cbfff',t:'MTc0Mzg2ODgzMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
-  <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'92bf96622dad7bae',t:'MTc0MzkyNDcwNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
 </body>
 </html>
