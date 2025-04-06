@@ -16,100 +16,98 @@
       color: #ffffff;
       overflow: hidden;
     }
-   .content-container {
-  width: 100%;
-  height: calc(100vh - 50px);
-  position: relative;
-  z-index: 1;
-  padding: 0;
-  padding-bottom: 0;
-  margin: 0;
-  box-sizing: border-box;
-  -webkit-mask-image: linear-gradient(to bottom, black 90%, transparent 100%); /* Затемнение сверху */
-  mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
-  transition: filter 0.3s ease;
-  display: flex;
-  flex-direction: column;
-}
-.tab-content {
-  display: none;
-  overflow-y: auto;
-  flex: 1;
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-  min-height: 0; /* Предотвращаем переполнение */
-  -ms-overflow-style: none; /* Для Internet Explorer и Edge */
-  scrollbar-width: none; /* Для Firefox */
-}
-.tab-content > * {
-  margin-bottom: 0; /* Убираем отступ снизу для всех дочерних элементов */
-}
+    .content-container {
+      width: 100%;
+      height: calc(100vh - 50px);
+      position: relative;
+      z-index: 1;
+      padding: 0;
+      padding-bottom: 0;
+      margin: 0;
+      box-sizing: border-box;
+      -webkit-mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
+      mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
+      transition: filter 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .tab-content {
+      display: none;
+      overflow-y: auto;
+      flex: 1;
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+      min-height: 0;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .tab-content > * {
+      margin-bottom: 0;
+    }
     .content-container.blurred {
       filter: blur(5px) brightness(0.5);
     }
-    
     .tab-content.active { display: block; }
     .tabs {
-  display: flex;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  background: #212121; /* Цвет фона как в Telegram */
-  padding: 8px 0;
-  box-sizing: border-box;
-  z-index: 10;
-  transition: filter 0.3s ease;
-  height: 56px; /* Фиксированная высота */
-  border-top: 1px solid #333; /* Граница сверху */
-}
+      display: flex;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background: #212121;
+      padding: 8px 0;
+      box-sizing: border-box;
+      z-index: 100;
+      transition: filter 0.3s ease;
+      height: 56px;
+      border-top: 1px solid #333;
+    }
     .tabs.blurred {
-  filter: blur(5px) brightness(0.5);
-}
-.tab {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 4px 0;
-  text-align: center;
-  cursor: pointer;
-  color: #999; /* Цвет неактивного текста */
-  font-size: 12px;
-  position: relative;
-  transition: color 0.3s ease; /* Плавный переход для цвета текста */
-}
-.tab.active {
-  color: #fff !important;
-  background: transparent;
-}
-.tab.active .tab-icon {
-  stroke: #fff !important;
-}
-.tab-icon {
-  width: 24px;
-  height: 24px;
-  margin-bottom: 2px;
-  stroke: currentColor; /* Цвет иконки наследуется от цвета текста */
-  transition: stroke 0.3s ease; /* Плавный переход для цвета иконки */
-}
-
-.tab-badge {
-  position: absolute;
-  top: 4px;
-  right: 25%;
-  background: #ff3b30; /* Красный бейдж */
-  color: #fff;
-  font-size: 10px;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 16px;
-}
+      filter: blur(5px) brightness(0.5);
+    }
+    .tab {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 0;
+      text-align: center;
+      cursor: pointer;
+      color: #999;
+      font-size: 12px;
+      position: relative;
+      transition: color 0.3s ease;
+    }
+    .tab.active {
+      color: #fff !important;
+      background: transparent;
+    }
+    .tab.active .tab-icon {
+      stroke: #fff !important;
+    }
+    .tab-icon {
+      width: 24px;
+      height: 24px;
+      margin-bottom: 2px;
+      stroke: currentColor;
+      transition: stroke 0.3s ease;
+    }
+    .tab-badge {
+      position: absolute;
+      top: 4px;
+      right: 25%;
+      background: #ff3b30;
+      color: #fff;
+      font-size: 10px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 16px;
+    }
     .preloader {
       position: fixed;
       top: 0;
@@ -200,13 +198,12 @@
     }
     .welcome-text span { font-size: 28px; font-weight: 500; }
     .header-section {
-  background: linear-gradient(135deg, #1a2a44, #1a3c34);
-  border-radius: 12px;
-  padding: 20px;
-  text-align: center;
-  margin: 0 0 30px 0;
-}
-    
+      background: linear-gradient(135deg, #1a2a44, #1a3c34);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      margin: 0 0 30px 0;
+    }
     .header-section h1 {
       font-size: 28px;
       font-weight: 600;
@@ -250,17 +247,17 @@
       overflow: hidden;
     }
     .slider {
-  display: flex;
-  overflow-x: auto;
-  gap: 15px;
-  padding-bottom: 10px;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  -ms-overflow-style: none; /* Для Internet Explorer и Edge */
-  scrollbar-width: none; /* Для Firefox */
-  padding-left: 15px;
-  padding-right: 15px;
-}
+      display: flex;
+      overflow-x: auto;
+      gap: 15px;
+      padding-bottom: 10px;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+      padding-left: 15px;
+      padding-right: 15px;
+    }
     .slider::-webkit-scrollbar { display: none; }
     .slide {
       flex: 0 0 calc(100% - 30px);
@@ -349,16 +346,16 @@
       background: linear-gradient(90deg, #007bff, #00c4b4);
     }
     .partners-grid {
-  display: flex;
-  overflow-x: auto;
-  gap: 15px;
-  padding-bottom: 10px;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  -ms-overflow-style: none; /* Для Internet Explorer и Edge */
-  scrollbar-width: none; /* Для Firefox */
-}
-.partners-grid::-webkit-scrollbar { display: none; }
+      display: flex;
+      overflow-x: auto;
+      gap: 15px;
+      padding-bottom: 10px;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .partners-grid::-webkit-scrollbar { display: none; }
     .partner-block {
       flex: 0 0 250px;
       background: linear-gradient(135deg, #1a2a44, #1a3c34);
@@ -421,16 +418,16 @@
       margin-bottom: 15px;
     }
     .rates-cards-container, .tech-cards-container {
-  display: flex;
-  overflow-x: auto;
-  gap: 15px;
-  padding-bottom: 10px;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  -ms-overflow-style: none; /* Для Internet Explorer и Edge */
-  scrollbar-width: none; /* Для Firefox */
-}
-.rates-cards-container::-webkit-scrollbar, .tech-cards-container::-webkit-scrollbar { display: none; }
+      display: flex;
+      overflow-x: auto;
+      gap: 15px;
+      padding-bottom: 10px;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .rates-cards-container::-webkit-scrollbar, .tech-cards-container::-webkit-scrollbar { display: none; }
     .rate-card {
       flex: 0 0 250px;
       background: #2a2a2a;
@@ -663,20 +660,20 @@
     }
     .resource-button:hover { transform: scale(1.02); }
     .filter-section {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  background: #1a1a1a;
-  padding: 10px 15px;
-  display: flex;
-  gap: 8px;
-  flex-wrap: nowrap;
-  align-items: center;
-  z-index: 10;
-  box-sizing: border-box;
-  min-height: 60px; /* Минимальная высота */
-}
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: #1a1a1a;
+      padding: 10px 15px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: nowrap;
+      align-items: center;
+      z-index: 10;
+      box-sizing: border-box;
+      min-height: 60px;
+    }
     .filter-section h3 {
       font-size: 12px;
       font-weight: 500;
@@ -712,7 +709,7 @@
       left: 50%;
       transform: translate(-50%, -50%) scale(0.95);
       width: 80%;
-      max-height: 70vh;
+      max-height: 50vh;
       background: #2a2a2a;
       border-radius: 12px;
       padding: 15px;
@@ -739,6 +736,8 @@
       flex-wrap: wrap;
       gap: 8px;
       margin-bottom: 15px;
+      max-height: 35vh;
+      overflow: hidden;
     }
     .filter-tag {
       padding: 6px 12px;
@@ -893,11 +892,11 @@
       z-index: 40;
       opacity: 0;
       transition: opacity 0.3s ease;
-      pointer-events: none; /* Отключаем клики, когда невидимо */
+      pointer-events: none;
     }
     .notification.active {
       opacity: 1;
-      pointer-events: auto; /* Включаем клики, когда видно */
+      pointer-events: auto;
     }
     .privacy-notice {
       position: fixed;
@@ -928,41 +927,41 @@
       100% { background-position: 200% 0%; }
     }
     #home .header-section {
-  margin-top: 20px; /* Отступ сверху для первого блока на главной вкладке */
-}
+      margin-top: 20px;
+    }
     @media (max-width: 600px) {
-  .content-container { height: calc(100vh - 50px); padding: 0 10px 20px 10px; }
-  .tabs { bottom: 10px; padding: 5px; }
-  .tab { font-size: 12px; margin: 0 3px; }
-  .header-section h1 { font-size: 24px; }
-  .header-section .subtitle { font-size: 18px; }
-  .header-section .stat h3 { font-size: 12px; }
-  .header-section .stat p { font-size: 20px; }
-  .slide h3 { font-size: 16px; }
-  .slide p { font-size: 13px; }
-  .slide .apply-button { max-width: none; }
-  .slide .image { flex: 0 0 100px; height: 100px; }
-  .partner-block { flex: 0 0 200px; }
-  .partner-block p { font-size: 13px; }
-  .rate-card, .tech-card { flex: 0 0 200px; }
-  .rate-card .card-header, .tech-card .card-header { font-size: 14px; }
-  .tech-card img { height: 120px; }
-  .ai-assistant .section-title, .for-agents .section-title { font-size: 18px; }
-  .ai-assistant .section-subtitle, .for-agents .section-subtitle { font-size: 13px; }
-  .ai-assistant .description, .for-agents .description { font-size: 13px; }
-  .info-section h3 { font-size: 16px; }
-  .resources { flex-direction: column; }
-  .resource-button { font-size: 13px; }
-  .filter-section { flex-wrap: wrap; gap: 6px; padding: 8px 10px; }
-  .filter-dropdown { min-width: 80px; }
-  .filter-button { padding: 3px 8px; font-size: 11px; }
-  .filter-section h3 { font-size: 11px; margin-bottom: 4px; }
-  .filter-popup, .feedback-popup, .add-psp-popup, .invest-popup, .agent-popup { width: 90%; }
-  .card, .tech-card { width: 100%; max-width: 100%; }
-  .card-header { font-size: 14px; padding: 10px; }
-  .card-details { font-size: 12px; }
-  .tech-card img { height: auto; max-height: 276px; }
-}
+      .content-container { height: calc(100vh - 70px); padding: 0 10px 20px 10px; }
+      .tabs { bottom: 10px; padding: 5px; }
+      .tab { font-size: 12px; margin: 0 3px; }
+      .header-section h1 { font-size: 24px; }
+      .header-section .subtitle { font-size: 18px; }
+      .header-section .stat h3 { font-size: 12px; }
+      .header-section .stat p { font-size: 20px; }
+      .slide h3 { font-size: 16px; }
+      .slide p { font-size: 13px; }
+      .slide .apply-button { max-width: none; }
+      .slide .image { flex: 0 0 100px; height: 100px; }
+      .partner-block { flex: 0 0 200px; }
+      .partner-block p { font-size: 13px; }
+      .rate-card, .tech-card { flex: 0 0 200px; }
+      .rate-card .card-header, .tech-card .card-header { font-size: 14px; }
+      .tech-card img { height: 120px; }
+      .ai-assistant .section-title, .for-agents .section-title { font-size: 18px; }
+      .ai-assistant .section-subtitle, .for-agents .section-subtitle { font-size: 13px; }
+      .ai-assistant .description, .for-agents .description { font-size: 13px; }
+      .info-section h3 { font-size: 16px; }
+      .resources { flex-direction: column; }
+      .resource-button { font-size: 13px; }
+      .filter-section { flex-wrap: wrap; gap: 6px; padding: 8px 10px; }
+      .filter-dropdown { min-width: 80px; }
+      .filter-button { padding: 3px 8px; font-size: 11px; }
+      .filter-section h3 { font-size: 11px; margin-bottom: 4px; }
+      .filter-popup, .feedback-popup, .add-psp-popup, .invest-popup, .agent-popup { width: 90%; max-height: 50vh; }
+      .card, .tech-card { width: 100%; max-width: 100%; }
+      .card-header { font-size: 14px; padding: 10px; }
+      .card-details { font-size: 12px; }
+      .tech-card img { height: auto; max-height: 276px; }
+    }
   </style>
 </head>
 <body>
@@ -1069,50 +1068,48 @@
     </div>
     <div id="rates" class="tab-content">
       <div class="filter-section">
-        <div class="filter-dropdown"><h3>Индустрия</h3><div class="filter-button" id="industry-button">Все</div></div>
-        <div class="filter-dropdown"><h3>Гео</h3><div class="filter-button" id="geo-button">Все</div></div>
-        <div class="filter-dropdown"><h3>Риск</h3><div class="filter-button" id="risk-button">Все</div></div>
+        <div class="filter-dropdown"><h3>Индустрия</h3><div class="filter-button" id="industry-button" data-label="Индустрия">Все</div></div>
+        <div class="filter-dropdown"><h3>Гео</h3><div class="filter-button" id="geo-button" data-label="Гео">Все</div></div>
+        <div class="filter-dropdown"><h3>Риск</h3><div class="filter-button" id="risk-button" data-label="Риск">Все</div></div>
       </div>
       <div id="rates-content"></div>
     </div>
     <div id="tech" class="tab-content">
       <div class="filter-section">
-        <div class="filter-dropdown"><h3>Тип</h3><div class="filter-button" id="type-button">Все</div></div>
+        <div class="filter-dropdown"><h3>Тип</h3><div class="filter-button" id="type-button" data-label="Тип">Все</div></div>
       </div>
       <div id="tech-content"><p>Загрузка...</p></div>
     </div>
   </div>
-
   <div class="tabs">
-  <div class="tab active" data-tab="home" onclick="showTab('home')">
-    <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9z"/>
-      <polyline points="9 22 9 12 15 12 15 22"/>
-    </svg>
-    <span>Главная</span>
+    <div class="tab active" data-tab="home" onclick="showTab('home')">
+      <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9z"/>
+        <polyline points="9 22 9 12 15 12 15 22"/>
+      </svg>
+      <span>Главная</span>
+    </div>
+    <div class="tab" data-tab="rates" onclick="showTab('rates')">
+      <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+      </svg>
+      <span>Ставки</span>
+    </div>
+    <div class="tab" data-tab="tech" onclick="showTab('tech')">
+      <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+      <span>Решения</span>
+    </div>
+    <div class="tab" data-tab="operator" onclick="openTelegram()">
+      <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+        <circle cx="12" cy="7" r="4"/>
+      </svg>
+      <span>Оператор</span>
+      <span class="tab-badge">1</span>
+    </div>
   </div>
-  <div class="tab" data-tab="rates" onclick="showTab('rates')">
-    <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-    </svg>
-    <span>Ставки</span>
-  </div>
-  <div class="tab" data-tab="tech" onclick="showTab('tech')">
-    <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <path d="M4 6h16M4 12h16M4 18h16"/>
-    </svg>
-    <span>Решения</span>
-  </div>
-  <div class="tab" data-tab="operator" onclick="openTelegram()">
-    <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-      <circle cx="12" cy="7" r="4"/>
-    </svg>
-    <span>Оператор</span>
-    <span class="tab-badge">1</span>
-  </div>
-</div>
-
   <div class="filter-popup" id="industry-popup">
     <h4>Выберите индустрии</h4>
     <div class="filter-tags" id="industry-options"></div>
@@ -1207,7 +1204,6 @@
       <p>Продолжая использовать приложение, вы соглашаетесь с нашей <a href="https://example.com/privacy-policy" target="_blank">политикой конфиденциальности</a>.</p>
     </div>
   </div>
-
   <script>
     const tg = window.Telegram.WebApp;
     tg.ready();
@@ -1371,6 +1367,8 @@
         else getTags(row, field).forEach(tag => tags.add(tag));
       });
 
+      button.dataset.label = button.textContent;
+
       button.addEventListener('click', (e) => {
         e.stopPropagation();
         document.querySelectorAll('.filter-popup').forEach(p => { if (p !== popup) p.classList.remove('active'); });
@@ -1416,7 +1414,7 @@
         button.classList.remove('active');
       } else {
         selectedValues.forEach(tag => activeFilters[filterType].add(tag));
-        button.textContent = selectedValues.join(', ');
+        button.textContent = `${button.dataset.label} (${selectedValues.length})`;
         button.classList.add('active');
       }
 
@@ -1532,7 +1530,7 @@
         if (containerId === 'rates-content') {
           card.addEventListener('click', (e) => {
             if (e.target.classList.contains('apply-button')) return;
-                        const details = card.querySelector('.card-details');
+            const details = card.querySelector('.card-details');
             details.classList.toggle('active');
             card.classList.toggle('active');
           });
@@ -1621,38 +1619,38 @@
     }
 
     function showTab(tabId) {
-  document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-  document.querySelectorAll('.tab-content').forEach(content => {
-    content.classList.remove('active');
-    content.scrollTop = 0;
-  });
-  const activeTab = document.querySelector(`.tab[data-tab="${tabId}"]`);
-  if (activeTab) activeTab.classList.add('active');
-  document.getElementById(tabId).classList.add('active');
-  adjustContentPadding();
-}
+      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.remove('active');
+        content.scrollTop = 0;
+      });
+      const activeTab = document.querySelector(`.tab[data-tab="${tabId}"]`);
+      if (activeTab) activeTab.classList.add('active');
+      document.getElementById(tabId).classList.add('active');
+      adjustContentPadding();
+    }
 
     function openTelegram() {
-  document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-  document.querySelectorAll('.tab-content').forEach(content => {
-    content.classList.remove('active');
-    content.scrollTop = 0;
-  });
-  const operatorTab = document.querySelector('.tab[data-tab="operator"]');
-  if (operatorTab) operatorTab.classList.add('active');
-  window.open('https://t.me/p_fintech?text=I%20need%20help%20with%20the%20PaysHub%20service', '_blank');
-}
+      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.remove('active');
+        content.scrollTop = 0;
+      });
+      const operatorTab = document.querySelector('.tab[data-tab="operator"]');
+      if (operatorTab) operatorTab.classList.add('active');
+      window.open('https://t.me/p_fintech?text=I%20need%20help%20with%20the%20PaysHub%20service', '_blank');
+    }
 
     function adjustContentPadding() {
-  const filterSection = document.querySelector('.filter-section');
-  const contentContainer = document.querySelector('.content-container');
-  if (filterSection && (document.getElementById('rates').classList.contains('active') || document.getElementById('tech').classList.contains('active'))) {
-    const filterHeight = filterSection.getBoundingClientRect().height || 60;
-    contentContainer.style.paddingTop = `${filterHeight}px`;
-  } else {
-    contentContainer.style.paddingTop = '0px'; // Убираем отступ для главной вкладки
-  }
-}
+      const filterSection = document.querySelector('.filter-section');
+      const contentContainer = document.querySelector('.content-container');
+      if (filterSection && (document.getElementById('rates').classList.contains('active') || document.getElementById('tech').classList.contains('active'))) {
+        const filterHeight = filterSection.getBoundingClientRect().height || 60;
+        contentContainer.style.paddingTop = `${filterHeight}px`;
+      } else {
+        contentContainer.style.paddingTop = '0px';
+      }
+    }
 
     document.getElementById('feedback-form').addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -1759,37 +1757,35 @@
     });
 
     document.addEventListener('click', (e) => {
-  // Закрытие попапов форм обратной связи
-  const feedbackPopup = document.querySelector('#feedback-popup.active');
-  if (feedbackPopup && !feedbackPopup.contains(e.target) && !e.target.closest('.apply-button') && !e.target.closest('.agent-button')) {
-    closeFeedbackPopup();
-  }
+      const feedbackPopup = document.querySelector('#feedback-popup.active');
+      if (feedbackPopup && !feedbackPopup.contains(e.target) && !e.target.closest('.apply-button') && !e.target.closest('.agent-button')) {
+        closeFeedbackPopup();
+      }
 
-  const addPspPopup = document.querySelector('#add-psp-popup.active');
-  if (addPspPopup && !addPspPopup.contains(e.target) && !e.target.closest('.apply-button') && !e.target.closest('.agent-button')) {
-    closeAddPspPopup();
-  }
+      const addPspPopup = document.querySelector('#add-psp-popup.active');
+      if (addPspPopup && !addPspPopup.contains(e.target) && !e.target.closest('.apply-button') && !e.target.closest('.agent-button')) {
+        closeAddPspPopup();
+      }
 
-  const investPopup = document.querySelector('#invest-popup.active');
-  if (investPopup && !investPopup.contains(e.target) && !e.target.closest('.apply-button') && !e.target.closest('.agent-button')) {
-    closeInvestPopup();
-  }
+      const investPopup = document.querySelector('#invest-popup.active');
+      if (investPopup && !investPopup.contains(e.target) && !e.target.closest('.apply-button') && !e.target.closest('.agent-button')) {
+        closeInvestPopup();
+      }
 
-  const agentPopup = document.querySelector('#agent-popup.active');
-  if (agentPopup && !agentPopup.contains(e.target) && !e.target.closest('.agent-button') && !e.target.closest('.apply-button')) {
-    closeAgentPopup();
-  }
+      const agentPopup = document.querySelector('#agent-popup.active');
+      if (agentPopup && !agentPopup.contains(e.target) && !e.target.closest('.agent-button') && !e.target.closest('.apply-button')) {
+        closeAgentPopup();
+      }
 
-  // Закрытие попапов фильтров
-  const filterPopup = document.querySelector('.filter-popup.active');
-  if (filterPopup && !filterPopup.contains(e.target) && !e.target.closest('.filter-dropdown')) {
-    document.querySelectorAll('.filter-popup').forEach(popup => {
-      popup.classList.remove('active');
-      document.querySelector('.content-container').classList.remove('blurred');
-      document.querySelector('.tabs').classList.remove('blurred');
+      const filterPopup = document.querySelector('.filter-popup.active');
+      if (filterPopup && !filterPopup.contains(e.target) && !e.target.closest('.filter-dropdown')) {
+        document.querySelectorAll('.filter-popup').forEach(popup => {
+          popup.classList.remove('active');
+          document.querySelector('.content-container').classList.remove('blurred');
+          document.querySelector('.tabs').classList.remove('blurred');
+        });
+      }
     });
-  }
-});
 
     window.addEventListener('load', () => {
       const preloader = document.getElementById('preloader');
@@ -1826,5 +1822,6 @@
     });
   </script>
   <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'92ba42407c4cbfff',t:'MTc0Mzg2ODgzMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+  <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'92bf96622dad7bae',t:'MTc0MzkyNDcwNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
 </body>
 </html>
