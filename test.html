@@ -1589,67 +1589,99 @@
 }
 
     async function renderTech(containerId, rows) {
-      const container = document.getElementById(containerId);
-      container.innerHTML = '';
-      let filteredRows = rows.filter(row => row['On'] === true);
+  const container = document.getElementById(containerId);
+  container.innerHTML = '';
+  let filteredRows = rows.filter(row => row['On'] === true);
 
-      if (containerId === 'home-tech-content') filteredRows = filteredRows.filter(row => row['HB'] === true);
-      if (activeFilters.type.size > 0) {
-        filteredRows = filteredRows.filter(row => activeFilters.type.has(row['Type'] || 'N/A'));
-      }
+  if (containerId === 'home-tech-content') filteredRows = filteredRows.filter(row => row['HB'] === true);
+  if (activeFilters.type.size > 0) {
+    filteredRows = filteredRows.filter(row => activeFilters.type.has(row['Type'] || 'N/A'));
+  }
 
-      if (filteredRows.length === 0) {
-        container.innerHTML = '<p>Нет данных для отображения</p>';
-        return;
-      }
+  if (filteredRows.length === 0) {
+    container.innerHTML = '<p>Нет данных для отображения</p>';
+    return;
+  }
 
-      for (const row of filteredRows) {
-        const imgUrl = await extractImageUrl(row['Img']);
-        const card = document.createElement('div');
-        card.className = containerId === 'home-tech-content' ? 'tech-card' : 'tech-card';
-        const truncatedName = truncateText(row['Name'] || 'Без названия', 20);
+  for (const row of filteredRows) {
+    const imgUrl = await extractImageUrl(row['Img']);
+    const cardId = `tech-card-${row['ID name']?.replace(/\s+/g, '-') || row['Name']?.replace(/\s+/g, '-') || index}`; // Уникальный ID
+    const card = document.createElement('div');
+    card.className = 'tech-card';
+    card.dataset.id = cardId; // Сохраняем ID в data-атрибут
+    const truncatedName = truncateText(row['Name'] || 'Без названия', 20);
 
-        const mainInfoBlock = [
-          { label: 'ID', value: row['ID name'] },
-          { label: 'Название', value: row['Name'] },
-          { label: 'Тип', value: row['Type'] },
-          { label: 'Цена', value: row['Price'] },
-          { label: 'Условия', value: row['Terms'] }
-        ].filter(item => !isEmptyValue(item.value)).map(item => `<span class="info-tag">${item.label}: ${item.value}</span>`).join('');
+    const mainInfoBlock = [
+      { label: 'ID', value: row['ID name'] },
+      { label: 'Название', value: row['Name'] },
+      { label: 'Тип', value: row['Type'] },
+      { label: 'Цена', value: row['Price'] },
+      { label: 'Условия', value: row['Terms'] }
+    ].filter(item => !isEmptyValue(item.value)).map(item => `<span class="info-tag">${item.label}: ${item.value}</span>`).join('');
 
-        const descriptionBlock = !isEmptyValue(row['Description']) ? `<span class="info-tag" style="display: block;">${formatText(row['Description'])}</span>` : '';
+    const descriptionBlock = !isEmptyValue(row['Description']) ? `<span class="info-tag" style="display: block;">${formatText(row['Description'])}</span>` : '';
 
-        card.innerHTML = `
-          <img src="${imgUrl}" alt="Tech Solution" onerror="this.src='https://placehold.co/400x276';">
-          <div class="card-header">
-            <span>${truncatedName}</span>
-            <span>${row['Price'] || ''}</span>
-          </div>
-          <div class="card-tags">
-            <span class="tag tech-type">${row['Type'] || 'White Label'}</span>
-          </div>
-          ${containerId === 'tech-content' ? `
-          <div class="short-description">${row['Short description'] || 'Нет краткого описания'}</div>
-          <div class="card-details">
-            ${mainInfoBlock ? `<div class="details-block"><h4>Основная информация</h4>${mainInfoBlock}</div>` : ''}
-            ${descriptionBlock ? `<div class="details-block"><h4>Описание</h4>${descriptionBlock}</div>` : ''}
-            <div class="apply-button-container">
-              <button class="apply-button" onclick="window.open('https://t.me/p_fintech?text=Im interested in ${row['ID name']}', '_blank')">Подать заявку</button>
-            </div>
-          </div>
-          ` : ''}
-        `;
-        if (containerId === 'tech-content') {
-          card.addEventListener('click', (e) => {
-            if (e.target.classList.contains('apply-button')) return;
-            const details = card.querySelector('.card-details');
-            details.classList.toggle('active');
-            card.classList.toggle('active');
-          });
-        }
-        container.appendChild(card);
-      }
+    card.innerHTML = `
+      <img src="${imgUrl}" alt="Tech Solution" onerror="this.src='https://placehold.co/400x276';">
+      <div class="card-header">
+        <span>${truncatedName}</span>
+        <span>${row['Price'] || ''}</span>
+      </div>
+      <div class="card-tags">
+        <span class="tag tech-type">${row['Type'] || 'White Label'}</span>
+      </div>
+      ${containerId === 'tech-content' ? `
+      <div class="short-description">${row['Short description'] || 'Нет краткого описания'}</div>
+      <div class="card-details">
+        ${mainInfoBlock ? `<div class="details-block"><h4>Основная информация</h4>${mainInfoBlock}</div>` : ''}
+        ${descriptionBlock ? `<div class="details-block"><h4>Описание</h4>${descriptionBlock}</div>` : ''}
+        <div class="apply-button-container">
+          <button class="apply-button" onclick="window.open('https://t.me/p_fintech?text=Im interested in ${row['ID name']}', '_blank')">Подать заявку</button>
+        </div>
+      </div>
+      ` : ''}
+    `;
+
+    if (containerId === 'home-tech-content') {
+      card.addEventListener('click', () => {
+        localStorage.setItem('selectedTechCard', cardId); // Сохраняем ID выбранной карточки
+        showTab('tech'); // Переключаем вкладку
+        setTimeout(() => {
+          const targetCard = document.querySelector(`#tech-content .tech-card[data-id="${cardId}"]`);
+          if (targetCard) {
+            targetCard.scrollIntoView({ behavior: 'smooth' });
+            const details = targetCard.querySelector('.card-details');
+            details.classList.add('active');
+            targetCard.classList.add('active');
+          }
+        }, 100); // Задержка для рендера вкладки
+      });
+    } else if (containerId === 'tech-content') {
+      card.addEventListener('click', (e) => {
+        if (e.target.classList.contains('apply-button')) return;
+        const details = card.querySelector('.card-details');
+        details.classList.toggle('active');
+        card.classList.toggle('active');
+      });
     }
+    container.appendChild(card);
+  }
+
+  // Автоматическое разворачивание при загрузке вкладки "Решения"
+  const selectedTechCard = localStorage.getItem('selectedTechCard');
+  if (selectedTechCard && containerId === 'tech-content') {
+    setTimeout(() => {
+      const targetCard = document.querySelector(`#tech-content .tech-card[data-id="${selectedTechCard}"]`);
+      if (targetCard) {
+        targetCard.scrollIntoView({ behavior: 'smooth' });
+        const details = targetCard.querySelector('.card-details');
+        details.classList.add('active');
+        targetCard.classList.add('active');
+        localStorage.removeItem('selectedTechCard'); // Очищаем после использования
+      }
+    }, 100);
+  }
+}
 
     async function loadData() {
       const [rates, tech] = await Promise.all([fetchData(RATES_TABLE_ID), fetchData(TECH_TABLE_ID)]);
