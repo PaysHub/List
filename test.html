@@ -836,22 +836,22 @@
       border-top: 1px solid #333;
     }
     .feedback-popup, .add-psp-popup, .invest-popup, .agent-popup {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%) scale(0.95);
-      width: 80%;
-      max-height: 70vh;
-      background: #2a2a2a;
-      border-radius: 12px;
-      padding: 15px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
-      display: none;
-      z-index: 30;
-      overflow-y: auto;
-      opacity: 0;
-      transition: opacity 0.3s ease, transform 0.3s ease;
-    }
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.95);
+  width: 80%;
+  /* max-height: 70vh; Удаляем фиксированную высоту */
+  background: #2a2a2a;
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  display: none;
+  z-index: 30;
+  /* overflow-y: auto; Удаляем прокрутку */
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
     .feedback-popup.active, .add-psp-popup.active, .invest-popup.active, .agent-popup.active {
       display: block;
       opacity: 1;
@@ -935,6 +935,7 @@
       margin-top: 20px;
     }
     @media (max-width: 600px) {
+
   .content-container { 
     height: calc(100vh - 76px); /* Учитываем отступ 20px */
     padding: 0 10px 0 10px; 
@@ -973,7 +974,7 @@
     text-overflow: ellipsis;
   }
   .filter-section h3 { font-size: 11px; margin-bottom: 4px; }
-  .filter-popup, .feedback-popup, .add-psp-popup, .invest-popup, .agent-popup { width: 90%; max-height: 50vh; }
+  .filter-popup, .feedback-popup, .add-psp-popup, .invest-popup, .agent-popup { width: 90%; }
   .card, .tech-card { width: 100%; max-width: 100%; }
   .card-header { font-size: 14px; padding: 10px; }
   .card-details { font-size: 12px; }
