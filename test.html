@@ -1746,22 +1746,37 @@
     });
 
     document.addEventListener('click', (e) => {
-      // Закрытие попапов форм обратной связи
-      if (!e.target.closest('.apply-button') && !e.target.closest('.feedback-popup') && !e.target.closest('.agent-button')) closeFeedbackPopup();
-      if (!e.target.closest('.apply-button') && !e.target.closest('.add-psp-popup') && !e.target.closest('.agent-button')) closeAddPspPopup();
-      if (!e.target.closest('.apply-button') && !e.target.closest('.invest-popup') && !e.target.closest('.agent-button')) closeInvestPopup();
-      if (!e.target.closest('.agent-button') && !e.target.closest('.agent-popup') && !e.target.closest('.apply-button')) closeAgentPopup();
+  // Закрытие попапов форм обратной связи
+  const feedbackPopup = document.querySelector('#feedback-popup.active');
+  if (feedbackPopup && !feedbackPopup.contains(e.target) && !e.target.closest('.apply-button') && !e.target.closest('.agent-button')) {
+    closeFeedbackPopup();
+  }
 
-      // Закрытие попапов фильтров
-      const filterPopup = document.querySelector('.filter-popup.active');
-      if (filterPopup && !e.target.closest('.filter-dropdown') && !e.target.closest('.filter-popup') && !e.target.closest('.filter-tag')) {
-        document.querySelectorAll('.filter-popup').forEach(popup => {
-          popup.classList.remove('active');
-          document.querySelector('.content-container').classList.remove('blurred');
-          document.querySelector('.tabs').classList.remove('blurred');
-        });
-      }
+  const addPspPopup = document.querySelector('#add-psp-popup.active');
+  if (addPspPopup && !addPspPopup.contains(e.target) && !e.target.closest('.apply-button') && !e.target.closest('.agent-button')) {
+    closeAddPspPopup();
+  }
+
+  const investPopup = document.querySelector('#invest-popup.active');
+  if (investPopup && !investPopup.contains(e.target) && !e.target.closest('.apply-button') && !e.target.closest('.agent-button')) {
+    closeInvestPopup();
+  }
+
+  const agentPopup = document.querySelector('#agent-popup.active');
+  if (agentPopup && !agentPopup.contains(e.target) && !e.target.closest('.agent-button') && !e.target.closest('.apply-button')) {
+    closeAgentPopup();
+  }
+
+  // Закрытие попапов фильтров
+  const filterPopup = document.querySelector('.filter-popup.active');
+  if (filterPopup && !filterPopup.contains(e.target) && !e.target.closest('.filter-dropdown')) {
+    document.querySelectorAll('.filter-popup').forEach(popup => {
+      popup.classList.remove('active');
+      document.querySelector('.content-container').classList.remove('blurred');
+      document.querySelector('.tabs').classList.remove('blurred');
     });
+  }
+});
 
     window.addEventListener('load', () => {
       const preloader = document.getElementById('preloader');
