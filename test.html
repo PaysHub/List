@@ -9,7 +9,7 @@
     * { box-sizing: border-box; }
     html, body {
       margin: 0;
-      padding: 0;
+      padding: 0;ч
       height: 100%;
       font-family: 'Inter', sans-serif;
       background-color: #1a1a1a;
@@ -1266,17 +1266,17 @@
     }
 
     function openFeedbackPopup() {
-      const popup = document.getElementById('feedback-popup');
-      document.getElementById('feedback-telegram').value = telegramUsername ? `@${telegramUsername}` : '';
-      popup.classList.add('active');
-      document.querySelector('.content-container').classList.add('blurred');
-      document.querySelector('.tabs').classList.add('blurred');
-    }
+  const popup = document.getElementById('feedback-popup');
+  document.getElementById('feedback-telegram').value = telegramUsername ? `@${telegramUsername}` : '';
+  popup.classList.add('active');
+  document.querySelector('.content-container').classList.add('blurred');
+  document.querySelector('.tabs').classList.add('blurred');
+}
     function closeFeedbackPopup() {
-      document.getElementById('feedback-popup').classList.remove('active');
-      document.querySelector('.content-container').classList.remove('blurred');
-      document.querySelector('.tabs').classList.remove('blurred');
-    }
+  document.getElementById('feedback-popup').classList.remove('active');
+  document.querySelector('.content-container').classList.remove('blurred');
+  document.querySelector('.tabs').classList.remove('blurred');
+}
     function openAddPspPopup() {
       const popup = document.getElementById('add-psp-popup');
       document.getElementById('add-psp-telegram').value = telegramUsername ? `@${telegramUsername}` : '';
@@ -1315,15 +1315,16 @@
     }
 
     document.querySelectorAll('input, textarea').forEach(input => {
-      input.addEventListener('focus', () => document.querySelector('.content-container').classList.add('blurred'));
-      input.addEventListener('blur', () => {
-        if (!document.querySelector('.feedback-popup.active') && !document.querySelector('.add-psp-popup.active') &&
-            !document.querySelector('.invest-popup.active') && !document.querySelector('.agent-popup.active')) {
-          document.querySelector('.content-container').classList.remove('blurred');
-          document.querySelector('.tabs').classList.remove('blurred');
-        }
-      });
-    });
+  input.addEventListener('focus', () => {
+    // Убедимся, что блюр остаётся, если попап открыт
+    if (document.querySelector('.feedback-popup.active') || document.querySelector('.add-psp-popup.active') ||
+        document.querySelector('.invest-popup.active') || document.querySelector('.agent-popup.active') ||
+        document.querySelector('.filter-popup.active')) {
+      document.querySelector('.content-container').classList.add('blurred');
+      document.querySelector('.tabs').classList.add('blurred');
+    }
+  });
+});
 
     async function fetchData(tableId) {
       try {
@@ -1756,18 +1757,18 @@
     });
 
     document.addEventListener('click', (e) => {
-      if (!e.target.closest('.apply-button') && !e.target.closest('.feedback-popup') && !e.target.closest('.agent-button')) closeFeedbackPopup();
-      if (!e.target.closest('.apply-button') && !e.target.closest('.add-psp-popup') && !e.target.closest('.agent-button')) closeAddPspPopup();
-      if (!e.target.closest('.apply-button') && !e.target.closest('.invest-popup') && !e.target.closest('.agent-button')) closeInvestPopup();
-      if (!e.target.closest('.agent-button') && !e.target.closest('.agent-popup') && !e.target.closest('.apply-button')) closeAgentPopup();
-      if (!e.target.closest('.filter-dropdown') && !e.target.closest('.filter-popup')) {
-        document.querySelectorAll('.filter-popup').forEach(popup => {
-          popup.classList.remove('active');
-          document.querySelector('.content-container').classList.remove('blurred');
-          document.querySelector('.tabs').classList.remove('blurred');
-        });
-      }
+  if (!e.target.closest('.apply-button') && !e.target.closest('.feedback-popup') && !e.target.closest('.agent-button')) closeFeedbackPopup();
+  if (!e.target.closest('.apply-button') && !e.target.closest('.add-psp-popup') && !e.target.closest('.agent-button')) closeAddPspPopup();
+  if (!e.target.closest('.apply-button') && !e.target.closest('.invest-popup') && !e.target.closest('.agent-button')) closeInvestPopup();
+  if (!e.target.closest('.agent-button') && !e.target.closest('.agent-popup') && !e.target.closest('.apply-button')) closeAgentPopup();
+  if (!e.target.closest('.filter-dropdown') && !e.target.closest('.filter-popup')) {
+    document.querySelectorAll('.filter-popup').forEach(popup => {
+      popup.classList.remove('active');
+      document.querySelector('.content-container').classList.remove('blurred');
+      document.querySelector('.tabs').classList.remove('blurred');
     });
+  }
+});
 
     window.addEventListener('load', () => {
       const preloader = document.getElementById('preloader');
