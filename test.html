@@ -735,13 +735,11 @@
       color: #fff;
     }
     .filter-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 15px;
-  max-height: 35vh; /* Ограничиваем высоту списка тегов */
-  overflow: hidden; /* Скрываем лишние теги */
-}
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 15px;
+    }
     .filter-tag {
       padding: 6px 12px;
       border-radius: 12px;
@@ -933,11 +931,7 @@
   margin-top: 20px; /* Отступ сверху для первого блока на главной вкладке */
 }
     @media (max-width: 600px) {
-  .content-container { height: calc(100vh - 70px); padding: 0 10px 20px 10px; }
-}
-    
-    @media (max-width: 600px) {
-  
+  .content-container { height: calc(100vh - 50px); padding: 0 10px 20px 10px; }
   .tabs { bottom: 10px; padding: 5px; }
   .tab { font-size: 12px; margin: 0 3px; }
   .header-section h1 { font-size: 24px; }
@@ -1074,19 +1068,20 @@
       </div>
     </div>
     <div id="rates" class="tab-content">
-  <div class="filter-section">
-    <div class="filter-dropdown"><h3>Индустрия</h3><div class="filter-button" id="industry-button" data-label="Индустрия">Все</div></div>
-    <div class="filter-dropdown"><h3>Гео</h3><div class="filter-button" id="geo-button" data-label="Гео">Все</div></div>
-    <div class="filter-dropdown"><h3>Риск</h3><div class="filter-button" id="risk-button" data-label="Риск">Все</div></div>
-  </div>
-  <div id="rates-content"></div>
-</div>
+      <div class="filter-section">
+        <div class="filter-dropdown"><h3>Индустрия</h3><div class="filter-button" id="industry-button">Все</div></div>
+        <div class="filter-dropdown"><h3>Гео</h3><div class="filter-button" id="geo-button">Все</div></div>
+        <div class="filter-dropdown"><h3>Риск</h3><div class="filter-button" id="risk-button">Все</div></div>
+      </div>
+      <div id="rates-content"></div>
+    </div>
     <div id="tech" class="tab-content">
-  <div class="filter-section">
-    <div class="filter-dropdown"><h3>Тип</h3><div class="filter-button" id="type-button" data-label="Тип">Все</div></div>
+      <div class="filter-section">
+        <div class="filter-dropdown"><h3>Тип</h3><div class="filter-button" id="type-button">Все</div></div>
+      </div>
+      <div id="tech-content"><p>Загрузка...</p></div>
+    </div>
   </div>
-  <div id="tech-content"><p>Загрузка...</p></div>
-</div>
 
   <div class="tabs">
   <div class="tab active" data-tab="home" onclick="showTab('home')">
@@ -1367,71 +1362,68 @@
     }
 
     function renderFilters(containerId, buttonId, popupId, rows, field, filterType) {
-  const container = document.getElementById(containerId);
-  const button = document.getElementById(buttonId);
-  const popup = document.getElementById(popupId);
-  const tags = new Set(['Все']);
-  rows.forEach(row => {
-    if (filterType === 'type') tags.add(row[field] || 'N/A');
-    else getTags(row, field).forEach(tag => tags.add(tag));
-  });
+      const container = document.getElementById(containerId);
+      const button = document.getElementById(buttonId);
+      const popup = document.getElementById(popupId);
+      const tags = new Set(['Все']);
+      rows.forEach(row => {
+        if (filterType === 'type') tags.add(row[field] || 'N/A');
+        else getTags(row, field).forEach(tag => tags.add(tag));
+      });
 
-  // Сохраняем исходный текст кнопки в data-label
-  button.dataset.label = button.textContent;
+      button.addEventListener('click', (e) => {
+        e.stopPropagation();
+        document.querySelectorAll('.filter-popup').forEach(p => { if (p !== popup) p.classList.remove('active'); });
+        popup.classList.toggle('active');
+        if (popup.classList.contains('active')) {
+          document.querySelector('.content-container').classList.add('blurred');
+          document.querySelector('.tabs').classList.add('blurred');
+        } else {
+          document.querySelector('.content-container').classList.remove('blurred');
+          document.querySelector('.tabs').classList.remove('blurred');
+        }
+      });
 
-  button.addEventListener('click', (e) => {
-    e.stopPropagation();
-    document.querySelectorAll('.filter-popup').forEach(p => { if (p !== popup) p.classList.remove('active'); });
-    popup.classList.toggle('active');
-    if (popup.classList.contains('active')) {
-      document.querySelector('.content-container').classList.add('blurred');
-      document.querySelector('.tabs').classList.add('blurred');
-    } else {
-      document.querySelector('.content-container').classList.remove('blurred');
-      document.querySelector('.tabs').classList.remove('blurred');
+      Array.from(tags).sort().forEach(tag => {
+        const tagElement = document.createElement('div');
+        tagElement.className = 'filter-tag';
+        tagElement.textContent = tag;
+        tagElement.dataset.value = tag;
+        if (activeFilters[filterType].has(tag)) tagElement.classList.add('selected');
+        tagElement.addEventListener('click', () => {
+          if (tag === 'Все') {
+            container.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('selected'));
+            tagElement.classList.add('selected');
+          } else {
+            container.querySelector('.filter-tag[data-value="Все"]').classList.remove('selected');
+            tagElement.classList.toggle('selected');
+          }
+        });
+        container.appendChild(tagElement);
+      });
     }
-  });
-
-  Array.from(tags).sort().forEach(tag => {
-    const tagElement = document.createElement('div');
-    tagElement.className = 'filter-tag';
-    tagElement.textContent = tag;
-    tagElement.dataset.value = tag;
-    if (activeFilters[filterType].has(tag)) tagElement.classList.add('selected');
-    tagElement.addEventListener('click', () => {
-      if (tag === 'Все') {
-        container.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('selected'));
-        tagElement.classList.add('selected');
-      } else {
-        container.querySelector('.filter-tag[data-value="Все"]').classList.remove('selected');
-        tagElement.classList.toggle('selected');
-      }
-    });
-    container.appendChild(tagElement);
-  });
-}
 
     function applyFilter(filterType) {
-  const popup = document.getElementById(`${filterType}-popup`);
-  const button = document.getElementById(`${filterType}-button`);
-  const selectedTags = popup.querySelectorAll('.filter-tag.selected');
-  activeFilters[filterType].clear();
-  const selectedValues = Array.from(selectedTags).map(tag => tag.dataset.value);
+      const popup = document.getElementById(`${filterType}-popup`);
+      const button = document.getElementById(`${filterType}-button`);
+      const selectedTags = popup.querySelectorAll('.filter-tag.selected');
+      activeFilters[filterType].clear();
+      const selectedValues = Array.from(selectedTags).map(tag => tag.dataset.value);
 
-  if (selectedValues.length === 0 || selectedValues.includes('Все')) {
-    activeFilters[filterType].clear();
-    button.textContent = 'Все';
-    button.classList.remove('active');
-  } else {
-    selectedValues.forEach(tag => activeFilters[filterType].add(tag));
-    button.textContent = `${button.dataset.label} (${selectedValues.length})`; // Показываем количество
-    button.classList.add('active');
-  }
+      if (selectedValues.length === 0 || selectedValues.includes('Все')) {
+        activeFilters[filterType].clear();
+        button.textContent = 'Все';
+        button.classList.remove('active');
+      } else {
+        selectedValues.forEach(tag => activeFilters[filterType].add(tag));
+        button.textContent = selectedValues.join(', ');
+        button.classList.add('active');
+      }
 
-  if (filterType === 'type') renderTech('tech-content', techData);
-  else renderRates('rates-content', ratesData);
-  closePopup(`${filterType}-popup`);
-}
+      if (filterType === 'type') renderTech('tech-content', techData);
+      else renderRates('rates-content', ratesData);
+      closePopup(`${filterType}-popup`);
+    }
 
     function closePopup(popupId) {
       document.getElementById(popupId).classList.remove('active');
