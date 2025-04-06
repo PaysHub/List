@@ -760,12 +760,16 @@
     .popup-button {
       flex: 1;
       padding: 8px;
+      border:none;
       border-radius: 8px;
       text-align: center;
       cursor: pointer;
       font-size: 14px;
       color: #fff;
     }
+.popup-button:focus {
+  outline: none; /* Убираем обводку при фокусе */
+}
     .popup-button.apply { background: #007bff; }
     .popup-button.cancel { background: #555; }
     .popup-button.submit { background: #007bff; }
