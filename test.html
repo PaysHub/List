@@ -1447,114 +1447,146 @@
     }
 
     function renderRates(containerId, rows) {
-      const container = document.getElementById(containerId);
-      container.innerHTML = '';
-      let filteredRows = rows.filter(row => row['On'] === true);
+  const container = document.getElementById(containerId);
+  container.innerHTML = '';
+  let filteredRows = rows.filter(row => row['On'] === true);
 
-      if (containerId === 'rates-content') {
-        if (activeFilters.industry.size > 0) {
-          filteredRows = filteredRows.filter(row => getTags(row, 'Industry').some(tag => activeFilters.industry.has(tag)));
-        }
-        if (activeFilters.geo.size > 0) {
-          filteredRows = filteredRows.filter(row => getTags(row, 'Geo').some(tag => activeFilters.geo.has(tag)));
-        }
-        if (activeFilters.risk.size > 0) {
-          filteredRows = filteredRows.filter(row => getTags(row, 'Risk').some(tag => activeFilters.risk.has(tag)));
-        }
-      } else if (containerId === 'home-rates-content') {
-        filteredRows = filteredRows.filter(row => row['HB'] === true);
-      }
+  if (containerId === 'rates-content') {
+    if (activeFilters.industry.size > 0) {
+      filteredRows = filteredRows.filter(row => getTags(row, 'Industry').some(tag => activeFilters.industry.has(tag)));
+    }
+    if (activeFilters.geo.size > 0) {
+      filteredRows = filteredRows.filter(row => getTags(row, 'Geo').some(tag => activeFilters.geo.has(tag)));
+    }
+    if (activeFilters.risk.size > 0) {
+      filteredRows = filteredRows.filter(row => getTags(row, 'Risk').some(tag => activeFilters.risk.has(tag)));
+    }
+  } else if (containerId === 'home-rates-content') {
+    filteredRows = filteredRows.filter(row => row['HB'] === true);
+  }
 
-      if (filteredRows.length === 0) {
-        container.innerHTML = '<p>Нет данных для отображения</p>';
-        return;
-      }
+  if (filteredRows.length === 0) {
+    container.innerHTML = '<p>Нет данных для отображения</p>';
+    return;
+  }
 
-      filteredRows.forEach(row => {
-        const card = document.createElement('div');
-        card.className = containerId === 'home-rates-content' ? 'rate-card' : 'card';
+  filteredRows.forEach((row, index) => {
+    const cardId = `rate-card-${row['ID Name']?.replace(/\s+/g, '-') || index}`; // Уникальный ID
+    const card = document.createElement('div');
+    card.className = containerId === 'home-rates-content' ? 'rate-card' : 'card';
+    card.dataset.id = cardId; // Сохраняем ID в data-атрибут
 
-        const tariffsBlock = [
-          { label: 'Pay in', value: row['Pay in (%)'] },
-          { label: 'Pay out', value: row['Pay out (%)'] },
-          { label: 'Method', value: row['Method'] },
-          { label: 'Roll reserve', value: row['Roll reserve'] },
-          { label: 'Refund fee', value: row['Refound fee'] }
-        ].filter(item => !isEmptyValue(item.value)).map(item => `<span class="info-tag">${item.label}: ${item.value}</span>`).join('');
+    const tariffsBlock = [
+      { label: 'Pay in', value: row['Pay in (%)'] },
+      { label: 'Pay out', value: row['Pay out (%)'] },
+      { label: 'Method', value: row['Method'] },
+      { label: 'Roll reserve', value: row['Roll reserve'] },
+      { label: 'Refund fee', value: row['Refound fee'] }
+    ].filter(item => !isEmptyValue(item.value)).map(item => `<span class="info-tag">${item.label}: ${item.value}</span>`).join('');
 
-        const transactionsBlock = [
-          { label: 'Min trans', value: row['($) Min transaction'] },
-          { label: 'Max trans', value: row['($) Max transaction'] },
-          { label: 'Min turnover', value: row['($) Мин. оборот'] },
-          { label: 'Max turnover', value: row['($) Макс. оборот'] },
-          { label: 'Additional fees', value: row['Доп. платежи'] },
-          { label: 'Прием в', value: row['Прием в'] },
-          { label: 'Расчет в', value: row['Расчет в'] }
-        ].filter(item => !isEmptyValue(item.value)).map(item => `<span class="info-tag">${item.label}: ${item.value}</span>`).join('');
+    const transactionsBlock = [
+      { label: 'Min trans', value: row['($) Min transaction'] },
+      { label: 'Max trans', value: row['($) Max transaction'] },
+      { label: 'Min turnover', value: row['($) Мин. оборот'] },
+      { label: 'Max turnover', value: row['($) Макс. оборот'] },
+      { label: 'Additional fees', value: row['Доп. платежи'] },
+      { label: 'Прием в', value: row['Прием в'] },
+      { label: 'Расчет в', value: row['Расчет в'] }
+    ].filter(item => !isEmptyValue(item.value)).map(item => `<span class="info-tag">${item.label}: ${item.value}</span>`).join('');
 
-        const mainInfoBlock = [
-          { label: 'Индустрия', value: row['Industry'] },
-          { label: 'Гео', value: row['Geo'] },
-          { label: 'Риск', value: row['Risk'] }
-        ].filter(item => !isEmptyValue(item.value)).map(item => `<span class="info-tag">${item.label}: ${item.value}</span>`).join('');
+    const mainInfoBlock = [
+      { label: 'Индустрия', value: row['Industry'] },
+      { label: 'Гео', value: row['Geo'] },
+      { label: 'Риск', value: row['Risk'] }
+    ].filter(item => !isEmptyValue(item.value)).map(item => `<span class="info-tag">${item.label}: ${item.value}</span>`).join('');
 
-        const additionalBlock = [
-          { label: 'Type traffic', value: row['Type traffic'] },
-          { label: 'Settlement', value: row['Settlement'] },
-          { label: 'Settlement amount', value: row['Settlement amount'] },
-          { label: 'License', value: row['Лицензия'] },
-          { label: 'Integration', value: row['Интеграция'] },
-          { label: 'Compliance', value: row['Compliance'] },
-          { label: 'Support 24/7', value: row['Support 24/7'] },
-          { label: 'Recurrent', value: row['Рекуррент'] },
-          { label: 'Chargeback level', value: row['Уровень чарджбэков'] },
-          { label: '3DS', value: row['3DS-авторизация'] },
-          { label: 'Liquidity', value: row['Ликвидность'] },
-          { label: 'Conversion', value: row['Конверсия'] },
-          { label: 'Years on market', value: row['На рынке (лет)'] }
-        ].filter(item => !isEmptyValue(item.value)).map(item => `<span class="info-tag">${item.label}: ${item.value}</span>`).join('');
+    const additionalBlock = [
+      { label: 'Type traffic', value: row['Type traffic'] },
+      { label: 'Settlement', value: row['Settlement'] },
+      { label: 'Settlement amount', value: row['Settlement amount'] },
+      { label: 'License', value: row['Лицензия'] },
+      { label: 'Integration', value: row['Интеграция'] },
+      { label: 'Compliance', value: row['Compliance'] },
+      { label: 'Support 24/7', value: row['Support 24/7'] },
+      { label: 'Recurrent', value: row['Рекуррент'] },
+      { label: 'Chargeback level', value: row['Уровень чарджбэков'] },
+      { label: '3DS', value: row['3DS-авторизация'] },
+      { label: 'Liquidity', value: row['Ликвидность'] },
+      { label: 'Conversion', value: row['Конверсия'] },
+      { label: 'Years on market', value: row['На рынке (лет)'] }
+    ].filter(item => !isEmptyValue(item.value)).map(item => `<span class="info-tag">${item.label}: ${item.value}</span>`).join('');
 
-        const commentsBlock = !isEmptyValue(row['Комментарии']) ? `<span class="info-tag" style="display: block;">${formatText(row['Комментарии'])}</span>` : '';
+    const commentsBlock = !isEmptyValue(row['Комментарии']) ? `<span class="info-tag" style="display: block;">${formatText(row['Комментарии'])}</span>` : '';
 
-        const industryTag = getTags(row, 'Industry')[0] || 'N/A';
-        const geoTag = getTags(row, 'Geo')[0] || 'N/A';
-        const riskTag = getTags(row, 'Risk')[0] || 'N/A';
+    const industryTag = getTags(row, 'Industry')[0] || 'N/A';
+    const geoTag = getTags(row, 'Geo')[0] || 'N/A';
+    const riskTag = getTags(row, 'Risk')[0] || 'N/A';
 
-        card.innerHTML = `
-          <div class="card-header">
-            <span>${row['ID Name'] || 'Без названия'}</span>
-            <span>${row['Pay in (%)'] || ''}</span>
-          </div>
-          <div class="card-tags">
-            <span class="tag service">${row['Service'] || 'N/A'}</span>
-            <span class="tag">${industryTag}</span>
-            <span class="tag">${geoTag}</span>
-            <span class="tag">${riskTag}</span>
-          </div>
-          ${containerId === 'rates-content' ? `
-          <div class="card-details">
-            ${mainInfoBlock ? `<div class="details-block"><h4>Основная информация</h4>${mainInfoBlock}</div>` : ''}
-            ${tariffsBlock ? `<div class="details-block"><h4>Тарифы</h4>${tariffsBlock}</div>` : ''}
-            ${transactionsBlock ? `<div class="details-block"><h4>Транзакции</h4>${transactionsBlock}</div>` : ''}
-            ${additionalBlock ? `<div class="details-block"><h4>Дополнительно</h4>${additionalBlock}</div>` : ''}
-            ${commentsBlock ? `<div class="details-block"><h4>Комментарии</h4>${commentsBlock}</div>` : ''}
-            <div class="apply-button-container">
-              <button class="apply-button" onclick="window.open('https://t.me/p_fintech?text=Im interested in ${row['ID Name']}', '_blank')">Подать заявку</button>
-            </div>
-          </div>
-          ` : ''}
-        `;
-        if (containerId === 'rates-content') {
-          card.addEventListener('click', (e) => {
-            if (e.target.classList.contains('apply-button')) return;
-            const details = card.querySelector('.card-details');
-            details.classList.toggle('active');
-            card.classList.toggle('active');
-          });
-        }
-        container.appendChild(card);
+    card.innerHTML = `
+      <div class="card-header">
+        <span>${row['ID Name'] || 'Без названия'}</span>
+        <span>${row['Pay in (%)'] || ''}</span>
+      </div>
+      <div class="card-tags">
+        <span class="tag service">${row['Service'] || 'N/A'}</span>
+        <span class="tag">${industryTag}</span>
+        <span class="tag">${geoTag}</span>
+        <span class="tag">${riskTag}</span>
+      </div>
+      ${containerId === 'rates-content' ? `
+      <div class="card-details">
+        ${mainInfoBlock ? `<div class="details-block"><h4>Основная информация</h4>${mainInfoBlock}</div>` : ''}
+        ${tariffsBlock ? `<div class="details-block"><h4>Тарифы</h4>${tariffsBlock}</div>` : ''}
+        ${transactionsBlock ? `<div class="details-block"><h4>Транзакции</h4>${transactionsBlock}</div>` : ''}
+        ${additionalBlock ? `<div class="details-block"><h4>Дополнительно</h4>${additionalBlock}</div>` : ''}
+        ${commentsBlock ? `<div class="details-block"><h4>Комментарии</h4>${commentsBlock}</div>` : ''}
+        <div class="apply-button-container">
+          <button class="apply-button" onclick="window.open('https://t.me/p_fintech?text=Im interested in ${row['ID Name']}', '_blank')">Подать заявку</button>
+        </div>
+      </div>
+      ` : ''}
+    `;
+
+    if (containerId === 'home-rates-content') {
+      card.addEventListener('click', () => {
+        localStorage.setItem('selectedRateCard', cardId); // Сохраняем ID выбранной карточки
+        showTab('rates'); // Переключаем вкладку
+        setTimeout(() => {
+          const targetCard = document.querySelector(`#rates-content .card[data-id="${cardId}"]`);
+          if (targetCard) {
+            targetCard.scrollIntoView({ behavior: 'smooth' });
+            const details = targetCard.querySelector('.card-details');
+            details.classList.add('active');
+            targetCard.classList.add('active');
+          }
+        }, 100); // Небольшая задержка для рендера вкладки
+      });
+    } else if (containerId === 'rates-content') {
+      card.addEventListener('click', (e) => {
+        if (e.target.classList.contains('apply-button')) return;
+        const details = card.querySelector('.card-details');
+        details.classList.toggle('active');
+        card.classList.toggle('active');
       });
     }
+    container.appendChild(card);
+  });
+
+  // Автоматическое разворачивание при загрузке вкладки "Ставки"
+  const selectedRateCard = localStorage.getItem('selectedRateCard');
+  if (selectedRateCard && containerId === 'rates-content') {
+    setTimeout(() => {
+      const targetCard = document.querySelector(`#rates-content .card[data-id="${selectedRateCard}"]`);
+      if (targetCard) {
+        targetCard.scrollIntoView({ behavior: 'smooth' });
+        const details = targetCard.querySelector('.card-details');
+        details.classList.add('active');
+        targetCard.classList.add('active');
+        localStorage.removeItem('selectedRateCard'); // Очищаем после использования
+      }
+    }, 100);
+  }
+}
 
     async function renderTech(containerId, rows) {
       const container = document.getElementById(containerId);
@@ -1636,16 +1668,16 @@
     }
 
     function showTab(tabId) {
-      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(content => {
-        content.classList.remove('active');
-        content.scrollTop = 0;
-      });
-      const activeTab = document.querySelector(`.tab[data-tab="${tabId}"]`);
-      if (activeTab) activeTab.classList.add('active');
-      document.getElementById(tabId).classList.add('active');
-      adjustContentPadding();
-    }
+  document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(content => {
+    content.classList.remove('active');
+    content.scrollTop = 0;
+  });
+  const activeTab = document.querySelector(`.tab[data-tab="${tabId}"]`);
+  if (activeTab) activeTab.classList.add('active');
+  document.getElementById(tabId).classList.add('active');
+  adjustContentPadding();
+}
 
     function openTelegram() {
       document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
