@@ -39,6 +39,8 @@
   margin: 0;
   box-sizing: border-box;
   min-height: 0; /* Предотвращаем переполнение */
+  -ms-overflow-style: none; /* Для Internet Explorer и Edge */
+  scrollbar-width: none; /* Для Firefox */
 }
 .tab-content > * {
   margin-bottom: 0; /* Убираем отступ снизу для всех дочерних элементов */
@@ -246,17 +248,17 @@
       overflow: hidden;
     }
     .slider {
-      display: flex;
-      overflow-x: auto;
-      gap: 15px;
-      padding-bottom: 10px;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-      padding-left: 15px;
-      padding-right: 15px;
-    }
+  display: flex;
+  overflow-x: auto;
+  gap: 15px;
+  padding-bottom: 10px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: none; /* Для Internet Explorer и Edge */
+  scrollbar-width: none; /* Для Firefox */
+  padding-left: 15px;
+  padding-right: 15px;
+}
     .slider::-webkit-scrollbar { display: none; }
     .slide {
       flex: 0 0 calc(100% - 30px);
@@ -345,16 +347,16 @@
       background: linear-gradient(90deg, #007bff, #00c4b4);
     }
     .partners-grid {
-      display: flex;
-      overflow-x: auto;
-      gap: 15px;
-      padding-bottom: 10px;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
-    .partners-grid::-webkit-scrollbar { display: none; }
+  display: flex;
+  overflow-x: auto;
+  gap: 15px;
+  padding-bottom: 10px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: none; /* Для Internet Explorer и Edge */
+  scrollbar-width: none; /* Для Firefox */
+}
+.partners-grid::-webkit-scrollbar { display: none; }
     .partner-block {
       flex: 0 0 250px;
       background: linear-gradient(135deg, #1a2a44, #1a3c34);
@@ -417,16 +419,16 @@
       margin-bottom: 15px;
     }
     .rates-cards-container, .tech-cards-container {
-      display: flex;
-      overflow-x: auto;
-      gap: 15px;
-      padding-bottom: 10px;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
-    .rates-cards-container::-webkit-scrollbar, .tech-cards-container::-webkit-scrollbar { display: none; }
+  display: flex;
+  overflow-x: auto;
+  gap: 15px;
+  padding-bottom: 10px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: none; /* Для Internet Explorer и Edge */
+  scrollbar-width: none; /* Для Firefox */
+}
+.rates-cards-container::-webkit-scrollbar, .tech-cards-container::-webkit-scrollbar { display: none; }
     .rate-card {
       flex: 0 0 250px;
       background: #2a2a2a;
