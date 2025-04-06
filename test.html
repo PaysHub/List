@@ -686,18 +686,21 @@
       min-width: 90px;
     }
     .filter-button {
-      padding: 4px 10px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 12px;
-      color: #fff;
-      background: #333;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      width: 100%;
-      box-sizing: border-box;
-    }
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  color: #fff;
+  background: #333;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+  white-space: nowrap; /* Запрещаем перенос текста */
+  overflow: hidden; /* Скрываем лишний текст */
+  text-overflow: ellipsis; /* Добавляем многоточие, если текст обрезается */
+}
     .filter-button.active {
       background: linear-gradient(90deg, #007bff, #00c4b4, #007bff);
       background-size: 200% 100%;
@@ -954,7 +957,13 @@
   .resource-button { font-size: 13px; }
   .filter-section { flex-wrap: wrap; gap: 6px; padding: 8px 10px; }
   .filter-dropdown { min-width: 80px; }
-  .filter-button { padding: 3px 8px; font-size: 11px; }
+  .filter-button { 
+    padding: 3px 8px; 
+    font-size: 11px; 
+    white-space: nowrap; /* Запрещаем перенос текста */
+    overflow: hidden; /* Скрываем лишний текст */
+    text-overflow: ellipsis; /* Добавляем многоточие */
+  }
   .filter-section h3 { font-size: 11px; margin-bottom: 4px; }
   .filter-popup, .feedback-popup, .add-psp-popup, .invest-popup, .agent-popup { width: 90%; max-height: 50vh; }
   .card, .tech-card { width: 100%; max-width: 100%; }
@@ -1402,26 +1411,27 @@
     }
 
     function applyFilter(filterType) {
-      const popup = document.getElementById(`${filterType}-popup`);
-      const button = document.getElementById(`${filterType}-button`);
-      const selectedTags = popup.querySelectorAll('.filter-tag.selected');
-      activeFilters[filterType].clear();
-      const selectedValues = Array.from(selectedTags).map(tag => tag.dataset.value);
+  const popup = document.getElementById(`${filterType}-popup`);
+  const button = document.getElementById(`${filterType}-button`);
+  const selectedTags = popup.querySelectorAll('.filter-tag.selected');
+  activeFilters[filterType].clear();
+  const selectedValues = Array.from(selectedTags).map(tag => tag.dataset.value);
 
-      if (selectedValues.length === 0 || selectedValues.includes('Все')) {
-        activeFilters[filterType].clear();
-        button.textContent = 'Все';
-        button.classList.remove('active');
-      } else {
-        selectedValues.forEach(tag => activeFilters[filterType].add(tag));
-        button.textContent = `${button.dataset.label} (${selectedValues.length})`;
-        button.classList.add('active');
-      }
+  if (selectedValues.length === 0 || selectedValues.includes('Все')) {
+    activeFilters[filterType].clear();
+    button.textContent = 'Все'; // Показываем "Все", если ничего не выбрано
+    button.classList.remove('active');
+  } else {
+    selectedValues.forEach(tag => activeFilters[filterType].add(tag));
+    // Показываем количество и значения в строку
+    button.textContent = `${selectedValues.length}: ${selectedValues.join(', ')}`;
+    button.classList.add('active');
+  }
 
-      if (filterType === 'type') renderTech('tech-content', techData);
-      else renderRates('rates-content', ratesData);
-      closePopup(`${filterType}-popup`);
-    }
+  if (filterType === 'type') renderTech('tech-content', techData);
+  else renderRates('rates-content', ratesData);
+  closePopup(`${filterType}-popup`);
+}
 
     function closePopup(popupId) {
       document.getElementById(popupId).classList.remove('active');
