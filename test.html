@@ -1314,17 +1314,7 @@
       document.querySelector('.tabs').classList.remove('blurred');
     }
 
-    document.querySelectorAll('input, textarea').forEach(input => {
-  input.addEventListener('focus', () => {
-    // Убедимся, что блюр остаётся, если попап открыт
-    if (document.querySelector('.feedback-popup.active') || document.querySelector('.add-psp-popup.active') ||
-        document.querySelector('.invest-popup.active') || document.querySelector('.agent-popup.active') ||
-        document.querySelector('.filter-popup.active')) {
-      document.querySelector('.content-container').classList.add('blurred');
-      document.querySelector('.tabs').classList.add('blurred');
-    }
-  });
-});
+   
 
     async function fetchData(tableId) {
       try {
