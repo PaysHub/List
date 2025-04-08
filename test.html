@@ -889,13 +889,13 @@
       margin-bottom: 15px;
       line-height: 1.5;
     }
-    .feedback-form, .add-psp-form, .invest-form, .agent-form, .apply-request-form, .smart-assistant-form {
+    .feedback-form, .add-psp-form, .invest-form, .agent-form, .apply-request-form {
       display: flex;
       flex-direction: column;
       gap: 10px;
     }
-    .feedback-form input, .add-psp-form input, .invest-form input, .agent-form input, .apply-request-form input, .smart-assistant-form input,
-    .feedback-form textarea, .add-psp-form textarea, .invest-form textarea, .agent-form textarea, .apply-request-form textarea, .smart-assistant-form textarea {
+    .feedback-form input, .add-psp-form input, .invest-form input, .agent-form input, .apply-request-form input,
+    .feedback-form textarea, .add-psp-form textarea, .invest-form textarea, .agent-form textarea, .apply-request-form textarea {
       padding: 8px;
       border: 1px solid #555;
       border-radius: 8px;
@@ -906,12 +906,144 @@
       resize: none;
     }
     .feedback-form textarea, .add-psp-form textarea, .invest-form textarea, .agent-form textarea, .apply-request-form textarea { height: 100px; }
-    .smart-assistant-form textarea { height: 100px; }
-    #smart-assistant-results {
-      margin-top: 15px;
+
+    /* Стили для попапа в стиле чата */
+    .smart-assistant-popup {
+      display: flex;
+      flex-direction: column;
+      height: 80vh; /* Высота попапа */
+      max-height: 500px; /* Ограничение максимальной высоты */
+      background: #1a1a1a; /* Тёмный фон */
+      border-radius: 12px;
+      padding: 0;
+      overflow: hidden;
+    }
+    .smart-assistant-popup h4 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #fff;
+      padding: 10px 15px;
+      margin: 0;
+      background: #2a2a2a;
+      border-bottom: 1px solid #333;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .smart-assistant-popup .close-button {
+      background: none;
+      border: none;
+      color: #aaa;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 5px 10px;
+    }
+    .smart-assistant-popup .close-button:hover {
+      color: #fff;
+    }
+    .chat-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      padding: 15px;
+      background: #1a1a1a;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .chat-container::-webkit-scrollbar {
+      display: none;
+    }
+    .chat-messages {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .chat-message {
+      max-width: 70%;
+      padding: 8px 12px;
+      border-radius: 12px;
+      font-size: 14px;
+      line-height: 1.4;
+      word-wrap: break-word;
+    }
+    .chat-message.user {
+      align-self: flex-end;
+      background: #007bff; /* Цвет сообщений пользователя */
+      color: #fff;
+      border-bottom-right-radius: 4px;
+    }
+    .chat-message.assistant {
+      align-self: flex-start;
+      background: #333; /* Цвет сообщений ассистента */
+      color: #ddd;
+      border-bottom-left-radius: 4px;
+    }
+    .chat-message.loading {
+      align-self: flex-start;
+      background: #333;
+      color: #aaa;
+      font-style: italic;
+    }
+    .chat-input-container {
+      display: flex;
+      align-items: center;
+      padding: 10px 15px;
+      background: #2a2a2a;
+      border-top: 1px solid #333;
+    }
+    .chat-input-container textarea {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid #555;
+      border-radius: 8px;
+      background: #333;
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+      resize: none;
+      height: 40px;
+      margin-right: 10px;
+    }
+    .chat-input-container button {
+      padding: 8px 15px;
+      border: none;
+      border-radius: 8px;
+      background: #007bff;
+      color: #fff;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .chat-input-container button:hover {
+      background: #0056b3;
+    }
+    .chat-clarification {
+      display: none;
+      margin-top: 10px;
+      padding: 10px;
+      background: #2a2a2a;
+      border-radius: 8px;
+    }
+    .chat-clarification p {
+      margin: 0 0 10px 0;
       color: #ddd;
       font-size: 14px;
     }
+    .chat-clarification textarea {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #555;
+      border-radius: 8px;
+      background: #333;
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+      resize: none;
+      height: 60px;
+    }
+
     .notification {
       position: fixed;
       top: 20px;
@@ -1016,6 +1148,22 @@
       .card-header { font-size: 14px; color: #fff; padding: 10px; }
       .card-details { font-size: 12px; }
       .tech-card img { height: auto; max-height: 276px; }
+      .smart-assistant-popup {
+        height: 90vh;
+        max-height: 400px;
+      }
+      .chat-input-container textarea {
+        height: 36px;
+        font-size: 13px;
+      }
+      .chat-input-container button {
+        padding: 6px 12px;
+        font-size: 13px;
+      }
+      .chat-message {
+        font-size: 13px;
+        max-width: 80%;
+      }
     }
   </style>
 </head>
@@ -1286,19 +1434,20 @@
     </form>
   </div>
   <div class="smart-assistant-popup" id="smart-assistant-popup">
-    <h4>ИИ-подбор</h4>
-    <form id="smart-assistant-form">
-      <textarea id="smart-assistant-query" placeholder="Опишите ваш запрос" required></textarea>
-      <div id="smart-assistant-clarification" style="display: none; margin-top: 10px;">
+    <h4>ИИ-подбор <button class="close-button" onclick="closeSmartAssistantPopup()">×</button></h4>
+    <div class="chat-container">
+      <div class="chat-messages" id="smart-assistant-messages">
+        <!-- Сообщения будут добавляться сюда -->
+      </div>
+      <div id="smart-assistant-clarification" class="chat-clarification">
         <p id="clarification-question"></p>
-        <textarea id="smart-assistant-clarification-answer" placeholder="Ваш ответ" style="height: 60px;"></textarea>
+        <textarea id="smart-assistant-clarification-answer" placeholder="Ваш ответ"></textarea>
       </div>
-      <div class="popup-actions">
-        <button type="submit" class="popup-button submit">Подобрать</button>
-        <button type="button" class="popup-button cancel" onclick="closeSmartAssistantPopup()">Закрыть</button>
-      </div>
+    </div>
+    <form id="smart-assistant-form" class="chat-input-container">
+      <textarea id="smart-assistant-query" placeholder="Опишите ваш запрос" required></textarea>
+      <button type="submit">Отправить</button>
     </form>
-    <div id="smart-assistant-results"></div>
   </div>
   <div class="notification" id="notification">Сообщение успешно отправлено!</div>
   <div class="privacy-notice" id="privacy-notice">
@@ -1527,7 +1676,7 @@
       separator.style.height = '8px';
       container.appendChild(separator);
 
-      const allTagElement = document
+      const allTagElement = document.createElement('div');
       allTagElement.className = 'filter-tag';
       allTagElement.textContent = 'Все';
       allTagElement.dataset.value = 'Все';
@@ -1985,7 +2134,7 @@
       // Сбрасываем состояние
       document.getElementById('smart-assistant-query').value = '';
       document.getElementById('smart-assistant-clarification').style.display = 'none';
-      document.getElementById('smart-assistant-results').innerHTML = '';
+      document.getElementById('smart-assistant-messages').innerHTML = '';
       conversationHistory = []; // Сбрасываем историю диалога
     }
 
@@ -1997,6 +2146,16 @@
 
     // Храним историю диалога
     let conversationHistory = [];
+
+    // Функция для добавления сообщения в чат
+    function addMessageToChat(message, role) {
+      const messagesContainer = document.getElementById('smart-assistant-messages');
+      const messageElement = document.createElement('div');
+      messageElement.className = `chat-message ${role}`;
+      messageElement.innerHTML = message;
+      messagesContainer.appendChild(messageElement);
+      messagesContainer.scrollTop = messagesContainer.scrollHeight; // Прокрутка вниз
+    }
 
     // Функция для форматирования данных NocoDB в текст для OpenAI
     function formatNocoDBData() {
@@ -2032,7 +2191,6 @@
       const clarificationAnswer = document.getElementById('smart-assistant-clarification-answer').value;
       const clarificationDiv = document.getElementById('smart-assistant-clarification');
       const clarificationQuestion = document.getElementById('clarification-question');
-      const resultsDiv = document.getElementById('smart-assistant-results');
 
       let userMessage = queryInput.value;
       if (clarificationAnswer) {
@@ -2040,9 +2198,12 @@
         clarificationDiv.style.display = 'none';
       }
 
-      // Добавляем сообщение пользователя в историю
+      // Добавляем сообщение пользователя в чат
+      addMessageToChat(userMessage, 'user');
       conversationHistory.push({ role: "user", content: userMessage });
-      resultsDiv.innerHTML = '<p>Анализирую ваш запрос...</p>';
+
+      // Показываем индикатор загрузки
+      addMessageToChat('Анализирую ваш запрос...', 'loading');
 
       // Извлекаем уникальные значения для подсказок
       const industries = getUniqueValues('Industry', ratesData);
@@ -2085,7 +2246,7 @@ ${conversationHistory.length > 0 ? conversationHistory.map(msg => `${msg.role}: 
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer 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'
+            'Authorization': 'Bearer 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'
           },
           body: JSON.stringify({
             model: 'gpt-3.5-turbo',
@@ -2103,20 +2264,32 @@ ${conversationHistory.length > 0 ? conversationHistory.map(msg => `${msg.role}: 
           throw new Error(data.error?.message || 'Ошибка при запросе к OpenAI');
         }
 
+        // Удаляем индикатор загрузки
+        const messagesContainer = document.getElementById('smart-assistant-messages');
+        const loadingMessage = messagesContainer.querySelector('.chat-message.loading');
+        if (loadingMessage) loadingMessage.remove();
+
         const aiResponse = data.choices[0].message.content.trim();
         conversationHistory.push({ role: "assistant", content: aiResponse });
 
         // Проверяем, задает ли ИИ уточняющий вопрос
         if (aiResponse.startsWith('Уточните:')) {
+          addMessageToChat(aiResponse, 'assistant');
           clarificationQuestion.textContent = aiResponse.replace('Уточните:', '').trim();
           clarificationDiv.style.display = 'block';
-          resultsDiv.innerHTML = '';
         } else {
-          resultsDiv.innerHTML = aiResponse;
+          addMessageToChat(aiResponse, 'assistant');
         }
+
+        // Очищаем поле ввода
+        queryInput.value = '';
       } catch (error) {
         console.error('Ошибка OpenAI:', error);
-        resultsDiv.innerHTML = '<p>Произошла ошибка при обработке запроса. Попробуйте снова.</p>';
+        // Удаляем индикатор загрузки
+        const messagesContainer = document.getElementById('smart-assistant-messages');
+        const loadingMessage = messagesContainer.querySelector('.chat-message.loading');
+        if (loadingMessage) loadingMessage.remove();
+        addMessageToChat('Произошла ошибка при обработке запроса. Попробуйте снова.', 'assistant');
       }
     });
 
