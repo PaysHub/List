@@ -229,7 +229,7 @@
       border-radius: 12px;
       padding: 20px;
       text-align: center;
-      margin: 0 0 30px 0;
+      margin: 0 0 mockup30px 0;
     }
     .header-section h1 {
       font-size: 28px;
@@ -316,7 +316,7 @@
       color: #ddd;
       margin-bottom: 15px;
     }
-    .slide anaphylactic-button {
+    .slide .apply-button {
       padding: 10px;
       background: #007bff;
       border: none;
@@ -860,7 +860,7 @@
       padding: 10px 0;
       border-top: 1px solid #333;
     }
-    .feedback-popup, .add-psp-popup, .invest-popup, .agent-popup {
+    .feedback-popup, .add-psp-popup, .invest-popup, .agent-popup, .apply-request-popup {
       position: fixed;
       top: 50%;
       left: 50%;
@@ -875,12 +875,12 @@
       opacity: 0;
       transition: opacity 0.3s ease, transform 0.3s ease;
     }
-    .feedback-popup.active, .add-psp-popup.active, .invest-popup.active, .agent-popup.active {
+    .feedback-popup.active, .add-psp-popup.active, .invest-popup.active, .agent-popup.active, .apply-request-popup.active {
       display: block;
       opacity: 1;
       transform: translate(-50%, -50%) scale(1);
     }
-    .feedback-instruction, .add-psp-instruction, .invest-instruction, .agent-instruction {
+    .feedback-instruction, .add-psp-instruction, .invest-instruction, .agent-instruction, .apply-request-instruction {
       font-size: 13px;
       color: #ddd;
       background: #333;
@@ -889,13 +889,13 @@
       margin-bottom: 15px;
       line-height: 1.5;
     }
-    .feedback-form, .add-psp-form, .invest-form, .agent-form {
+    .feedback-form, .add-psp-form, .invest-form, .agent-form, .apply-request-form {
       display: flex;
       flex-direction: column;
       gap: 10px;
     }
-    .feedback-form input, .add-psp-form input, .invest-form input, .agent-form input,
-    .feedback-form textarea, .add-psp-form textarea, .invest-form textarea, .agent-form textarea {
+    .feedback-form input, .add-psp-form input, .invest-form input, .agent-form input, .apply-request-form input,
+    .feedback-form textarea, .add-psp-form textarea, .invest-form textarea, .agent-form textarea, .apply-request-form textarea {
       padding: 8px;
       border: 1px solid #555;
       border-radius: 8px;
@@ -905,7 +905,7 @@
       outline: none;
       resize: none;
     }
-    .feedback-form textarea, .add-psp-form textarea, .invest-form textarea, .agent-form textarea { height: 100px; }
+    .feedback-form textarea, .add-psp-form textarea, .invest-form textarea, .agent-form textarea, .apply-request-form textarea { height: 100px; }
     .notification {
       position: fixed;
       top: 20px;
@@ -1034,7 +1034,7 @@
         text-overflow: ellipsis;
       }
       .filter-section h3 { font-size: 11px; margin-bottom: 4px; }
-      .filter-popup, .feedback-popup, .add-psp-popup, .invest-popup, .agent-popup { width: 90%; padding: 10px; }
+      .filter-popup, .feedback-popup, .add-psp-popup, .invest-popup, .agent-popup, .apply-request-popup { width: 90%; padding: 10px; }
       .filter-tag { font-size: 12px; padding: 5px 10px; }
       .card, .tech-card { width: 100%; max-width: 100%; }
       .card-header { font-size: 14px; color: #fff; padding: 10px; }
@@ -1165,39 +1165,39 @@
     </div>
   </div>
   <div class="tabs">
-  <div class="tab active" data-tab="home" onclick="showTab('home')">
-    <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9z"/>
-      <polyline points="9 22 9 12 15 12 15 22"/>
-    </svg>
-    <span>Главная</span>
+    <div class="tab active" data-tab="home" onclick="showTab('home')">
+      <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9z"/>
+        <polyline points="9 22 9 12 15 12 15 22"/>
+      </svg>
+      <span>Главная</span>
+    </div>
+    <div class="tab" data-tab="rates" onclick="showTab('rates')">
+      <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="5" x2="5" y2="19"></line>
+        <circle cx="6.5" cy="6.5" r="2.5"></circle>
+        <circle cx="17.5" cy="17.5" r="2.5"></circle>
+      </svg>
+      <span>Ставки</span>
+    </div>
+    <div class="tab" data-tab="tech" onclick="showTab('tech')">
+      <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="16.5" y1="9.4" x2="7.5" y2="4.21"></line>
+        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+        <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+        <line x1="12" y1="22.08" x2="12" y2="12"></line>
+      </svg>
+      <span>Решения</span>
+    </div>
+    <div class="tab" data-tab="operator" onclick="openTelegram()">
+      <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+        <circle cx="12" cy="7" r="4"/>
+      </svg>
+      <span>Оператор</span>
+      <span class="tab-badge">1</span>
+    </div>
   </div>
-  <div class="tab" data-tab="rates" onclick="showTab('rates')">
-    <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <line x1="19" y1="5" x2="5" y2="19"></line>
-      <circle cx="6.5" cy="6.5" r="2.5"></circle>
-      <circle cx="17.5" cy="17.5" r="2.5"></circle>
-    </svg>
-    <span>Ставки</span>
-  </div>
-  <div class="tab" data-tab="tech" onclick="showTab('tech')">
-    <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <line x1="16.5" y1="9.4" x2="7.5" y2="4.21"></line>
-      <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-      <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-      <line x1="12" y1="22.08" x2="12" y2="12"></line>
-    </svg>
-    <span>Решения</span>
-  </div>
-  <div class="tab" data-tab="operator" onclick="openTelegram()">
-    <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-      <circle cx="12" cy="7" r="4"/>
-    </svg>
-    <span>Оператор</span>
-    <span class="tab-badge">1</span>
-  </div>
-</div>
   <div class="filter-popup" id="industry-popup">
     <h4>Выберите индустрии</h4>
     <div class="filter-tags" id="industry-options"></div>
@@ -1310,6 +1310,25 @@
       <div class="success-message" style="display: none;">Сообщение отправлено</div>
     </div>
   </div>
+  <div class="apply-request-popup" id="apply-request-popup">
+    <h4>Запрос на подключение</h4>
+    <div class="apply-request-instruction">
+      Оставьте заявку для подключения к выбранному решению или PSP. Укажите:<br>- Объем платежей в месяц<br>- Адрес сайта<br>- Методы платежей (карты, P2P, крипта и т.д.)<br>- Есть ли юрлицо (где зарегистрировано)
+    </div>
+    <form class="apply-request-form" id="apply-request-form">
+      <input type="text" id="apply-request-telegram" placeholder="Ваш Telegram-ник или телефон" required>
+      <textarea id="apply-request-message" placeholder="Ответы на вопросы" required></textarea>
+      <input type="hidden" id="apply-request-item" value="">
+      <div class="popup-actions">
+        <button type="submit" class="popup-button submit">Отправить</button>
+        <button type="button" class="popup-button cancel" onclick="closeApplyRequestPopup()">Закрыть</button>
+      </div>
+    </form>
+    <div class="popup-overlay" id="apply-request-overlay">
+      <div class="loading-message">Идет отправка сообщения, не закрывайте окно</div>
+      <div class="success-message" style="display: none;">Сообщение отправлено</div>
+    </div>
+  </div>
   <div class="notification" id="notification">Сообщение успешно отправлено!</div>
   <div class="privacy-notice" id="privacy-notice">
     <div class="privacy-content">
@@ -1409,7 +1428,7 @@
     function closeInvestPopup() {
       document.getElementById('invest-popup').classList.remove('active');
       document.querySelector('.content-container').classList.remove('blurred');
-      document.querySelector('.tabs').classList.remove('blurred');
+      document.querySelector('.tabs').classList.remove('bl129urred');
     }
     function openAgentPopup() {
       const popup = document.getElementById('agent-popup');
@@ -1420,6 +1439,19 @@
     }
     function closeAgentPopup() {
       document.getElementById('agent-popup').classList.remove('active');
+      document.querySelector('.content-container').classList.remove('blurred');
+      document.querySelector('.tabs').classList.remove('blurred');
+    }
+    function openApplyRequestPopup(itemName) {
+      const popup = document.getElementBy_HTId('apply-request-popup');
+      document.getElementById('apply-request-telegram').value = telegramUsername ? `@${telegramUsername}` : '';
+      document.getElementById('apply-request-item').value = itemName;
+      popup.classList.add('active');
+      document.querySelector('.content-container').classList.add('blurred');
+      document.querySelector('.tabs').classList.add('blurred');
+    }
+    function closeApplyRequestPopup() {
+      document.getElementById('apply-request-popup').classList.remove('active');
       document.querySelector('.content-container').classList.remove('blurred');
       document.querySelector('.tabs').classList.remove('blurred');
     }
@@ -1560,7 +1592,7 @@
       document.querySelector('.tabs').classList.remove('blurred');
     }
 
-    function renderRates(containerId, rows)    {
+    function renderRates(containerId, rows) {
       const container = document.getElementById(containerId);
       container.innerHTML = '';
       let filteredRows = rows.filter(row => row['On'] === true);
@@ -1608,7 +1640,7 @@
           { label: 'Max turnover', value: row['($) Макс. оборот'] },
           { label: 'Additional fees', value: row['Доп. платежи'] },
           { label: 'Прием в', value: row['Прием в'] },
-          { label: 'Расчет в', value: row['Расчет в'] }
+                    { label: 'Расчет в', value: row['Расчет в'] }
         ].filter(item => !isEmptyValue(item.value)).map(item => `<span class="info-tag">${item.label}: ${item.value}</span>`).join('');
 
         const mainInfoBlock = [
@@ -1656,12 +1688,12 @@
           ${containerId === 'rates-content' ? `
           <div class="card-details">
             ${mainInfoBlock ? `<div class="details-block"><h4>Основная информация</h4>${mainInfoBlock}</div>` : ''}
-            ${tariffsBlock ? `<div class="details-block"><h4>Тарифы            ${tariffsBlock}</div>` : ''}
+            ${tariffsBlock ? `<div class="details-block"><h4>Тарифы</h4>${tariffsBlock}</div>` : ''}
             ${transactionsBlock ? `<div class="details-block"><h4>Транзакции</h4>${transactionsBlock}</div>` : ''}
             ${additionalBlock ? `<div class="details-block"><h4>Дополнительно</h4>${additionalBlock}</div>` : ''}
             ${commentsBlock ? `<div class="details-block"><h4>Комментарии</h4>${commentsBlock}</div>` : ''}
             <div class="apply-button-container">
-              <button class="apply-button" onclick="window.open('https://t.me/p_fintech?text=Im interested in ${row['ID Name']}', '_blank')">Подать заявку</button>
+              <button class="apply-button" onclick="openApplyRequestPopup('${row['ID Name']}')">Подать заявку</button>
             </div>
           </div>
           ` : ''}
@@ -1768,7 +1800,7 @@
               ${mainInfoBlock ? `<div class="details-block"><h4>Основная информация</h4>${mainInfoBlock}</div>` : ''}
               ${descriptionBlock ? `<div class="details-block"><h4>Описание</h4>${descriptionBlock}</div>` : ''}
               <div class="apply-button-container">
-                <button class="apply-button" onclick="window.open('https://t.me/p_fintech?text=Im interested in ${row['ID name']}', '_blank')">Подать заявку</button>
+                <button class="apply-button" onclick="openApplyRequestPopup('${row['ID name'] || row['Name']}')">Подать заявку</button>
               </div>
             </div>
           `;
@@ -2055,6 +2087,48 @@
       }
     });
 
+    document.getElementById('apply-request-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const overlay = document.getElementById('apply-request-overlay');
+      const loadingMessage = overlay.querySelector('.loading-message');
+      const successMessage = overlay.querySelector('.success-message');
+      overlay.classList.add('active');
+      loadingMessage.style.display = 'block';
+      successMessage.style.display = 'none';
+
+      const telegram = document.getElementById('apply-request-telegram').value;
+      const message = document.getElementById('apply-request-message').value;
+      const itemName = document.getElementById('apply-request-item').value;
+      const serverUrl = 'https://payshub-feedback-bot.glitch.me/send-message';
+      try {
+        const response = await fetch(serverUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            telegram,
+            message: `Новая заявка на подключение:\n\nНазвание: ${itemName}\nСообщение: ${message}\n\nДанные пользователя:\nID: ${telegramId}\nИмя: ${telegramFirstName}\nФамилия: ${telegramLastName}\nUsername: @${telegramUsername || 'Не указан'}`
+          })
+        });
+        const result = await response.json();
+        if (response.ok) {
+          loadingMessage.style.display = 'none';
+          successMessage.style.display = 'flex';
+          setTimeout(() => {
+            overlay.classList.remove('active');
+            closeApplyRequestPopup();
+            document.getElementById('apply-request-form').reset();
+          }, 2000);
+        } else {
+          overlay.classList.remove('active');
+          showNotification(result.error || 'Ошибка при отправке заявки.');
+        }
+      } catch (error) {
+        console.error('Ошибка:', error);
+        overlay.classList.remove('active');
+        showNotification('Произошла ошибка.');
+      }
+    });
+
     document.addEventListener('click', (e) => {
       const feedbackPopup = document.querySelector('#feedback-popup.active');
       if (feedbackPopup && !feedbackPopup.contains(e.target) && !e.target.closest('.apply-button') && !e.target.closest('.agent-button')) {
@@ -2074,6 +2148,11 @@
       const agentPopup = document.querySelector('#agent-popup.active');
       if (agentPopup && !agentPopup.contains(e.target) && !e.target.closest('.agent-button') && !e.target.closest('.apply-button')) {
         closeAgentPopup();
+      }
+
+      const applyRequestPopup = document.querySelector('#apply-request-popup.active');
+      if (applyRequestPopup && !applyRequestPopup.contains(e.target) && !e.target.closest('.apply-button')) {
+        closeApplyRequestPopup();
       }
 
       const filterPopup = document.querySelector('.filter-popup.active');
