@@ -1527,7 +1527,7 @@
       separator.style.height = '8px';
       container.appendChild(separator);
 
-      const allTagElement = document.createElement('div');
+      const allTagElement = document
       allTagElement.className = 'filter-tag';
       allTagElement.textContent = 'Все';
       allTagElement.dataset.value = 'Все';
@@ -1570,7 +1570,7 @@
     function renderRates(containerId, rows) {
       const container = document.getElementById(containerId);
       container.innerHTML = '';
-           let filteredRows = rows.filter(row => row['On'] === true);
+      let filteredRows = rows.filter(row => row['On'] === true);
 
       if (containerId === 'rates-content') {
         if (activeFilters.industry.size > 0) {
@@ -2085,7 +2085,7 @@ ${conversationHistory.length > 0 ? conversationHistory.map(msg => `${msg.role}: 
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer YOUR_OPENAI_API_KEY' // Вставь действительный API-ключ OpenAI здесь
+            'Authorization': 'Bearer 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'
           },
           body: JSON.stringify({
             model: 'gpt-3.5-turbo',
